@@ -1,0 +1,719 @@
+import React, { useEffect, useState } from 'react';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Carousel from 'react-native-snap-carousel';
+import MyCarousel from './testing';
+import { scale } from 'react-native-size-matters';
+import { API_URL, API_URL_IMAGE } from '../../services/api_url';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  bannerListAdd,
+  cityListAdd,
+  danceCategoryAdd,
+  hireusAdd,
+  usersSignInAdd,
+} from '../../redux/reducers/appData';
+import { profile } from '../../services/services';
+import { BDLoader, hp, wp } from '../../Constants';
+import { Dropdown } from 'react-native-element-dropdown';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import LinearGradient from 'react-native-linear-gradient';
+import Video from 'react-native-video';
+
+const { width: screenWidth } = Dimensions.get('window');
+
+const LogoTitle = ({ navigation }) => {
+  return (
+    <View style={styles.header}>
+      <Image
+        source={require('../../assets/images/logo.png')}
+        style={{ width: 30, height: 30 }}
+      />
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+        }}>
+        <TouchableOpacity
+          style={{ width: 30, height: 30, marginRight: 10 }}
+          onPress={() => {
+            navigation.navigate('Notifications');
+          }}>
+          <Ionicons name="notifications-outline" size={30} color={'#fff'} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ width: 30, height: 30 }}
+          onPress={() => {
+            navigation.navigate('profile');
+          }}>
+          <Image
+            source={require('../../assets/images/user.png')}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export const PostLoginLanding = ({ navigation }) => {
+  const { token } = useSelector(({ appData }) => appData);
+  const dispatch = useDispatch();
+  const BannerWidth = Dimensions.get('window').width * 1;
+
+  const lastBannerData = [
+    { count: '1000+', name: 'Classes' },
+    { count: '100+', name: 'Workshops' },
+    { count: '80+', name: 'Instructors' },
+    { count: '70+', name: 'Catogeries' },
+  ];
+  const [State, setState] = useState({
+    IsLoading: false,
+    States: null,
+    hirelist: null,
+    danceCategory: null,
+    cityList: null,
+    bannerList: null,
+  });
+  const [country, SetCountry] = useState(null)
+
+  const States = [
+    { label: 'Mumbai', value: 'Mumbai' },
+    { label: 'Delhi', value: 'Delhi' },
+    { label: 'Gujarat', value: 'Gujarat' },
+    { label: 'Bihar', value: 'Bihar' },
+  ];
+
+  // unlimited function
+  const hireusFun = async () => {
+    const response = await fetch(`${API_URL}/getHireList`);
+    const data = await response.json();
+    setState(p => ({ ...p, hirelist: data?.hirelist }));
+    dispatch(hireusAdd(data?.hirelist));
+  };
+
+  // dance category
+  const danceCategory = async () => {
+    const response = await fetch(`${API_URL}/getAllCategories`);
+    const data = await response.json();
+    setState(p => ({ ...p, danceCategory: data }));
+    dispatch(danceCategoryAdd(data));
+  };
+
+  const reanderItem = ({ item }) => {
+    return item.type === 'image' ? (
+      <View style={style.imageContainer}>
+        <Image
+          source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
+          resizeMode="cover"
+          style={{
+            width: '100%',
+            height: 140,
+          }}
+        />
+      </View>
+    ) : (
+      <View style={style.imageContainer}>
+        <Video
+          source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
+          resizeMode="cover"
+          useNativeControls
+          style={{
+            width: '100%',
+            height: 140,
+          }}
+        />
+      </View>
+    );
+  };
+
+  // city list
+  const cityList = async () => {
+    const response = await fetch(`${API_URL}/getallstate`);
+    const data = await response.json();
+    setState(p => ({ ...p, cityList: data }));
+    dispatch(cityListAdd(data));
+  };
+
+  // const cityList = async () => {
+  //   const response = await fetch(`${API_URL}/allcity`);
+  //   const data = await response.json();
+  //   setState(p => ({ ...p, cityList: data }));
+  //   dispatch(cityListAdd(data));
+  // };
+
+  // banner list
+  const bannerList = async () => {
+    const response = await fetch(`${API_URL}/getAllBanner`);
+    const data = await response.json();
+    setState(p => ({ ...p, bannerList: data }));
+    dispatch(bannerListAdd(data));
+  };
+
+  const GetRequiredApis = async () => {
+    setState(p => ({ ...p, IsLoading: true }));
+    await danceCategory();
+    await cityList();
+    await bannerList();
+    await hireusFun();
+    await profile(token).then(res => dispatch(usersSignInAdd(res)));
+    setState(p => ({ ...p, IsLoading: false }));
+  };
+
+  useEffect(() => {
+    GetRequiredApis();
+
+    ;(async() => {
+      const response = await fetch(`${API_URL}/getAllCountry`);
+      const data = await response.json();
+      SetCountry(data.countrys)
+    })();
+
+  }, []);
+
+  return (
+    <View style={style.view}>
+      <BDLoader visible={State.IsLoading} />
+      <LogoTitle navigation={navigation} />
+      <ScrollView>
+        <StatusBar animated={true} backgroundColor="#1D283A" />
+        <View>
+          <Carousel
+            style={style.bannerTop}
+            data={State.bannerList?.banners}
+            renderItem={reanderItem}
+            //   return (
+            //     <View style={style.imageContainer}>
+            //       <Image
+            //         source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
+            //         resizeMode="cover"
+            //         style={{
+            //           width: '100%',
+            //           height: 140,
+            //         }}
+            //       />
+            //     </View>
+            //   );
+            // }}
+            sliderWidth={BannerWidth}
+            itemWidth={BannerWidth}
+            autoplay={true}
+            autoplayInterval={20000}
+            loop={true}
+          />
+        </View>
+        <View style={style.section}>
+          <View style={style.sectionHeader}>
+            <Text style={style.sectionTitle}>Learn to Dance</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('learn-to-dance', { workshop: true });
+              }}>
+              <Text style={style.seeAll}>See All</Text>
+            </TouchableOpacity>
+          </View>
+          <MyCarousel getDanceCategory={State.danceCategory} />
+        </View>
+        <View style={style.section}>
+          <View style={style.sectionHeader}>
+            <Text style={style.sectionTitle}>Hire Us</Text>
+            <Text
+              style={style.seeAll}
+              onTouchEnd={() => navigation.navigate('Hire Us')}>
+              See All
+            </Text>
+          </View>
+          <ScrollView horizontal={true} style={{ paddingTop: '5%' }}>
+            {State.hirelist?.map((item, index) => {
+              return (
+                <View key={`${index}`} style={style.hireUsView}>
+                  <View style={style.teacherImageContainer}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('Hire Us', {
+                          screen: 'instructor-details',
+                          params: { id: item?._id, item: item },
+                        });
+                      }}>
+                      <Image
+                        style={style.teacherImage}
+                        source={{
+                          uri: `${API_URL_IMAGE}/${item?.profileImage}`,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={style.teacherDetails}>
+                    <Text style={style.teacherName}>{item.name}</Text>
+                    <Text style={style.danceType}>{item.designation}</Text>
+                  </View>
+                </View>
+              );
+            })}
+          </ScrollView>
+        </View>
+        <View style={style.section}>
+          <View style={style.workshopstyle}>
+            <Text style={style.sectionTitle}>Global Dance Forms</Text>
+          </View>
+          <View style={{ paddingTop: '8%', flexDirection: 'row' }}>
+            {country?.slice(0,2)?.map(item => 
+              <TouchableOpacity
+              activeOpacity={1}
+              style={style.workshopContainer}
+              onPress={() => navigation.navigate('global dance form',{
+                screen: 'global dance form',
+                params: { id: item?._id, item: item },
+              })}>
+              <View style={style.imageDance}>
+                <Image
+                  style={{ width: '100%', height: '100%' }}
+                  resizeMode={'cover'}
+                  source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
+                />
+              </View>
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: -wp(10),
+                  left: 0,
+                }}>
+                <LinearGradient
+                  style={[
+                    {
+                      width: wp(50),
+                      height: wp(50),
+                    },
+                  ]}
+                  colors={['#0304045c', '#d2dce52b']}
+                  start={{ x: 1, y: 1 }}
+                  end={{ x: 1, y: 0 }}>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      bottom: hp(1),
+                      alignSelf: 'center',
+                      alignItems: 'flex-start',
+                      width: '100%',
+                      paddingLeft: wp(2),
+                    }}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        marginBottom: hp(0.5),
+                        fontSize: wp(6),
+                      }}>
+                      {item?.name}
+                    </Text>
+                    <Text
+                      style={[
+                        style.danceFormText,
+                        { paddingHorizontal: wp(5) },
+                      ]}>
+                      {item?.subtitle}
+                    </Text>
+                  </View>
+                </LinearGradient>
+              </View>
+            </TouchableOpacity>
+              )}
+            {/* <TouchableOpacity
+              activeOpacity={1}
+              style={style.workshopContainer}
+              onPress={() => navigation.navigate('global dance form')}>
+              <View style={style.imageDance}>
+                <Image
+                  style={{ width: '100%', height: '100%' }}
+                  resizeMode={'cover'}
+                  source={require('../../assets/images/World.png')}
+                />
+              </View>
+
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: -wp(10),
+                  left: 0,
+                }}>
+                <LinearGradient
+                  style={[
+                    {
+                      width: wp(50),
+                      height: wp(50),
+                    },
+                  ]}
+                  colors={['#0304045c', '#d2dce52b']}
+                  start={{ x: 1, y: 1 }}
+                  end={{ x: 1, y: 0 }}>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      bottom: hp(1),
+                      alignSelf: 'center',
+                      alignItems: 'flex-start',
+                      width: '100%',
+                      paddingLeft: wp(2),
+                    }}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        marginBottom: hp(0.5),
+                        fontSize: wp(6),
+                      }}>
+                      {'Others'}
+                    </Text>
+                    <Text style={style.danceFormText}>
+                      {'International Dance Form'}
+                    </Text>
+                  </View>
+                </LinearGradient>
+              </View>
+            </TouchableOpacity> */}
+          </View>
+        </View>
+        <View style={style.section}>
+          <View style={style.sectionHeader}>
+            <Text style={style.sectionTitle}>B2D In Cities</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('all-city');
+              }}>
+              <Text style={style.seeAll}>See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            data={State.cityList?.states.slice(0,4)}
+            renderItem={({ item }) => (
+              <View style={style.imageContainerDance}>
+                
+                <TouchableOpacity
+                  onPress={() =>
+                    // navigation.navigate('classes-list', { city: item.stateName })
+                    navigation.navigate('city', { id: item._id, stateName:item?.stateName  })
+                  }
+                  style={{height:hp(25),justifyContent:"center",width:wp(73)}}
+                  >
+                  <Image
+                    style={{
+                      alignSelf: 'center',
+                      width: wp(70),
+                      height: hp(20),
+                      borderRadius:7
+                     
+                    }}
+                    resizeMode={'cover'}
+                    source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
+                  />
+                  <Text
+                    style={{
+                      color: '#BABFC8',
+                      textAlign: 'center',
+                      marginTop: '5%',
+                      fontSize: 17,
+                      fontWeight: '400',
+                    }}>
+                    {item?.stateName}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            horizontal
+          />
+
+          <Dropdown
+            style={style.inputStyle}
+            selectedTextStyle={{ color: '#babfc8' }}
+            placeholderStyle={{ color: '#babfc8' }}
+            containerStyle={{ borderWidth: 0 }}
+            data={States}
+            maxHeight={hp(18)}
+            labelField="label"
+            valueField="value"
+            placeholder={'Please select the type'}
+            value={State.States?.value}
+            onChange={e => setState(p => ({ ...p, States: e }))}
+            renderItem={(item, selected) => (
+              <View
+                style={{
+                  backgroundColor: selected ? '#263040' : '#334155',
+                  paddingHorizontal: wp(2),
+                  paddingVertical: hp(1.5),
+                }}>
+                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
+              </View>
+            )}
+          />
+        </View>
+        <View
+          style={{
+            ...style.bannerView,
+            marginBottom: '15%',
+          }}>
+          <Image
+            style={style.image}
+            source={require('../../assets/images/LastBanner.png')}
+          />
+          <Text style={{ ...style.imageTitle, fontSize: 20 }}>
+            Get unlimited access with Premium
+          </Text>
+          <FlatList
+            style={{
+              position: 'relative',
+              bottom: 0,
+              width: '100%',
+              top: '25%',
+            }}
+            contentContainerStyle={{
+              flex: 1,
+              justifyContent: 'flex-end',
+            }}
+            data={lastBannerData}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  flex: 1,
+                  marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+                  justifyContent: 'flex-end',
+                  alignSelf: 'center',
+                }}>
+                <Text
+                  style={{
+                    ...style.imageTitleDance,
+                    color: '#ff9300',
+                    fontSize: 16,
+                  }}>
+                  {item?.count}
+                </Text>
+                <Text style={style.imageTitleDance}>{item?.name}</Text>
+              </View>
+            )}
+            //Setting the number of column
+            numColumns={4}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+const style = StyleSheet.create({
+  view: {
+    backgroundColor: '#0E172A',
+    flex: 1,
+  },
+  imageContainer: {
+    flex: 1,
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    backgroundColor: 'white',
+    backgroundColor: '#000000',
+    borderRadius: 8,
+    width: screenWidth - 20,
+    marginHorizontal: 10,
+    marginVertical: 10,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: '110%',
+    resizeMode: 'contain',
+    height: 200,
+    borderRadius: 8,
+  },
+  imageTitle: {
+    color: '#FFFFFF',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 20,
+    marginTop: '13%',
+    marginLeft: '6%',
+  },
+  imageDescription: {
+    color: '#FFFFFF',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 14,
+    padding: '5%',
+  },
+  bannerTop: {
+    width: '110%',
+    resizeMode: 'cover',
+    height: 173,
+    borderRadius: 8,
+  },
+  bannerView: {
+    width: Dimensions.get('window').width * 0.9,
+    height: Dimensions.get('window').width * 0.3,
+  },
+  section: {
+    paddingTop: '5%',
+    backgroundColor: '#0E172A',
+  },
+  sectionHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 15,
+  },
+  workshopstyle: {
+    marginTop: scale(5),
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 15,
+    marginBottom: scale(-18),
+  },
+  sectionTitle: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 20,
+    lineHeight: 23,
+    color: '#FFFFFF',
+    paddingLeft: 15,
+    paddingBottom: 10,
+  },
+  seeAll: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#956DFF',
+  },
+  danceStyleView: {
+    paddingVertical: '0%',
+    width: Dimensions.get('window').width * 0.9,
+    height: Dimensions.get('window').width * 0.51,
+  },
+  imageContainerDance: {
+    flex: 1,
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+  
+    backgroundColor: '#0E172A',
+    borderRadius: 8,
+    justifyContent: 'flex-start',
+    // height: 80,
+    // width:wp(100)
+  },
+  imageDance: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  imageTitleDance: {
+    padding: '1%',
+    color: '#FFFFFF',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 12,
+    lineHeight: 14,
+    alignSelf: 'center',
+    bottom: 0,
+  },
+  hireUsView: {
+    marginHorizontal: wp(3),
+  },
+  teacherName: {
+    fontStyle: 'normal',
+    marginTop: 8,
+    fontWeight: '500',
+    fontSize: 14,
+    lineHeight: 16,
+    letterSpacing: -0.1992,
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  danceType: {
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 12,
+    marginTop: 5,
+    letterSpacing: -0.1992,
+    color: '#B6B8BB',
+    width: scale(100),
+    textAlign: 'center',
+  },
+  teacherImageContainer: {
+    borderRadius: 60,
+    overflow: 'hidden',
+  },
+  teacherImage: {
+    height: 120,
+    width: 120,
+  },
+  teacherDetails: {
+    alignItems: 'center',
+  },
+  danceFormText: {
+    color: '#fff',
+    backgroundColor: '#EC3528',
+    fontSize: 10,
+    paddingHorizontal: wp(2),
+    paddingVertical: wp(1),
+    borderRadius: wp(1),
+  },
+  workshopContainer: {
+    width: '47%',
+    height: wp(50),
+    marginHorizontal: wp(1.5),
+    overflow: 'hidden',
+    borderRadius: wp(2),
+  },
+  inputStyle: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#334155',
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(0.5),
+    marginHorizontal: wp(3),
+    marginBottom: -hp(2),
+    marginTop: hp(2),
+  },
+  dropdownContainerStyle: {},
+  placeholderStyle: {
+    color: '#BABFC8',
+  },
+  selectedTextStyle: {
+    color: '#BABFC8',
+  },
+  inputSearchStyle: {
+    backgroundColor: '#0E172A',
+    color: '#BABFC8',
+  },
+});
+const styles = StyleSheet.create({
+  container: {
+    flex: 100,
+    backgroundColor: '#0E172A',
+    justifyContent: 'center',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: hp(1.5),
+    paddingHorizontal: wp(5),
+  },
+  icon: {
+    width: wp(9),
+    height: wp(9),
+  },
+});
