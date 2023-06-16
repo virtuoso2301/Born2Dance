@@ -23,6 +23,7 @@ import { API_URL_IMAGE } from '../../services/api_url';
 import Logo from '../../assets/images/logo.png';
 import Share from 'react-native-share';
 import Orientation from 'react-native-orientation-locker';
+import FastImage from 'react-native-fast-image';
 
 export const DanceTypeDetails = ({ navigation, route }) => {
   const paymentStatus = useSelector(
@@ -206,7 +207,7 @@ export const DanceTypeDetails = ({ navigation, route }) => {
             <View style={style.mainDanceDetails}>
               <View style={style.daneTeacherDetails}>
                 <View>
-                  <Image
+                  <FastImage
                     style={style.dancerImage}
                     source={
                       !item?.titleImage ? { uri: item?.titleImage } : Logo
@@ -223,13 +224,13 @@ export const DanceTypeDetails = ({ navigation, route }) => {
               {workshop && (
                 <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity onPress={onSharePress}>
-                    <Image
+                    <FastImage
                       style={[style.downloadImage, { marginRight: wp(2) }]}
                       source={require('../../assets/images/share.png')}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={DownloadBtn}>
-                    <Image
+                    <FastImage
                       style={style.downloadImage}
                       source={require('../../assets/images/download.png')}
                     />
@@ -276,7 +277,7 @@ export const DanceTypeDetails = ({ navigation, route }) => {
                   style={style.mainLearnVideo}
                   key={index}>
                   <View style={style.videoText}>
-                    <Image
+                    <FastImage
                       style={style.dancerImage}
                       source={require('../../assets/images/introVideo.png')}
                     />
@@ -308,7 +309,7 @@ export const DanceTypeDetails = ({ navigation, route }) => {
                 colors={['#2885E5', '#844AE9']}
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1, y: 0.5 }}>
-                <Image
+                <FastImage
                   style={style.takeClassesIcon}
                   source={require('../../assets/images/lock.png')}
                 />
@@ -587,7 +588,7 @@ const OldCode = () => {
           <View style={style.mainDanceDetails}>
             <View style={style.daneTeacherDetails}>
               <View>
-                <Image
+                <FastImage
                   style={style.dancerImage}
                   source={!item?.titleImage ? { uri: item?.titleImage } : Logo}
                 />
@@ -602,13 +603,13 @@ const OldCode = () => {
             {workshop && (
               <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity onPress={onSharePress}>
-                  <Image
+                  <FastImage
                     style={[style.downloadImage, { marginRight: wp(2) }]}
                     source={require('../../assets/images/share.png')}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={DownloadBtn}>
-                  <Image
+                  <FastImage
                     style={style.downloadImage}
                     source={require('../../assets/images/download.png')}
                   />
@@ -655,7 +656,7 @@ const OldCode = () => {
                 style={style.mainLearnVideo}
                 key={index}>
                 <View style={style.videoText}>
-                  <Image
+                  <FastImage
                     style={style.dancerImage}
                     source={require('../../assets/images/introVideo.png')}
                   />
@@ -687,7 +688,7 @@ const OldCode = () => {
               colors={['#2885E5', '#844AE9']}
               start={{ x: 0, y: 0.5 }}
               end={{ x: 1, y: 0.5 }}>
-              <Image
+              <FastImage
                 style={style.takeClassesIcon}
                 source={require('../../assets/images/lock.png')}
               />

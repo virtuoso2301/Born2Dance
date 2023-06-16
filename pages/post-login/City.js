@@ -15,6 +15,7 @@ import { API_URL, API_URL_IMAGE } from '../../services/api_url';
 import { hp, wp } from '../../Constants';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import FastImage from 'react-native-fast-image';
 
 export const City = ({ navigation, route }) => {
     const { id, stateName } = route.params;
@@ -40,7 +41,7 @@ export const City = ({ navigation, route }) => {
           style={style.input}
           placeholder="Search city name"
         />
-        <Image source={searchIcon} style={style.searchIcon} />
+        {/* <Image source={searchIcon} style={style.searchIcon} /> */}
         <Text style={style.pageHeader}>Cities</Text>
         <View style={style.renderContainer}>
           {city?.length > 0 &&
@@ -51,11 +52,12 @@ export const City = ({ navigation, route }) => {
                 onPress={() =>
                   navigation.navigate('classes-list', { _id: item._id, city: item.cityName })
                 }>
-                <Image
+                <FastImage
                   style={{
                     alignSelf: 'center',
                     width: wp(20),
                     height: wp(20),
+                    borderRadius:3.5
                   }}
                   source={{ uri: `${API_URL_IMAGE}/${item.profileImage}` }}
                 />
@@ -114,5 +116,6 @@ const style = StyleSheet.create({
   renderCityText: {
     color: '#fff',
     textAlign: 'center',
+    marginVertical:hp(1)
   },
 });

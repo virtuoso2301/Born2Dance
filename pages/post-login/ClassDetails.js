@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import { API_URL, API_URL_IMAGE } from '../../services/api_url';
+import FastImage from 'react-native-fast-image';
 
 export const ClasseDetails = ({ navigation, route }) => {
   const { id } = route.params;
@@ -42,7 +43,7 @@ export const ClasseDetails = ({ navigation, route }) => {
   return (
     <ScrollView style={style.view}>
       <View style={style.imageContainer}>
-        <Image
+        <FastImage
           style={style.image}
           source={{ uri: `${API_URL_IMAGE}/${classDetails?.images}` }}
         />

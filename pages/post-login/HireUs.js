@@ -14,109 +14,116 @@ import { API_URL_IMAGE, API_URL } from '../../services/api_url';
 import searchIcon from '../../assets/images/search.png';
 import verified from '../../assets/images/verified.png';
 import { BDLoader, hp, wp } from '../../Constants';
+import FastImage from 'react-native-fast-image';
 
 export const HireUs = ({ navigation }) => {
   const [State, setState] = useState({
     IsLoading: false,
   });
-  const [selectedTab,setSelectedTab]=useState("All")
-  const [list,setList]=useState(null)
-  const [displayList,setDisplayList]=useState(null)
+  const [selectedTab, setSelectedTab] = useState("All")
+  const [list, setList] = useState(null)
+  const [displayList, setDisplayList] = useState(null)
 
   useEffect(() => {
     GetHireUsList();
   }, []);
   const GetHireUsList = async (v) => {
     try {
-// console.log('good morning')
+      // console.log('good morning')
       //setState(p => ({ ...p, SelectedTab: v ,}))
       setState(p => ({ ...p, IsLoading: true }));
       const jsonObj = await fetch(`${API_URL}/getHireList`);
       const response = await jsonObj.json();
-      
+
       setState(p => ({ ...p, IsLoading: false }));
       console.log('GetHireUsList -> ', JSON.stringify(response, null, 2));
 
-    //   if (response?.hirelist?.length > 0) {
-    //     setState(p => ({ ...p, HireUs: response?.hirelist }));
-    //  }
+      //   if (response?.hirelist?.length > 0) {
+      //     setState(p => ({ ...p, HireUs: response?.hirelist }));
+      //  }
       // if(State.SelectedTab===0){
-//          if (response?.hirelist?.length > 0) {
-//         let choregrapherArrayList=[]
-//  choregrapherArrayList= await response.hirelist.filter((hireListElement)=>hireListElement.designation===State.SelectedTab)
-//         setState(p => ({ ...p, HireUs: choregrapherArrayList }));
-      
-//       } 
-//      else  if(State.SelectedTab===1){
-//         let choregrapherArrayList=[]
-//  choregrapherArrayList=response.hirelist.filter((hireListElement)=>hireListElement.designation=='Dancers')
-//         setState(p => ({ ...p, HireUs: choregrapherArrayList }));
-      
-//       } 
-if(response?.hirelist?.length>0){
-  setList(response.hirelist)
-  setDisplayList(response.hirelist)
-}
+      //          if (response?.hirelist?.length > 0) {
+      //         let choregrapherArrayList=[]
+      //  choregrapherArrayList= await response.hirelist.filter((hireListElement)=>hireListElement.designation===State.SelectedTab)
+      //         setState(p => ({ ...p, HireUs: choregrapherArrayList }));
+
+      //       } 
+      //      else  if(State.SelectedTab===1){
+      //         let choregrapherArrayList=[]
+      //  choregrapherArrayList=response.hirelist.filter((hireListElement)=>hireListElement.designation=='Dancers')
+      //         setState(p => ({ ...p, HireUs: choregrapherArrayList }));
+
+      //       } 
+      if (response?.hirelist?.length > 0) {
+        setList(response.hirelist)
+        setDisplayList(response.hirelist)
+      }
     } catch (e) {
       console.log('Error getHireUsList -> ', e);
     }
   };
 
-  useEffect(()=>{
-    if(selectedTab=="All"){
+  useEffect(() => {
+    if (selectedTab == "All") {
       setDisplayList(list)
     }
-    else{
-      setDisplayList(list.filter(item=>item.designation==selectedTab))
+    else {
+      setDisplayList(list.filter(item => item.designation == selectedTab))
     }
-  },[selectedTab])
+  }, [selectedTab])
 
-  const designations=[
-    {id:"1",title:"All"},
-    {id:"2",title:"Choreographer"},
-    {id:"3",title:"Dancers"},
-    {id:"4",title:"Child Dancers"},
-    {id:"5",title:"Senior Dancers"},
-    {id:"6",title:"Group Dancers"},
+  useEffect(()=>{
+
+    console.log(displayList)
+
+  },[])
+
+  const designations = [
+    { id: "1", title: "All" },
+    { id: "2", title: "Choreographer" },
+    { id: "3", title: "Dancers" },
+    { id: "4", title: "Child Dancers" },
+    { id: "5", title: "Senior Dancers" },
+    { id: "6", title: "Group Dancers" },
   ]
 
-  const renderItem=({item})=>{
-    return(
+  const renderItem = ({ item }) => {
+    return (
       <View
-      style={style.headerContainer}
-      onTouchEnd={() => {
-        navigation.navigate('instructor-details', {
-          id: item._id,
-          item: item,
-        });
-      }}
+        style={style.headerContainer}
+        onTouchEnd={() => {
+          navigation.navigate('instructor-details', {
+            id: item._id,
+            item: item,
+          });
+        }}
       >
-      <View style={style.headerLogo}>
-        <Image
-          style={style.instructorlogo}
-          source={{
-            uri: `${API_URL_IMAGE}/${item?.profileImage}`,
-          }}
-        />
-      </View>
-      <View style={style.headerTitleContainer}>
-        <View
-          style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={style.headerTitle}>{item.name}</Text>
-          <Image
-            source={verified}
-            resizeMode={'contain'}
-            style={{ width: wp(4), height: wp(4) }}
+        <View style={style.headerLogo}>
+          <FastImage
+            style={style.instructorlogo}
+            source={{
+              uri: `${API_URL_IMAGE}/${item?.profileImage}`,
+            }}
           />
         </View>
-        <Text style={style.headerDescription}>
-          {item.designation}
-        </Text>
+        <View style={style.headerTitleContainer}>
+          <View
+            style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={style.headerTitle}>{item.name}</Text>
+            <FastImage
+              source={verified}
+              resizeMode={'contain'}
+              style={{ width: wp(4), height: wp(4) }}
+            />
+          </View>
+          <Text style={style.headerDescription}>
+            {item.designation}
+          </Text>
+        </View>
+        <View style={style.arrow}>
+          <FastImage source={require('../../assets/images/arrow.png')} />
+        </View>
       </View>
-      <View style={style.arrow}>
-        <Image source={require('../../assets/images/arrow.png')} />
-      </View>
-    </View>
     )
   }
 
@@ -148,7 +155,7 @@ if(response?.hirelist?.length>0){
             height: scale(40),
           }}
           onPress={() => console.warn('hello')}>
-          <Image
+          <FastImage
             source={searchIcon}
             style={{
               width: '50%',
@@ -170,7 +177,7 @@ if(response?.hirelist?.length>0){
       </View>
 
       <View style={style.TabContainer}>
-      {/* <ScrollView horizontal={true}>
+        {/* <ScrollView horizontal={true}>
           <View
             style={{
               flexDirection: 'row',
@@ -201,17 +208,18 @@ if(response?.hirelist?.length>0){
           </View>
         </ScrollView> */}
         <FlatList
-        data={designations}
-        renderItem={({item})=>{
-          return(
-          <View style={{marginHorizontal:wp(1.75),marginTop:hp(1)}}>
-            <TouchableOpacity onPress={()=>setSelectedTab(item.title)}>
-          <Text style={{color:selectedTab==item.title?"green":"#ffffff",fontWeight:"400"}}>{item.title}</Text>
-          </TouchableOpacity>
-          </View>
-          )
-        }}
-        horizontal
+          data={designations}
+          renderItem={({ item }) => {
+            return (
+              <View style={{ marginHorizontal: wp(1.75) }}>
+                <TouchableOpacity onPress={() => setSelectedTab(item.title)}>
+                  <Text style={{ color: selectedTab == item.title ? "#8671DB" : "#ffffff", fontWeight: "500" }}>{item.title}</Text>
+                </TouchableOpacity>
+              </View>
+            )
+          }}
+          horizontal
+          style={{marginVertical:hp(1.5)}}
         />
       </View>
 
@@ -259,8 +267,8 @@ if(response?.hirelist?.length>0){
           : null}
       </ScrollView> */}
       <FlatList
-      data={displayList}
-      renderItem={renderItem}
+        data={displayList}
+        renderItem={renderItem}
       />
     </View>
   );

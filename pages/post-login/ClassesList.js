@@ -16,6 +16,7 @@ import Actor from '../../assets/images/actor.png';
 import { moderateVerticalScale, scale } from 'react-native-size-matters';
 import { Dropdown } from 'react-native-element-dropdown';
 import { BDLoader, hp, wp } from '../../Constants';
+import FastImage from 'react-native-fast-image';
 
 const Suburbs = [
   { label: 'Suburb1', value: 'Suburb1' },
@@ -43,23 +44,16 @@ export const ClassesList = ({ navigation, route }) => {
     if (DanceId) {
       GetDanceDetail();
     }
-  }, []);
+  },[]);
 
-  useEffect(()=>{
-    console.log("==========CLASSES LIST START===========")
-    console.log(classLists.studios)
-    console.log("==========CLASSES LIST END=============")
-  },[])
+
 
   useEffect(()=>{
     console.log("CITY SELECTED", city)
+    console.log(classLists?.studios)
 
   },[])
 
-  // useEffect(()=>{
-  //   const classes1=classLists.studios.filter(item=>item.city.cityName!=city)
-  //   console.log("AVAILABLE DANCE CLASSES: ",classes1)
-  // })
 
   const GetDanceDetail = async id => {
     setState(p => ({ ...p, IsLoading: true }));
@@ -98,7 +92,7 @@ export const ClassesList = ({ navigation, route }) => {
     }}>
     <View style={style.card}>
       <View style={style.cardImageContainer}>
-        <Image
+        <FastImage
           style={style.imageStyle}
           source={{ uri: `${API_URL_IMAGE}/${item?.images[0]}` }}
         />
@@ -110,7 +104,7 @@ export const ClassesList = ({ navigation, route }) => {
           {item?.status == 'Active' ? 'Open Now' : 'Close'}
         </Text>
         <Text style={style.classType}>
-          {item?.city.cityName}, {item?.state.stateName}
+          {item?.city?.cityName}, {item?.state?.stateName}
         </Text>
       </View>
     </View>
@@ -122,7 +116,7 @@ export const ClassesList = ({ navigation, route }) => {
       <View style={style.pageHeaderView}>
         <Text style={style.pageHeader}>City: {city}</Text>
         <Text style={style.pageHeader}>
-          {classLists?.studios?.filter(item => item.city.cityName == city).length}{' '}
+          {classLists?.studios?.filter(item => item?.city?.cityName == city).length}{' '}
           Classes
         </Text>
       </View>
@@ -153,46 +147,9 @@ export const ClassesList = ({ navigation, route }) => {
           />
       </View>
 
-      {/* <ScrollView style={style.view}>
-        {classLists?.studios?.filter(item => item.city.cityName == city).map((element, index) => (
-            <View
-              onTouchEnd={() => {
-                navigation.navigate('class-details', {
-                  id: element._id,
-                });
-              }}>
-              <View style={style.card}>
-                <View style={style.cardImageContainer}>
-                  <Image
-                    style={style.imageStyle}
-                    source={{ uri: `${API_URL_IMAGE}/${element?.images[0]}` }}
-                  />
-                </View>
-                <View style={style.cardDetailsContainer}>
-                  <Text style={style.className}>{element?.studioName}</Text>
-                  <Text style={style.classRating}>
-                    4.5
-                    <AirbnbRating
-                      count={5}
-                      defaultRating={4.5}
-                      size={12}
-                      ratingContainerStyle={{ paddingHorizontal: 5 }}
-                    />
-                  </Text>
-                  <Text style={style.classAddress}>{element?.address}</Text>
-                  <Text style={style.classOpen}>
-                    {element?.status == 'Active' ? 'Open' : 'Close'}
-                  </Text>
-                  <Text style={style.classType}>
-                    {element?.city.cityName}, {element?.state.stateName}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          ))}
-      </ScrollView> */}
+     
       <FlatList
-      data={classLists?.studios?.filter(item => item.city.cityName == city)}
+      data={classLists?.studios?.filter(item => item?.city?.cityName == city)}
       renderItem={renderItem}
       />
     </View>

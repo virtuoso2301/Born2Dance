@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import searchIcon from '../../assets/images/search.png';
 import { API_URL_IMAGE } from '../../services/api_url';
 import LinearGradient from 'react-native-linear-gradient';
+import FastImage from 'react-native-fast-image';
 
 export const LearnToDance = ({ navigation, route }) => {
   const getDanceCategory = useSelector(state => state.appData.danceCategory);
@@ -60,7 +61,7 @@ export const LearnToDance = ({ navigation, route }) => {
           value={searchText}
         />
         <TouchableOpacity onPress={SerachData}>
-          <Image
+          <FastImage
             source={searchIcon}
             style={{
               width: 20,
@@ -87,7 +88,7 @@ export const LearnToDance = ({ navigation, route }) => {
                 workshop: workshop,
               });
             }}>
-            <Image
+            <FastImage
               style={style.imageDance}
               source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
             />

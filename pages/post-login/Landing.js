@@ -28,13 +28,14 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
+import FastImage from 'react-native-fast-image'
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const LogoTitle = ({ navigation }) => {
   return (
     <View style={styles.header}>
-      <Image
+      <FastImage
         source={require('../../assets/images/logo.png')}
         style={{ width: 30, height: 30 }}
       />
@@ -56,7 +57,7 @@ const LogoTitle = ({ navigation }) => {
           onPress={() => {
             navigation.navigate('profile');
           }}>
-          <Image
+          <FastImage
             source={require('../../assets/images/user.png')}
             style={{ width: '100%', height: '100%' }}
           />
@@ -71,12 +72,6 @@ export const PostLoginLanding = ({ navigation }) => {
   const dispatch = useDispatch();
   const BannerWidth = Dimensions.get('window').width * 1;
 
-  const lastBannerData = [
-    { count: '1000+', name: 'Classes' },
-    { count: '100+', name: 'Workshops' },
-    { count: '80+', name: 'Instructors' },
-    { count: '70+', name: 'Catogeries' },
-  ];
   const [State, setState] = useState({
     IsLoading: false,
     States: null,
@@ -85,6 +80,7 @@ export const PostLoginLanding = ({ navigation }) => {
     cityList: null,
     bannerList: null,
   });
+  const [bannerURL,setBannerURL]=useState("")
   const [country, SetCountry] = useState(null)
 
   const States = [
@@ -112,27 +108,51 @@ export const PostLoginLanding = ({ navigation }) => {
 
   const reanderItem = ({ item }) => {
     return item.type === 'image' ? (
-      <View style={style.imageContainer}>
-        <Image
+      <View>
+        <FastImage
           source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
           resizeMode="cover"
           style={{
-            width: '100%',
-            height: 140,
+            // width: "100%",
+            // height: "100%",
+            // alignSelf:"center"
+            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+            backgroundColor: 'white',
+            backgroundColor: '#000000',
+            borderRadius: 10,
+            width: screenWidth-screenWidth/50,
+            marginHorizontal: 1,
+            marginVertical: 5,
+            height: Dimensions.get("window").height * 0.24,
+            alignSelf:"center"
+
           }}
         />
       </View>
     ) : (
-      <View style={style.imageContainer}>
+      <View>
         <Video
           source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
           resizeMode="cover"
-          useNativeControls
           style={{
-            width: '100%',
-            height: 140,
+            // width: "100%",
+            // height: "100%",
+            // alignSelf:"center"
+            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+            backgroundColor: 'white',
+            backgroundColor: '#000000',
+            borderRadius: 10,
+            width: screenWidth-screenWidth/50,
+            marginHorizontal: 1,
+            marginVertical: 5,
+            height: Dimensions.get("window").height * 0.24,
+            alignSelf:"center"
           }}
-        />
+          controls={false}
+          paused={false}
+          repeat={false}
+        >
+        </Video>
       </View>
     );
   };
@@ -157,6 +177,7 @@ export const PostLoginLanding = ({ navigation }) => {
     const response = await fetch(`${API_URL}/getAllBanner`);
     const data = await response.json();
     setState(p => ({ ...p, bannerList: data }));
+    setBannerURL(data?.banners[0]?.image)
     dispatch(bannerListAdd(data));
   };
 
@@ -181,13 +202,14 @@ export const PostLoginLanding = ({ navigation }) => {
 
   }, []);
 
+
   return (
     <View style={style.view}>
       <BDLoader visible={State.IsLoading} />
       <LogoTitle navigation={navigation} />
       <ScrollView>
         <StatusBar animated={true} backgroundColor="#1D283A" />
-        <View>
+        {/* <View>
           <Carousel
             style={style.bannerTop}
             data={State.bannerList?.banners}
@@ -211,7 +233,33 @@ export const PostLoginLanding = ({ navigation }) => {
             autoplayInterval={20000}
             loop={true}
           />
-        </View>
+        </View> */}
+        <View>
+        <Video
+          source={{ uri: `${API_URL_IMAGE}/${bannerURL}` }}
+          // source={{uri:"https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761"}}
+          resizeMode="cover"
+          style={{
+            // width: "100%",
+            // height: "100%",
+            // alignSelf:"center"
+            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+            backgroundColor: 'white',
+            backgroundColor: '#000000',
+            borderRadius: 10,
+            width: screenWidth-screenWidth/50,
+            marginHorizontal: 1,
+            marginVertical: 5,
+            height: Dimensions.get("window").height * 0.24,
+            alignSelf:"center"
+          }}
+          controls={false}
+          paused={false}
+          repeat={false}
+        >
+        </Video>
+      </View>
+
         <View style={style.section}>
           <View style={style.sectionHeader}>
             <Text style={style.sectionTitle}>Learn to Dance</Text>
@@ -245,7 +293,7 @@ export const PostLoginLanding = ({ navigation }) => {
                           params: { id: item?._id, item: item },
                         });
                       }}>
-                      <Image
+                      <FastImage
                         style={style.teacherImage}
                         source={{
                           uri: `${API_URL_IMAGE}/${item?.profileImage}`,
@@ -269,14 +317,14 @@ export const PostLoginLanding = ({ navigation }) => {
           <View style={{ paddingTop: '8%', flexDirection: 'row' }}>
             {country?.slice(0,2)?.map(item => 
               <TouchableOpacity
-              activeOpacity={1}
+              activeOpacity={0.5}
               style={style.workshopContainer}
               onPress={() => navigation.navigate('global dance form',{
                 screen: 'global dance form',
                 params: { id: item?._id, item: item },
               })}>
               <View style={style.imageDance}>
-                <Image
+                <FastImage
                   style={{ width: '100%', height: '100%' }}
                   resizeMode={'cover'}
                   source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
@@ -406,7 +454,7 @@ export const PostLoginLanding = ({ navigation }) => {
                   }
                   style={{height:hp(25),justifyContent:"center",width:wp(73)}}
                   >
-                  <Image
+                  <FastImage
                     style={{
                       alignSelf: 'center',
                       width: wp(70),
@@ -432,78 +480,13 @@ export const PostLoginLanding = ({ navigation }) => {
             )}
             horizontal
           />
-
-          <Dropdown
-            style={style.inputStyle}
-            selectedTextStyle={{ color: '#babfc8' }}
-            placeholderStyle={{ color: '#babfc8' }}
-            containerStyle={{ borderWidth: 0 }}
-            data={States}
-            maxHeight={hp(18)}
-            labelField="label"
-            valueField="value"
-            placeholder={'Please select the type'}
-            value={State.States?.value}
-            onChange={e => setState(p => ({ ...p, States: e }))}
-            renderItem={(item, selected) => (
-              <View
-                style={{
-                  backgroundColor: selected ? '#263040' : '#334155',
-                  paddingHorizontal: wp(2),
-                  paddingVertical: hp(1.5),
-                }}>
-                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
-              </View>
-            )}
-          />
         </View>
-        <View
-          style={{
-            ...style.bannerView,
-            marginBottom: '15%',
-          }}>
-          <Image
+        <View>
+          <FastImage
             style={style.image}
             source={require('../../assets/images/LastBanner.png')}
           />
-          <Text style={{ ...style.imageTitle, fontSize: 20 }}>
-            Get unlimited access with Premium
-          </Text>
-          <FlatList
-            style={{
-              position: 'relative',
-              bottom: 0,
-              width: '100%',
-              top: '25%',
-            }}
-            contentContainerStyle={{
-              flex: 1,
-              justifyContent: 'flex-end',
-            }}
-            data={lastBannerData}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  flex: 1,
-                  marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-                  justifyContent: 'flex-end',
-                  alignSelf: 'center',
-                }}>
-                <Text
-                  style={{
-                    ...style.imageTitleDance,
-                    color: '#ff9300',
-                    fontSize: 16,
-                  }}>
-                  {item?.count}
-                </Text>
-                <Text style={style.imageTitleDance}>{item?.name}</Text>
-              </View>
-            )}
-            //Setting the number of column
-            numColumns={4}
-            keyExtractor={(item, index) => index.toString()}
-          />
+          
         </View>
       </ScrollView>
     </View>
@@ -516,21 +499,26 @@ const style = StyleSheet.create({
     flex: 1,
   },
   imageContainer: {
-    flex: 1,
+    //flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     backgroundColor: '#000000',
-    borderRadius: 8,
-    width: screenWidth - 20,
-    marginHorizontal: 10,
-    marginVertical: 10,
+    borderRadius: 10,
+    width: screenWidth,
+    marginHorizontal: 1,
+    marginVertical: 5,
+    alignItems:"center",
+    height: Dimensions.get("window").height * 0.24,
+    justifyContent:"center"
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
-    width: '110%',
-    resizeMode: 'contain',
-    height: 200,
-    borderRadius: 8,
+    width: '95%',
+    resizeMode:"cover",
+    height: Dimensions.get("window").height * 0.3,
+    alignSelf:"center",
+    marginTop:hp(1)
+    
+
   },
   imageTitle: {
     color: '#FFFFFF',
@@ -554,10 +542,6 @@ const style = StyleSheet.create({
     resizeMode: 'cover',
     height: 173,
     borderRadius: 8,
-  },
-  bannerView: {
-    width: Dimensions.get('window').width * 0.9,
-    height: Dimensions.get('window').width * 0.3,
   },
   section: {
     paddingTop: '5%',
@@ -596,7 +580,7 @@ const style = StyleSheet.create({
   danceStyleView: {
     paddingVertical: '0%',
     width: Dimensions.get('window').width * 0.9,
-    height: Dimensions.get('window').width * 0.51,
+    height: Dimensions.get('window').height * 0.51,
   },
   imageContainerDance: {
     flex: 1,

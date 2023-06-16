@@ -17,6 +17,7 @@ import {
 } from 'react-native-size-matters';
 import VideoPlayer from 'react-native-video-player';
 import { hp, wp } from '../../Constants';
+import FastImage from 'react-native-fast-image';
 
 export const DownloadVideo = ({ navigation }) => {
   const [videolist, setVideolist] = useState([
@@ -59,7 +60,7 @@ export const DownloadVideo = ({ navigation }) => {
         {videolist.length == 0 ? (
           <View>
             <View>
-              <Image
+              <FastImage
                 source={require('../../assets/images/video.png')}
                 style={style.videoImage}
               />
@@ -78,7 +79,7 @@ export const DownloadVideo = ({ navigation }) => {
             {videolist.map((item, index) => (
               <View style={style.mainCardStyle}>
                 <View>
-                  <Image
+                  <FastImage
                     source={require('../../assets/images/girl_group.png')}
                     style={style.imageDownload}
                   />

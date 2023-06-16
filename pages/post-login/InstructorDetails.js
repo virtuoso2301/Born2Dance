@@ -21,6 +21,7 @@ import verified from '../../assets/images/verified.png';
 import { hp, wp } from '../../Constants';
 import Share from 'react-native-share';
 import VideoControl from 'react-native-video-controls';
+import FastImage from 'react-native-fast-image';
 
 export const InstructorDetails = ({ navigation, route }) => {
   const { id, item } = route.params;
@@ -33,7 +34,7 @@ export const InstructorDetails = ({ navigation, route }) => {
   const renderItem = useCallback(
     ({ item, index }) => (
       <View style={style.imageContainer}>
-        <Image
+        <FastImage
           style={style.image}
           resizeMode={'cover'}
           source={{ uri: `${API_URL_IMAGE}/${item}` }}
@@ -91,12 +92,12 @@ export const InstructorDetails = ({ navigation, route }) => {
         <View style={style.line}>
           <View style={style.lineHR} />
           <View style={style.lineLabel}>
-            <Image
+            <FastImage
               source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
               resizeMode="cover"
               style={{ width: '100%', height: '100%', borderRadius: 100 }}
             />
-            <Image
+            <FastImage
               source={verified}
               resizeMode={'contain'}
               style={{

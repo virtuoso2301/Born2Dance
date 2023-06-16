@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +12,7 @@ import { moderateScale, scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { API_URL_IMAGE } from '../../services/api_url';
 import { hp, wp } from '../../Constants';
+import FastImage from 'react-native-fast-image'
 
 export const AllCity = ({ navigation }) => {
   const cityLists = useSelector(state => state.appData.cityList);
@@ -35,7 +35,7 @@ export const AllCity = ({ navigation }) => {
           style={style.input}
           placeholder="Search state name"
         />
-        <Image source={searchIcon} style={style.searchIcon} />
+        {/* <Image source={searchIcon} style={style.searchIcon} /> */}
         <Text style={style.pageHeader}> Popular states</Text>
         <View style={style.renderContainer}>
           {cityLists?.states?.length > 0 &&
@@ -47,11 +47,12 @@ export const AllCity = ({ navigation }) => {
                   // navigation.navigate('classes-list', { state: item.stateName })
                   navigation.navigate('city', { id: item._id, stateName:item?.stateName  })
                 }>
-                <Image
+                <FastImage
                   style={{
                     alignSelf: 'center',
-                    width: wp(40),
-                    height: wp(40),
+                    width: wp(42.5),
+                    height: wp(42.5),
+                    borderRadius:7
                   }}
                   source={{ uri: `${API_URL_IMAGE}/${item.profileImage}` }}
                 />
@@ -92,11 +93,11 @@ const style = StyleSheet.create({
     marginLeft: 5,
   },
   searchIcon: {
-    width: scale(20),
-    height: scale(20),
-    position: 'absolute',
-    top: scale(-46),
-    left: scale(12),
+    width: scale(18),
+    height: scale(18),
+    // position: 'absolute',
+    // top: scale(-46),
+    // left: scale(12),
   },
   renderContainer: {
     flexDirection: 'row',
