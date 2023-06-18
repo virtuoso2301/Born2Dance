@@ -21,6 +21,7 @@ import {
 export const DanceClass = ({ navigation, route }) => {
   const [classDetails, setClassDetails] = useState({});
   const [VideoId, setVideoId] = useState(null);
+  const [showMore,setShowMore] =useState(false)
 
   const getClassDetailsAPI = async () => {
     try {
@@ -44,6 +45,7 @@ export const DanceClass = ({ navigation, route }) => {
   useEffect(() => {
     getClassDetailsAPI();
   }, []);
+
 
   return (
     <View style={style.view}>
@@ -78,7 +80,15 @@ export const DanceClass = ({ navigation, route }) => {
         {classDetails?.city} | {classDetails?.stateId?.stateName}
       </Text>
       <Text style={{ ...style.className, paddingTop: 30 }}>About</Text>
+      {classDetails?.description?.length<200?
       <Text style={style.aboutText}>{classDetails?.description}</Text>
+      :
+      showMore?
+        <Text style={style.aboutText}>{classDetails?.description} ... <Text onPress={()=>setShowMore(false)} style={{color:"#844AE9", fontWeight:"500"}}>Show Less</Text></Text>
+        :
+      <Text style={style.aboutText}>{classDetails?.description?.slice(0,200)} ... <Text onPress={()=>setShowMore(true)} style={{color:"#844AE9", fontWeight:"500"}}>Show More</Text></Text>
+      
+}
 
       <TouchableOpacity
         style={style.buttonTakeClasses}
@@ -86,7 +96,6 @@ export const DanceClass = ({ navigation, route }) => {
           navigation.navigate('Learn Dance Form');
         }}>
         <LinearGradient
-          style={style.takeClassesGradient}
           colors={['#2885E5', '#844AE9']}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}>
@@ -107,7 +116,7 @@ const style = StyleSheet.create({
   },
   buttonTakeClasses: {
     bottom: 0,
-    marginTop: moderateVerticalScale(250),
+    marginTop: moderateVerticalScale(25),
     textAlign: 'center',
     borderRadius: 5,
     width: wp(95),

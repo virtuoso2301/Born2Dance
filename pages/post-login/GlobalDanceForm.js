@@ -16,7 +16,7 @@ const GlobalDanceForm = ({ navigation, route }) => {
 
   const [State, setState] = useState({
     States: [],
-    SelectedState: {},
+    SelectedState: [],
     IsLoading: false,
     StateDances: [],
   });
@@ -24,6 +24,11 @@ const GlobalDanceForm = ({ navigation, route }) => {
   useEffect(() => {
     GetAllIndiaStates();
   }, []);
+
+  useEffect(() => {
+    console.log("SELECTED STATE: ", State.SelectedState)
+  }, [State.SelectedState])
+
 
   const GetAllIndiaStates = async () => {
     setState(p => ({ ...p, IsLoading: true }));
@@ -81,7 +86,7 @@ const GlobalDanceForm = ({ navigation, route }) => {
 
         // }
         // console.log("DANCE TYPESS END")
-      }else{
+      } else {
         setState(p => ({
           ...p,
           StateDances: [],
@@ -95,26 +100,27 @@ const GlobalDanceForm = ({ navigation, route }) => {
 
   const onStatePress = item => {
     GetDanceByStateId({ id: item._id })
-    setState(p => ({ ...p, SelectedState: item }));
+    setState(p => ({ ...p, SelectedState: [...State.SelectedState,item] }));
   };
 
   return (
     <View style={styles.Container}>
       <BDLoader visible={State.IsLoading} />
-      <View style={{ flex: 1, flexDirection: 'row'}}>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
         <FlatList
-          style={{ width: wp(30),backgroundColor:"#00000099" }}
+          style={{ width: wp(30), backgroundColor: "#00000099", paddingVertical:hp(1.5),paddingHorizontal:wp(1.5) }}
+          contentContainerStyle={{ alignItems: "center" }}
           data={State.States}
           renderItem={({ item, index }) => (
-            <View style={styles.imageContainerDance}>
-              <TouchableOpacity style={{backgroundColor:"#00000099"}} onPress={() => onStatePress(item)}>
+            <View style={{width:"100%",backgroundColor:"#00000000"}}>
+              <TouchableOpacity style={{width:"100%",backgroundColor:"#00000000",marginBottom:hp(1.5) }} onPress={() => onStatePress(item)}>
                 <FastImage
                   style={{
                     alignSelf: 'center',
                     width: wp(20),
                     height: wp(20),
                     borderRadius: wp(20),
-                    opacity: State.SelectedState?._id == item?._id ? 1 : 0.7,
+                    opacity:State.SelectedState[0]?._id == item?._id? 1:0.4
                   }}
                   resizeMode={'cover'}
                   source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
@@ -122,7 +128,7 @@ const GlobalDanceForm = ({ navigation, route }) => {
                 <Text
                   style={{
                     color:
-                      State.SelectedState?._id == item?._id
+                      State.SelectedState[0]?._id == item?._id
                         ? '#FFF'
                         : '#BABFC8CC',
                     textAlign: 'center',
@@ -136,40 +142,51 @@ const GlobalDanceForm = ({ navigation, route }) => {
             </View>
           )}
         />
-        <FlatList
-          style={{ width: wp(70) }}
-          data={State.States.length > 0 ? State.StateDances : []}
-          numColumns={2}
-          renderItem={({ item }) => (
-            <View style={styles.imageContainerDance}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Dance Class', {
-                  params: { id: item?._id, item: item },
-                })}>
-                <FastImage
-                  style={{
-                    alignSelf: 'center',
-                    width: wp(30),
-                    height: wp(40),
-                    borderRadius: wp(2),
-                  }}
-                  resizeMode={'cover'}
-                  source={{ uri: `${API_URL_IMAGE}/${item?.banner}` }}
-                />
-                <Text
-                  style={{
-                    color: '#BABFC8',
-                    textAlign: 'center',
-                    marginTop: '5%',
-                    fontSize: 14,
-                    fontWeight: '400',
-                  }}>
-                  {item?.className}
-                </Text>
-              </TouchableOpacity>
+        <View style={{ width: wp(70),paddingVertical:hp(1.5),paddingHorizontal:wp(1.5) }}>
+          {State?.SelectedState?.length>0?
+            <FlatList
+              data={State?.StateDances}
+              numColumns={2}
+              style={{paddingLeft:wp(1.5)}}
+              contentContainerStyle={{justifyContent:"flex-start"}}
+              renderItem={({ item }) => (
+                <View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Dance Class', {
+                      params: { id: item?._id, item: item },
+                    })}>
+                    <FastImage
+                      style={{
+                        alignSelf: 'center',
+                        width: wp(30),
+                        height: wp(35),
+                        borderRadius: wp(2),
+                        marginHorizontal:wp(1.5),
+                        marginVertical:hp(1.5)
+                      }}
+                      resizeMode={'cover'}
+                      source={{ uri: `${API_URL_IMAGE}/${item?.banner}` }}
+                    />
+                    <Text
+                      style={{
+                        color: '#BABFC8',
+                        textAlign: 'center',
+                        marginTop: '5%',
+                        fontSize: 14,
+                        fontWeight: '400',
+                      }}>
+                      {item?.className}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+            :
+            <View style={{ flex: 1,width:"100%", alignItems:"center",justifyContent:"center" }}>
+              <Text style={{ color: "#ffffff",fontWeight:"500" }}>Please select a state!</Text>
             </View>
-          )}
-        />
+          }
+        </View>
       </View>
     </View>
   );
@@ -181,15 +198,6 @@ const styles = StyleSheet.create({
   Container: {
     flex: 1,
     backgroundColor: '#0E172A',
-  },
-  imageContainerDance: {
-    marginBottom: Platform.select({ ios: hp(1), android: hp(1) }), // Prevent a random Android rendering issue
-    backgroundColor: '#0E172A',
-    borderRadius: 8,
-    justifyContent: 'flex-end',
-    marginRight: wp(5),
-    marginTop:hp(1.5),
-    backgroundColor:"#00000099"
   },
 });
 

@@ -265,6 +265,24 @@ const AppStack = (props) => {
           ...preLoginPageHeaderOptions,
         }}
       />
+      {/* <Stack.Screen
+        name="register-yourself"
+        component={RegisterYourself}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Register yourself',
+          ...preLoginPageHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="register-yourclass"
+        component={RegisterYourClass}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Register your class',
+          ...preLoginPageHeaderOptions,
+        }}
+      /> */}
       <Stack.Screen
         name="class-list2"
         component={ClassList2}

@@ -179,7 +179,7 @@ export const LearnDanceForm = ({ navigation }) => {
     <View style={{ flex: 1 }}>
       <ScrollView style={style.view}>
         {error !== '' && <Text style={{ color: 'red' }}>{error}</Text>}
-        <View style={{ marginTop: moderateScale(15) }}>
+        <View style={{ marginTop: moderateScale(10) }}>
           <Text style={style.whyYouText}>Song name</Text>
         </View>
         <View style={style.dropdownStyle}>
@@ -572,7 +572,6 @@ const style = StyleSheet.create({
   whyYouText: {
     color: '#ffffff',
     fontSize: scale(17),
-    fontStyle: 'Poppins',
   },
   dropdownStyle: {
     marginTop: moderateScale(20),

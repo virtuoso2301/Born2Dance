@@ -15,6 +15,7 @@ import searchIcon from '../../assets/images/search.png';
 import verified from '../../assets/images/verified.png';
 import { BDLoader, hp, wp } from '../../Constants';
 import FastImage from 'react-native-fast-image';
+import LinearGradient from 'react-native-linear-gradient';
 
 export const HireUs = ({ navigation }) => {
   const [State, setState] = useState({
@@ -23,6 +24,12 @@ export const HireUs = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState("All")
   const [list, setList] = useState(null)
   const [displayList, setDisplayList] = useState(null)
+  const actions = [{
+    text: "Register Yourself",
+    icon: require("../../assets/images/user.png"),
+    name: "register",
+    position: 1
+  }]
 
   useEffect(() => {
     GetHireUsList();
@@ -72,11 +79,11 @@ export const HireUs = ({ navigation }) => {
     }
   }, [selectedTab])
 
-  useEffect(()=>{
+  useEffect(() => {
 
     console.log(displayList)
 
-  },[])
+  }, [])
 
   const designations = [
     { id: "1", title: "All" },
@@ -176,6 +183,7 @@ export const HireUs = ({ navigation }) => {
         />
       </View>
 
+
       <View style={style.TabContainer}>
         {/* <ScrollView horizontal={true}>
           <View
@@ -219,7 +227,7 @@ export const HireUs = ({ navigation }) => {
             )
           }}
           horizontal
-          style={{marginVertical:hp(1.5)}}
+          style={{ marginVertical: hp(1.5) }}
         />
       </View>
 
@@ -270,11 +278,41 @@ export const HireUs = ({ navigation }) => {
         data={displayList}
         renderItem={renderItem}
       />
+      <TouchableOpacity
+        style={style.buttonTakeClasses}
+        onPress={() => {
+        }}>
+        <LinearGradient
+          style={style.takeClassesGradient}
+          colors={['#2885E5', '#844AE9']}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}>
+          <Text style={{ alignSelf:'center',color:"#ffffff",fontWeight:"500"}}>
+            Register Yourself
+          </Text>
+        </LinearGradient>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const style = StyleSheet.create({
+  takeClassesGradient: {
+    borderRadius: 5,
+    justifyContent: 'center',
+    width:"100%",
+    height:"100%",
+  },
+  buttonTakeClasses: {
+    textAlign: 'center',
+    borderRadius: 5,
+    position: 'absolute',
+    bottom: "4%",
+    right: "4%",
+    height:hp(5),
+    width:wp(40),
+    justifyContent:"center"
+},
   view: {
     backgroundColor: '#0E172A',
     flex: 1,

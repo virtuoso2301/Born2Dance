@@ -26,9 +26,10 @@ import FastImage from 'react-native-fast-image';
 export const InstructorDetails = ({ navigation, route }) => {
   const { id, item } = route.params;
 
+
   const BannerWidth = Dimensions.get('window').width * 1;
 
-  const [likeCount, setLikeCount] = useState(11)
+  const [likeCount, setLikeCount] = useState(item.like)
   const [isLiked, setIsLiked] = useState(false)
 
   const renderItem = useCallback(
@@ -46,7 +47,48 @@ export const InstructorDetails = ({ navigation, route }) => {
     [],
   );
 
-  console.log('img -> ', JSON.stringify(item, null, 2));
+
+  const increaseLikeAPI = async () => {
+    try {
+      const response = await fetch(`${API_URL}/increaseLike`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          id: item._id,
+        }),
+      });
+      const responseJson = await response.json();
+      // setClassDetails(responseJson.dance);
+      console.log(responseJson)
+    } catch (e) {
+      console.log('increaseLikeAPI -> ', e);
+    }
+  };
+
+  const decreaseLikeAPI = async () => {
+    try {
+      const response = await fetch(`${API_URL}/decreaseLike`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          id: item._id,
+        }),
+      });
+      const responseJson = await response.json();
+      // setClassDetails(responseJson.dance);
+      console.log(responseJson)
+    } catch (e) {
+      console.log('decreaseLikeAPI -> ', e);
+    }
+  };
+
+  //console.log('img -> ', JSON.stringify(item, null, 2));
 
   const onSharePress = async () => {
     try {
@@ -64,8 +106,14 @@ export const InstructorDetails = ({ navigation, route }) => {
 
   const onLikePress = () => {
     setIsLiked(!isLiked)
-    if (!isLiked) { setLikeCount(likeCount + 1) }
-    else { setLikeCount(likeCount - 1) }
+    if (!isLiked) { 
+      setLikeCount(likeCount + 1)
+      increaseLikeAPI()
+     }
+    else { 
+      setLikeCount(likeCount - 1)
+      decreaseLikeAPI()
+     }
 
 
   }
