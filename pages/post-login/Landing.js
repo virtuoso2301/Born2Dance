@@ -80,7 +80,7 @@ export const PostLoginLanding = ({ navigation }) => {
     cityList: null,
     bannerList: null,
   });
-  const [bannerURL,setBannerURL]=useState("")
+  const [bannerURL, setBannerURL] = useState("")
   const [country, SetCountry] = useState(null)
 
   const States = [
@@ -120,11 +120,11 @@ export const PostLoginLanding = ({ navigation }) => {
             backgroundColor: 'white',
             backgroundColor: '#000000',
             borderRadius: 10,
-            width: screenWidth-screenWidth/50,
+            width: screenWidth - screenWidth / 50,
             marginHorizontal: 1,
             marginVertical: 5,
             height: Dimensions.get("window").height * 0.24,
-            alignSelf:"center"
+            alignSelf: "center"
 
           }}
         />
@@ -142,11 +142,11 @@ export const PostLoginLanding = ({ navigation }) => {
             backgroundColor: 'white',
             backgroundColor: '#000000',
             borderRadius: 10,
-            width: screenWidth-screenWidth/50,
+            width: screenWidth - screenWidth / 50,
             marginHorizontal: 1,
             marginVertical: 5,
             height: Dimensions.get("window").height * 0.24,
-            alignSelf:"center"
+            alignSelf: "center"
           }}
           controls={false}
           paused={false}
@@ -194,13 +194,16 @@ export const PostLoginLanding = ({ navigation }) => {
   useEffect(() => {
     GetRequiredApis();
 
-    ;(async() => {
+    ; (async () => {
       const response = await fetch(`${API_URL}/getAllCountry`);
       const data = await response.json();
       SetCountry(data.countrys)
     })();
 
   }, []);
+
+  const [heroBannerEnded, setHeroBannerEnded] = useState(false)
+  const [muted,setMuted]=useState(false)
 
 
   return (
@@ -234,31 +237,41 @@ export const PostLoginLanding = ({ navigation }) => {
             loop={true}
           />
         </View> */}
-        <View>
-        <Video
-          source={{ uri: `${API_URL_IMAGE}/${bannerURL}` }}
-          // source={{uri:"https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761"}}
-          resizeMode="cover"
-          style={{
-            // width: "100%",
-            // height: "100%",
-            // alignSelf:"center"
-            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-            backgroundColor: 'white',
-            backgroundColor: '#000000',
-            borderRadius: 10,
-            width: screenWidth-screenWidth/50,
-            marginHorizontal: 1,
-            marginVertical: 5,
-            height: Dimensions.get("window").height * 0.24,
-            alignSelf:"center"
-          }}
-          controls={false}
-          paused={false}
-          repeat={false}
-        >
-        </Video>
-      </View>
+        <View style={{ height: Dimensions.get("window").height * 0.24 }}>
+          <Video
+            source={{ uri: `${API_URL_IMAGE}/${bannerURL}` }}
+            // source={{uri:"https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761"}}
+            resizeMode="cover"
+            style={{
+              // width: "100%",
+              // height: "100%",
+              // alignSelf:"center"
+              marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+              backgroundColor: 'white',
+              backgroundColor: '#000000',
+              borderRadius: 10,
+              width: screenWidth - screenWidth / 50,
+              marginHorizontal: 1,
+              alignSelf: "center",
+              height: "100%",
+
+            }}
+            controls={false}
+            paused={false}
+            repeat={false}
+            onEnd={() => setHeroBannerEnded(true)}
+            muted={muted}
+            onLoadStart={() => setHeroBannerEnded(false)}
+          >
+          </Video>
+          {!heroBannerEnded?
+            <TouchableOpacity style={{position: "absolute", top: "4.5%", right: "4.5%",}} onPress={()=>setMuted(!muted)}>
+              <Text style={{ color: "#ffffff", fontWeight: "bold", fontSize: 10 }}>{muted?`${"UNMUTE"}`:`${"MUTE"}`}</Text>
+            </TouchableOpacity>
+            :
+            null
+          }
+        </View>
 
         <View style={style.section}>
           <View style={style.sectionHeader}>
@@ -288,9 +301,10 @@ export const PostLoginLanding = ({ navigation }) => {
                   <View style={style.teacherImageContainer}>
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate('Hire Us', {
-                          screen: 'instructor-details',
-                          params: { id: item?._id, item: item },
+
+                        navigation.navigate('instructor-details', {
+                          id: item._id,
+                          item: item,
                         });
                       }}>
                       <FastImage
@@ -315,67 +329,67 @@ export const PostLoginLanding = ({ navigation }) => {
             <Text style={style.sectionTitle}>Global Dance Forms</Text>
           </View>
           <View style={{ paddingTop: '8%', flexDirection: 'row' }}>
-            {country?.slice(0,2)?.map(item => 
+            {country?.slice(0, 2)?.map(item =>
               <TouchableOpacity
-              activeOpacity={0.5}
-              style={style.workshopContainer}
-              onPress={() => navigation.navigate('global dance form',{
-                screen: 'global dance form',
-                params: { id: item?._id, item: item },
-              })}>
-              <View style={style.imageDance}>
-                <FastImage
-                  style={{ width: '100%', height: '100%' }}
-                  resizeMode={'cover'}
-                  source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
-                />
-              </View>
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: -wp(10),
-                  left: 0,
-                }}>
-                <LinearGradient
-                  style={[
-                    {
-                      width: wp(50),
-                      height: wp(50),
-                    },
-                  ]}
-                  colors={['#0304045c', '#d2dce52b']}
-                  start={{ x: 1, y: 1 }}
-                  end={{ x: 1, y: 0 }}>
-                  <View
-                    style={{
-                      position: 'absolute',
-                      bottom: hp(1),
-                      alignSelf: 'center',
-                      alignItems: 'flex-start',
-                      width: '100%',
-                      paddingLeft: wp(2),
-                    }}>
-                    <Text
+                activeOpacity={0.5}
+                style={style.workshopContainer}
+                onPress={() => navigation.navigate('global dance form', {
+                  screen: 'global dance form',
+                  params: { id: item?._id, item: item },
+                })}>
+                <View style={style.imageDance}>
+                  <FastImage
+                    style={{ width: '100%', height: '100%' }}
+                    resizeMode={'cover'}
+                    source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
+                  />
+                </View>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: -wp(10),
+                    left: 0,
+                  }}>
+                  <LinearGradient
+                    style={[
+                      {
+                        width: wp(50),
+                        height: wp(50),
+                      },
+                    ]}
+                    colors={['#0304045c', '#d2dce52b']}
+                    start={{ x: 1, y: 1 }}
+                    end={{ x: 1, y: 0 }}>
+                    <View
                       style={{
-                        color: '#fff',
-                        marginBottom: hp(0.5),
-                        fontSize: wp(6),
+                        position: 'absolute',
+                        bottom: hp(1),
+                        alignSelf: 'center',
+                        alignItems: 'flex-start',
+                        width: '100%',
+                        paddingLeft: wp(2),
                       }}>
-                      {item?.name}
-                    </Text>
-                    <Text
-                      style={[
-                        style.danceFormText,
-                        { paddingHorizontal: wp(5) },
-                      ]}>
-                      {item?.subtitle}
-                    </Text>
-                  </View>
-                </LinearGradient>
-              </View>
-            </TouchableOpacity>
-              )}
+                      <Text
+                        style={{
+                          color: '#fff',
+                          marginBottom: hp(0.5),
+                          fontSize: wp(6),
+                        }}>
+                        {item?.name}
+                      </Text>
+                      <Text
+                        style={[
+                          style.danceFormText,
+                          { paddingHorizontal: wp(5) },
+                        ]}>
+                        {item?.subtitle}
+                      </Text>
+                    </View>
+                  </LinearGradient>
+                </View>
+              </TouchableOpacity>
+            )}
             {/* <TouchableOpacity
               activeOpacity={1}
               style={style.workshopContainer}
@@ -443,24 +457,24 @@ export const PostLoginLanding = ({ navigation }) => {
           </View>
 
           <FlatList
-            data={State.cityList?.states.slice(0,4)}
+            data={State.cityList?.states.slice(0, 4)}
             renderItem={({ item }) => (
               <View style={style.imageContainerDance}>
-                
+
                 <TouchableOpacity
                   onPress={() =>
                     // navigation.navigate('classes-list', { city: item.stateName })
-                    navigation.navigate('city', { id: item._id, stateName:item?.stateName  })
+                    navigation.navigate('city', { id: item._id, stateName: item?.stateName })
                   }
-                  style={{height:hp(25),justifyContent:"center",width:wp(73)}}
-                  >
+                  style={{ height: hp(25), justifyContent: "center", width: wp(73) }}
+                >
                   <FastImage
                     style={{
                       alignSelf: 'center',
                       width: wp(70),
                       height: hp(20),
-                      borderRadius:7
-                     
+                      borderRadius: 7
+
                     }}
                     resizeMode={'cover'}
                     source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
@@ -486,7 +500,7 @@ export const PostLoginLanding = ({ navigation }) => {
             style={style.image}
             source={require('../../assets/images/LastBanner.png')}
           />
-          
+
         </View>
       </ScrollView>
     </View>
@@ -507,17 +521,17 @@ const style = StyleSheet.create({
     width: screenWidth,
     marginHorizontal: 1,
     marginVertical: 5,
-    alignItems:"center",
+    alignItems: "center",
     height: Dimensions.get("window").height * 0.24,
-    justifyContent:"center"
+    justifyContent: "center"
   },
   image: {
     width: '95%',
-    resizeMode:"cover",
+    resizeMode: "cover",
     height: Dimensions.get("window").height * 0.3,
-    alignSelf:"center",
-    marginTop:hp(1)
-    
+    alignSelf: "center",
+    marginTop: hp(1)
+
 
   },
   imageTitle: {
@@ -585,7 +599,7 @@ const style = StyleSheet.create({
   imageContainerDance: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-  
+
     backgroundColor: '#0E172A',
     borderRadius: 8,
     justifyContent: 'flex-start',

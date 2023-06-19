@@ -360,7 +360,7 @@ const BottomTabs = ({ navigation }) => {
               <Image
                 source={require('../assets/images/CustomVideo.png')}
                 resizeMode={'contain'}
-                style={styles.icon}
+                style={[styles.icon,{tintColor:'#9a9da6'}]}
               />
             );
           } else if (route.name === 'My plan') {
@@ -386,7 +386,7 @@ const BottomTabs = ({ navigation }) => {
       />
       <Tab.Screen
         name="Nearby Classes"
-        component={NearByClasses}
+        component={AllCity}
         options={{ headerShown: false }}
       />
       <Tab.Screen
