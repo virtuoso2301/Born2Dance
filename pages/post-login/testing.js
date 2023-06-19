@@ -39,12 +39,12 @@ const MyCarousel = () => {
           source={{ uri: `${API_URL_IMAGE}/${item.image}` }}
           containerStyle={styles.imageContainer}
           style={styles.image}
-          parallaxFactor={0.4}
+          parallaxFactor={0.3}
           {...parallaxProps}
         />
-        <Text style={styles.Headertitle} numberOfLines={2}>
+        {/* <Text style={styles.Headertitle} numberOfLines={2}>
           {item?.categoryName}
-        </Text>
+        </Text> */}
       </TouchableOpacity>
     );
   };
@@ -74,7 +74,8 @@ export default MyCarousel;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 230,
+    width: "100%",
+    height:"100%"
   },
   item: {
     width: screenWidth - 240,
@@ -88,14 +89,13 @@ const styles = StyleSheet.create({
   },
   image: {
     ...StyleSheet.absoluteFillObject,
-    resizeMode: 'contain',
-    position: 'relative',
+    resizeMode: 'cover',
   },
   Headertitle: {
     fontSize: 12,
     fontWeight: '600',
     color: '#fff',
-    textAlign: 'center',
+alignSelf:"center",
     position: 'absolute',
     top: '88%',
     marginLeft: '32%',
