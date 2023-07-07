@@ -100,7 +100,7 @@ const GlobalDanceForm = ({ navigation, route }) => {
 
   const onStatePress = item => {
     GetDanceByStateId({ id: item._id })
-    setState(p => ({ ...p, SelectedState: [...State.SelectedState,item] }));
+    setState(p => ({ ...p, SelectedState: [item] }));
   };
 
   return (
@@ -120,7 +120,7 @@ const GlobalDanceForm = ({ navigation, route }) => {
                     width: wp(20),
                     height: wp(20),
                     borderRadius: wp(20),
-                    opacity:State.SelectedState[0]?._id == item?._id? 1:0.4
+                    opacity:State.SelectedState[0]?._id == item?._id? 1:0.6
                   }}
                   resizeMode={'cover'}
                   source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
@@ -143,6 +143,7 @@ const GlobalDanceForm = ({ navigation, route }) => {
           )}
         />
         <View style={{ width: wp(70),paddingVertical:hp(1.5),paddingHorizontal:wp(1.5) }}>
+        <Text style={{color:"#fff",fontWeight:"600",fontSize:16,alignSelf:"center",marginVertical:hp(1)}}>{State?.SelectedState[0]?.stateName}</Text>
           {State?.SelectedState?.length>0?
             <FlatList
               data={State?.StateDances}

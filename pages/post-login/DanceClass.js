@@ -65,7 +65,7 @@ export const DanceClass = ({ navigation, route }) => {
           play={false}
         />
       </View>
-      <Text style={style.className}>{classDetails?.className}</Text>
+      <Text onPress={()=>console.log(classDetails)} style={style.className}>{classDetails?.className}</Text>
       <Text style={style.classRating}>
         4.5
         <AirbnbRating

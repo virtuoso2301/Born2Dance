@@ -8,6 +8,7 @@ import {
   Button,
   TouchableOpacity,
   TextInput,
+  ToastAndroid
 } from 'react-native';
 import {
   moderateScale,
@@ -19,6 +20,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { hp, wp } from '../../Constants';
 import RazorpayCheckout from 'react-native-razorpay';
 import Logo from '../../assets/images/logo.png';
+import { API_URL_IMAGE, API_URL } from '../../services/api_url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const style = StyleSheet.create({
   view: {
@@ -39,7 +42,6 @@ const style = StyleSheet.create({
   whyYouText: {
     color: '#ffffff',
     fontSize: scale(16),
-    fontStyle: 'Poppins',
     paddingBottom: hp(1),
   },
   dropdownStyle: {
@@ -60,7 +62,7 @@ const style = StyleSheet.create({
     textAlign: 'center',
   },
   mainNextstyle: {
-    marginVertical: hp(4),
+    marginTop: hp(3),
   },
   selectedTextStyle: {
     color: '#BABFC8',
@@ -85,6 +87,36 @@ const style = StyleSheet.create({
 });
 
 export const CustomVideo = ({ navigation }) => {
+
+  const [userId,setUserId]=useState("")
+  const [userName,setUserName]=useState("")
+
+
+  const GetUserDetail=async()=>{
+    const user= await AsyncStorage.getItem('user')
+setUserId(JSON.parse(user)._id)
+setUserName(JSON.parse(user).fullname)
+  }
+
+  const GetRequests=async()=>{
+    const response = await fetch(`${API_URL}/getAllCustomVideo`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    const responseJson = await response.json();
+    console.log("ALL REQUESTSSS: ",responseJson)
+  }
+
+  useEffect(()=>{
+    GetUserDetail()
+    GetRequests()
+  },[])
+
+
+
   const TypeOfEvent = [
     { label: 'Online', value: 'Online' },
     { label: 'Offline', value: 'Offline' },
@@ -103,49 +135,80 @@ export const CustomVideo = ({ navigation }) => {
     DanceLevel: null,
     Email: '',
     PhoneNumber: '',
+    SongTitle: "",
+    paymentStatus: "false"
   });
 
-  const onSubmitPress = async () => {
-    if (State.DanceLevel == null) {
-      return alert('Please select dance level');
-    }
-    if (State.PhoneNumber.length < 10) {
-      return alert('Please enter your phone number');
-    }
-    const options = {
-      description: 'Description goes here',
-      image: Logo,
-      currency: 'INR',
-      key: 'rzp_test_OCVELwbtKpzpvc', // Your api key
-      amount: Number(State.DanceLevel?.value) + '00',
-      name: State.DanceLevel?.label,
-      prefill: {
-        email: 'email goes here',
-        contact: 'phone number goes here',
-        name: 'Fullname goes here',
-      },
-      theme: { color: '#F37254' },
-    };
-    await RazorpayCheckout.open(options)
-      .then(data => {
-        // handle success
-        ToastAndroid.showWithGravity(
-          `Success: ${data.razorpay_payment_id}`,
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-        );
-        dispatch(paymentSuccessStatusAdd(data.razorpay_payment_id));
-        navigation.navigate('home');
-      })
-      .catch(error => {
-        // handle success
-        console.log('Razorpay -> ', JSON.stringify(error, null, 2));
-        ToastAndroid.showWithGravity(
-          error.error?.description,
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-        );
+  useEffect(()=>{
+    console.log("STATE: ",State)
+  },[State])
+
+  const customVideoRequestAPI = async () => {
+    try {
+      const response = await fetch(`${API_URL}/customeVedioForm`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          event:State.TypeOfEvent,
+          songname:State.SongTitle,
+          paymentStatus:"false",
+          phonenumber:State.PhoneNumber,
+          email:State.Email,
+          level:State.DanceLevel,
+          userId:userId
+        }),
       });
+      const responseJson = await response.json();
+      // setClassDetails(responseJson.dance);
+      console.log("SUBMITed RESPONSE: ",responseJson)
+    } catch (e) {
+      console.log('customVideoRequestAPI -> ', e);
+    }
+  };
+
+  const onSubmitPress = async () => {
+    if (State.DanceLevel == null || State.TypeOfEvent==null || State.Email==''|| State.PhoneNumber.length<10 ||State.SongTitle=='') {
+      return alert('Please fill all fields correctly');
+    }
+    else {
+      customVideoRequestAPI()
+      const options = {
+        description: 'Description goes here',
+        image: "https://i.imgur.com/3g7nmJC.png",
+        currency: 'INR',
+        // key: 'rzp_test_OCVELwbtKpzpvc', // Your api key
+        key: 'sgsdcsgjsdvsi',
+        amount: "100",
+        name: State.SongTitle,
+        prefill: {
+          email: State.Email,
+          contact: State.PhoneNumber,
+          name: userName,
+        },
+        theme: { color: '#F37254' },
+      };
+      await RazorpayCheckout.open(options)
+        .then(data => {
+          // handle success
+          alert(`Success: ${data.razorpay_payment_id}`);
+          dispatch(paymentSuccessStatusAdd(data.razorpay_payment_id));
+          navigation.navigate('home');
+          
+
+        })
+        .catch(error => {
+          // handle success
+          console.log('Razorpay -> ', error);
+          ToastAndroid.showWithGravity(
+            error.error?.description,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+          );
+        });
+    }
   };
 
   return (
@@ -162,6 +225,7 @@ export const CustomVideo = ({ navigation }) => {
             placeholderTextColor="#BABFC8"
             style={style.input}
             placeholder="Eg. Summer high,AP Dhillon"
+            onChangeText={e => setState(p => ({ ...p, SongTitle: e }))}
           />
         </View>
 
@@ -176,8 +240,8 @@ export const CustomVideo = ({ navigation }) => {
             labelField="label"
             valueField="value"
             placeholder={'Please select the type'}
-            value={State.TypeOfEvent?.value}
-            onChange={e => setState(p => ({ ...p, TypeOfEvent: e }))}
+            value={State.TypeOfEvent}
+            onChange={e => setState(p => ({ ...p, TypeOfEvent: e.value }))}
             renderItem={(item, selected) => (
               <View
                 style={{
@@ -212,8 +276,8 @@ export const CustomVideo = ({ navigation }) => {
             labelField="label"
             valueField="value"
             placeholder={'Please select the type'}
-            value={State.DanceLevel?.value}
-            onChange={e => setState(p => ({ ...p, DanceLevel: e }))}
+            value={State.DanceLevel}
+            onChange={e => setState(p => ({ ...p, DanceLevel: e.value }))}
           />
         </View>
 
@@ -250,6 +314,17 @@ export const CustomVideo = ({ navigation }) => {
             style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5 }}>
             <Text style={{ ...style.loginButtonText, color: '#FFFFFF' }}>
               Submit
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("download")} style={{ position: "absolute", top: "3%", right: "3%", justifyContent: "center", alignItems: "center", height: "5%", width: "50%" }}>
+          <LinearGradient
+            colors={['#2885E5', '#9968EE']}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+            style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5, justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+            <Text style={{ color: '#FFFFFF', fontSize: 12 }}>
+              See Your Requested Videos
             </Text>
           </LinearGradient>
         </TouchableOpacity>

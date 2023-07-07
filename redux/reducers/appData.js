@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+  bannerMuted: true,
   usersSignUp: null,
   usersSignIn: null,
   token: null,
@@ -55,6 +56,9 @@ export const appData = createSlice({
     paymentSuccessStatusAdd: (state, action) => {
       state.paymentSuccessStatus = action.payload;
     },
+    setBannerMuted: (state, action) => {
+      state.bannerMuted = action.payload
+    }
   },
 });
 
@@ -71,6 +75,7 @@ export const {
   hireusAdd,
   pricesAdd,
   paymentSuccessStatusAdd,
+  setBannerMuted
 } = appData.actions;
 
 export default appData.reducer;

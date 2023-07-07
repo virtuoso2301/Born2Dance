@@ -25,11 +25,13 @@ export const ProfileTwo = ({ navigation, route }) => {
   const users = route.params.users;
   const token = useSelector(state => state.appData.token);
 
+
+
   const [name, setName] = useState(users?.fullname);
   const [email, setEmail] = useState(users?.email);
   const [phone, setPhone] = useState(users?.phone);
   const [image, setImage] = useState({
-    uri: `${API_URL_IMAGE}/` + users?.profileImage,
+    uri: users?.profileImage,
   });
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

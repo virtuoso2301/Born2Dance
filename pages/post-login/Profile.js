@@ -18,6 +18,7 @@ import Bell from '../../assets/images/bell.png';
 import note from '../../assets/images/note.png';
 import hire from '../../assets/images/hire.png';
 import phone from '../../assets/images/phone.png';
+import info from '../../assets/images/info.png';
 import { useDispatch } from 'react-redux';
 import { tokenAdd, usersSignInAdd } from '../../redux/reducers/appData';
 import { API_URL_IMAGE } from '../../services/api_url';
@@ -27,7 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export function Profile({ navigation }) {
   const dispatch = useDispatch();
   const [State, setState] = useState({ userDetail: null });
-  const [googleLoginData, setGoogleLoginData] = useState({});
+
 const view="View Profile"
   useEffect(() => {
     GetUserDetails();
@@ -39,12 +40,11 @@ const view="View Profile"
     if (user) {
       setState(p => ({ ...p, userDetail: JSON.parse(user) }));
     }
-    console.log(State.userDetail,'sha')
-    console.log(user,'shadaab')
+    //console.log("1 ",State.userDetail)
+    console.log("2 ",user)
     const data=JSON.parse(user)
-    setGoogleLoginData(data.user )
-    console.log(googleLoginData,"usedfr")
-  };
+
+};
 
   return (
     <LinearGradient
@@ -83,15 +83,20 @@ const view="View Profile"
           <Image
             source={
               
-              State.userDetail&&googleLoginData
-                ? {
-                    uri:googleLoginData.photo
-                  }
-                : {
-                  uri: State.userDetail?.profileImage?.startsWith('http')
-                      ? State.userDetail?.profileImage
-                      : `${API_URL_IMAGE}/` + State.userDetail?.profileImage,
-                }
+              // State.userDetail&&googleLoginData
+              //   ? {
+              //       uri:googleLoginData.photo
+              //     }
+              //   : {
+              //     uri: State.userDetail?.profileImage?.startsWith('http')
+              //         ? State.userDetail?.profileImage
+              //         : `${API_URL_IMAGE}/` + State.userDetail?.profileImage,
+              //   }
+              {
+                uri: State.userDetail?.profileImage?.startsWith('http')
+                    ? State.userDetail?.profileImage
+                    : `${API_URL_IMAGE}/` + State.userDetail?.profileImage,
+              }
             }
             resizeMode={'cover'}
             style={style.profileImage}
@@ -103,15 +108,13 @@ const view="View Profile"
               color: '#FFFFFF',
               marginTop: moderateVerticalScale(6),
             }}>
-            {State.userDetail?.fullname|| googleLoginData.name}
+            {State.userDetail?.fullname}
           </Text>
 
           
           <TouchableOpacity
 
             onPress={() =>
-            googleLoginData&&State.userDetail?
-            navigation.navigate("profile"):
               navigation.navigate('profileTwo', { users: State.userDetail})
             }>
             <Text
@@ -121,21 +124,16 @@ const view="View Profile"
                 color: '#FFFFFF',
                 marginTop: moderateVerticalScale(6),
               }}>
-              {googleLoginData&&State.userDetail?googleLoginData.email:view}
+              {view}
             </Text>
           </TouchableOpacity>
         </View>
         <View style={style.profileList}>
           <FlatList
             data={[
+              { key: 'About us', image: info, route: 'About us' },
               { key: 'My wallet', image: wallet, route: 'Wallet' },
-              {
-                key: 'Register Dance class',
-                image: note,
-                route: 'Nearby Classes',
-              },
               { key: 'Refer & Earn', image: note, route: 'refer' },
-              { key: 'Hire Us', image: hire, route: 'Hire Us' },
               { key: 'Notifications', image: Bell, route: 'Notifications' },
               { key: 'Contact Us', image: phone, route: 'contact' },
               { key: 'Downloads', image: download, route: 'download' },
@@ -202,7 +200,7 @@ const view="View Profile"
 const style = {
   TextButton: {
     fontSize: scale(15),
-    fontWeight: 'Inter',
+    fontWeight: 'bold',
     color: '#000',
     backgroundColor: '#FFFFFF',
     width: '35%',

@@ -183,7 +183,6 @@ const style = StyleSheet.create({
     fontStyle: 'normal',
   },
   takeClassesButtonText: {
-    positions: 'fixed',
     bottom: 0,
     padding: '3%',
     alignSelf: 'center',

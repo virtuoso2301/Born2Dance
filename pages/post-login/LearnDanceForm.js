@@ -522,7 +522,7 @@ export const LearnDanceForm = ({ navigation }) => {
         <View style={{ ...style.dropdownStyle, paddingBottom: 50 }}>
           <TouchableOpacity
             onPress={handleCheckboxToggle}
-            style={styles.container}>
+            style={style.container}>
             {isChecked ? (
               <Icon name="check-square-o" size={24} color="#babfc8" />
             ) : (

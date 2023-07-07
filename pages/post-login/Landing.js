@@ -20,6 +20,7 @@ import {
   cityListAdd,
   danceCategoryAdd,
   hireusAdd,
+  setBannerMuted,
   usersSignInAdd,
 } from '../../redux/reducers/appData';
 import { profile } from '../../services/services';
@@ -29,6 +30,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Orientation from 'react-native-orientation-locker';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -37,7 +40,7 @@ const LogoTitle = ({ navigation }) => {
     <View style={styles.header}>
       <FastImage
         source={require('../../assets/images/logo.png')}
-        style={{ width: 30, height: 30 }}
+        style={{ width: 25, height: 25 }}
       />
       <View
         style={{
@@ -46,14 +49,14 @@ const LogoTitle = ({ navigation }) => {
           justifyContent: 'flex-end',
         }}>
         <TouchableOpacity
-          style={{ width: 30, height: 30, marginRight: 10 }}
+          style={{ width: 25, height: 25, marginRight: 10 }}
           onPress={() => {
             navigation.navigate('Notifications');
           }}>
-          <Ionicons name="notifications-outline" size={30} color={'#fff'} />
+          <Ionicons name="notifications-outline" size={25} color={'#fff'} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ width: 30, height: 30 }}
+          style={{ width: 25, height: 25 }}
           onPress={() => {
             navigation.navigate('profile');
           }}>
@@ -68,7 +71,9 @@ const LogoTitle = ({ navigation }) => {
 };
 
 export const PostLoginLanding = ({ navigation }) => {
-  const { token } = useSelector(({ appData }) => appData);
+  // const { token, bannerMuted} = useSelector(({ appData }) => appData);
+
+  const {bannerMuted, token} = useSelector(state=>state.appData);
   const dispatch = useDispatch();
   const BannerWidth = Dimensions.get('window').width * 1;
 
@@ -83,12 +88,7 @@ export const PostLoginLanding = ({ navigation }) => {
   const [bannerURL, setBannerURL] = useState("")
   const [country, SetCountry] = useState(null)
 
-  const States = [
-    { label: 'Mumbai', value: 'Mumbai' },
-    { label: 'Delhi', value: 'Delhi' },
-    { label: 'Gujarat', value: 'Gujarat' },
-    { label: 'Bihar', value: 'Bihar' },
-  ];
+
 
   // unlimited function
   const hireusFun = async () => {
@@ -106,56 +106,56 @@ export const PostLoginLanding = ({ navigation }) => {
     dispatch(danceCategoryAdd(data));
   };
 
-  const reanderItem = ({ item }) => {
-    return item.type === 'image' ? (
-      <View>
-        <FastImage
-          source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
-          resizeMode="cover"
-          style={{
-            // width: "100%",
-            // height: "100%",
-            // alignSelf:"center"
-            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-            backgroundColor: 'white',
-            backgroundColor: '#000000',
-            borderRadius: 10,
-            width: screenWidth - screenWidth / 50,
-            marginHorizontal: 1,
-            marginVertical: 5,
-            height: Dimensions.get("window").height * 0.24,
-            alignSelf: "center"
+  // const reanderItem = ({ item }) => {
+  //   return item.type === 'image' ? (
+  //     <View>
+  //       <FastImage
+  //         source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
+  //         resizeMode="cover"
+  //         style={{
+  //           // width: "100%",
+  //           // height: "100%",
+  //           // alignSelf:"center"
+  //           marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+  //           backgroundColor: 'white',
+  //           backgroundColor: '#000000',
+  //           borderRadius: 10,
+  //           width: screenWidth - screenWidth / 50,
+  //           marginHorizontal: 1,
+  //           marginVertical: 5,
+  //           height: Dimensions.get("window").height * 0.24,
+  //           alignSelf: "center"
 
-          }}
-        />
-      </View>
-    ) : (
-      <View>
-        <Video
-          source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
-          resizeMode="cover"
-          style={{
-            // width: "100%",
-            // height: "100%",
-            // alignSelf:"center"
-            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-            backgroundColor: 'white',
-            backgroundColor: '#000000',
-            borderRadius: 10,
-            width: screenWidth - screenWidth / 50,
-            marginHorizontal: 1,
-            marginVertical: 5,
-            height: Dimensions.get("window").height * 0.24,
-            alignSelf: "center"
-          }}
-          controls={false}
-          paused={false}
-          repeat={false}
-        >
-        </Video>
-      </View>
-    );
-  };
+  //         }}
+  //       />
+  //     </View>
+  //   ) : (
+  //     <View>
+  //       <Video
+  //         source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
+  //         resizeMode="cover"
+  //         style={{
+  //           // width: "100%",
+  //           // height: "100%",
+  //           // alignSelf:"center"
+  //           marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+  //           backgroundColor: 'white',
+  //           backgroundColor: '#000000',
+  //           borderRadius: 10,
+  //           width: screenWidth - screenWidth / 50,
+  //           marginHorizontal: 1,
+  //           marginVertical: 5,
+  //           height: Dimensions.get("window").height * 0.24,
+  //           alignSelf: "center"
+  //         }}
+  //         controls={false}
+  //         paused={false}
+  //         repeat={false}
+  //       >
+  //       </Video>
+  //     </View>
+  //   );
+  // };
 
   // city list
   const cityList = async () => {
@@ -188,11 +188,13 @@ export const PostLoginLanding = ({ navigation }) => {
     await bannerList();
     await hireusFun();
     await profile(token).then(res => dispatch(usersSignInAdd(res)));
-    setState(p => ({ ...p, IsLoading: false }));
+    
   };
 
   useEffect(() => {
+    Orientation.lockToPortrait()
     GetRequiredApis();
+    setState(p => ({ ...p, IsLoading: false }));
 
     ; (async () => {
       const response = await fetch(`${API_URL}/getAllCountry`);
@@ -203,7 +205,9 @@ export const PostLoginLanding = ({ navigation }) => {
   }, []);
 
   const [heroBannerEnded, setHeroBannerEnded] = useState(false)
-  const [muted,setMuted]=useState(false)
+
+  const [muted,setMuted]=useState(bannerMuted)
+
 
 
   return (
@@ -240,7 +244,6 @@ export const PostLoginLanding = ({ navigation }) => {
         <View style={{ height: Dimensions.get("window").height * 0.24 }}>
           <Video
             source={{ uri: `${API_URL_IMAGE}/${bannerURL}` }}
-            // source={{uri:"https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761"}}
             resizeMode="cover"
             style={{
               // width: "100%",
@@ -265,7 +268,11 @@ export const PostLoginLanding = ({ navigation }) => {
           >
           </Video>
           {!heroBannerEnded?
-            <TouchableOpacity style={{position: "absolute", top: "4.5%", right: "4.5%",}} onPress={()=>setMuted(!muted)}>
+            <TouchableOpacity style={{position: "absolute", top: "4.5%", right: "4.5%",}} onPress={()=>{
+              dispatch(setBannerMuted(!muted))
+              setMuted(!muted)
+
+              }}>
               <Text style={{ color: "#ffffff", fontWeight: "bold", fontSize: 10 }}>{muted?`${"UNMUTE"}`:`${"MUTE"}`}</Text>
             </TouchableOpacity>
             :
@@ -447,7 +454,7 @@ export const PostLoginLanding = ({ navigation }) => {
         </View>
         <View style={style.section}>
           <View style={style.sectionHeader}>
-            <Text style={style.sectionTitle}>B2D In Cities</Text>
+            <Text style={style.sectionTitle}>B2D Dance Classes</Text>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('all-city');

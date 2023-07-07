@@ -8,7 +8,6 @@ import { CustomVideo } from './post-login/CustomVideo';
 import { PostLoginLanding } from './post-login/Landing';
 import { NearByClasses } from './post-login/NearByClasses';
 import { HireUs } from './post-login/HireUs';
-import { DanceTypeDetails } from './post-login/DanceTypeDetails';
 import { LearnToDance } from './post-login/LearnToDance';
 import { PremiumScreen } from './post-login/PremiumScreen';
 import { PlayerVideo } from './post-login/PlayerVideo';
@@ -39,6 +38,11 @@ import { DanceClass } from './post-login/DanceClass';
 import { LearnDanceForm } from './post-login/LearnDanceForm';
 import { Thankyou } from './post-login/Thankyou';
 import { City } from './post-login/City';
+import RegisterYourClass from './post-login/RegisterYourClass';
+import RegisterYourself from './post-login/RegisterYourself';
+import Aboutus from './post-login/Aboutus';
+import Dummy from './post-login/Dummy';
+import DanceTypeDetails from './post-login/DanceTypeDetails';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,7 +68,7 @@ const AppStack = (props) => {
         name="dance-type-details"
         component={DanceTypeDetails}
         options={{
-          headerShown: false,
+headerShown:false
         }}
       />
       <Stack.Screen
@@ -136,6 +140,13 @@ const AppStack = (props) => {
       <Stack.Screen
         name="refer"
         component={Refer}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="dummy"
+        component={Dummy}
         options={{
           headerShown: false,
         }}
@@ -265,7 +276,7 @@ const AppStack = (props) => {
           ...preLoginPageHeaderOptions,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="register-yourself"
         component={RegisterYourself}
         options={{
@@ -282,7 +293,17 @@ const AppStack = (props) => {
           title: 'Register your class',
           ...preLoginPageHeaderOptions,
         }}
-      /> */}
+      />
+      <Stack.Screen
+        name="About us"
+        component={Aboutus}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'About us',
+          ...preLoginPageHeaderOptions,
+        }}
+      />
+
       <Stack.Screen
         name="class-list2"
         component={ClassList2}
@@ -335,6 +356,7 @@ const AppStack = (props) => {
           headerTitleAlign: 'center',
         })}
       />
+
     </Stack.Navigator>
   );
 };
@@ -345,13 +367,13 @@ const BottomTabs = ({ navigation }) => {
       screenOptions={({ route }) => ({
         tabBarStyle: {
           backgroundColor: '#0F172A',
-          paddingBottom: 6,
-          paddingTop: 6,
+          // paddingBottom: 6,
+          // paddingTop: 6,
         },
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'Home') {
             return <Ionicons name={'home'} size={size} color={color} />;
-          } else if (route.name === 'Nearby Classes') {
+          } else if (route.name === 'Explore Classes') {
             return <Ionicons name={'compass'} size={size} color={color} />;
           } else if (route.name === 'Hire Us') {
             return <Ionicons name={'search'} size={size} color={color} />;
@@ -360,7 +382,7 @@ const BottomTabs = ({ navigation }) => {
               <Image
                 source={require('../assets/images/CustomVideo.png')}
                 resizeMode={'contain'}
-                style={[styles.icon,{tintColor:'#9a9da6'}]}
+                style={[styles.icon, { tintColor: '#9a9da6' }]}
               />
             );
           } else if (route.name === 'My plan') {
@@ -385,7 +407,7 @@ const BottomTabs = ({ navigation }) => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Nearby Classes"
+        name="Explore Classes"
         component={AllCity}
         options={{ headerShown: false }}
       />

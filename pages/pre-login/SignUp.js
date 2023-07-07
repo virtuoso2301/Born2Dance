@@ -42,8 +42,9 @@ export const SignUp = ({ navigation }) => {
           fullname: name,
           email: email,
           password: password,
-          referralCode: code,
-          loginType: 'mobile',
+          refercode: code,
+          loginType: 'manual',
+          profileImage: "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80"
         };
         const response = await fetch(`${API_URL}/signup`, {
           method: 'POST',
@@ -57,7 +58,7 @@ export const SignUp = ({ navigation }) => {
         if (responseJson.success === true) {
           dispatch(usersSignUpAdd(request));
           await AsyncStorage.setItem('user', JSON.stringify(request));
-          navigation.navigate('verify-otp');
+          navigation.navigate('login');
           setError({ ...error, name: '', mobile: '', password: '' });
         } else if (responseJson.success === false) {
           setError({ ...error, serverError: responseJson.message });

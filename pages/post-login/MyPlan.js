@@ -190,7 +190,6 @@ const style = StyleSheet.create({
     fontStyle: 'normal',
   },
   takeClassesButtonText: {
-    positions: 'fixed',
     bottom: 0,
     padding: '3%',
     alignSelf: 'center',
@@ -217,7 +216,7 @@ const style = StyleSheet.create({
   mainHeaderImage: {
     width: '100%',
     height: scale(400),
-    objecFit: 'cover',
+    resizeMode:"cover",
     opacity: 0.6,
   },
   maintextRow: {
@@ -249,13 +248,14 @@ const style = StyleSheet.create({
   },
   missingText: {
     color: '#FFFFFF',
-    fontFamly: 'Raleway',
+    fontFamily: 'Raleway',
     fontSize: scale(16),
     fontStyle: 'normal',
     fontWeight: '500',
     lineHeight: scale(19),
     paddingTop: scale(18),
-    paddingBottom: scale(10),
+    paddingBottom: scale(18),
+    alignSelf:"center"
   },
   secScroll: {
     flexDirection: 'row',

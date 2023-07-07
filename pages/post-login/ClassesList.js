@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity
 } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import { classesAdd } from '../../redux/reducers/appData';
@@ -17,6 +18,7 @@ import { moderateVerticalScale, scale } from 'react-native-size-matters';
 import { Dropdown } from 'react-native-element-dropdown';
 import { BDLoader, hp, wp } from '../../Constants';
 import FastImage from 'react-native-fast-image';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Suburbs = [
   { label: 'Suburb1', value: 'Suburb1' },
@@ -48,11 +50,11 @@ export const ClassesList = ({ navigation, route }) => {
 
 
 
-  useEffect(()=>{
-    console.log("CITY SELECTED", city)
-    console.log(classLists?.studios)
+  // useEffect(()=>{
+  //   console.log("DETTAILSS")
+  //   console.log(classLists?.studios[2])
 
-  },[])
+  // },[])
 
 
   const GetDanceDetail = async id => {
@@ -70,7 +72,7 @@ export const ClassesList = ({ navigation, route }) => {
       });
       const response = await jsonObj.json();
       setState(p => ({ ...p, IsLoading: false }));
-      console.log('GetDanceDetail -> ', JSON.stringify(response, null, 2));
+      //console.log('GetDanceDetail -> ', JSON.stringify(response, null, 2));
       if (response?.success) {
         setState(p => ({
           ...p,
@@ -79,7 +81,7 @@ export const ClassesList = ({ navigation, route }) => {
       }
     } catch (e) {
       setState(p => ({ ...p, IsLoading: false }));
-      console.log('Error GetDanceDetail -> ', e);
+      //console.log('Error GetDanceDetail -> ', e);
     }
   };
 
@@ -152,6 +154,19 @@ export const ClassesList = ({ navigation, route }) => {
       data={classLists?.studios?.filter(item => item?.city?.cityName == city)}
       renderItem={renderItem}
       />
+      <TouchableOpacity
+        style={style.buttonTakeClasses}
+        onPress={() => navigation.navigate("register-yourclass")}>
+        <LinearGradient
+          style={style.takeClassesGradient}
+          colors={['#2885E5', '#844AE9']}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}>
+          <Text style={{ alignSelf:'center',color:"#ffffff",fontWeight:"500"}}>
+            Register Your Class
+          </Text>
+        </LinearGradient>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -162,6 +177,22 @@ const style = StyleSheet.create({
     flex: 1,
     padding: '2%',
   },
+  takeClassesGradient: {
+    borderRadius: 5,
+    justifyContent: 'center',
+    width:"100%",
+    height:"100%",
+  },
+  buttonTakeClasses: {
+    textAlign: 'center',
+    borderRadius: 5,
+    position: 'absolute',
+    bottom: "4%",
+    right: "4%",
+    height:hp(5),
+    width:wp(40),
+    justifyContent:"center"
+},
   inputStyle: {
     borderWidth: 1,
     borderRadius: 5,

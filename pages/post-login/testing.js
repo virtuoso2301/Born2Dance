@@ -30,7 +30,7 @@ const MyCarousel = () => {
         onPress={() =>
           navigation.navigate('dance-type-details', {
             id: item?._id,
-            item,
+            item: item,
             workshop: true,
           })
         }

@@ -280,8 +280,7 @@ export const HireUs = ({ navigation }) => {
       />
       <TouchableOpacity
         style={style.buttonTakeClasses}
-        onPress={() => {
-        }}>
+        onPress={() => navigation.navigate("register-yourself")}>
         <LinearGradient
           style={style.takeClassesGradient}
           colors={['#2885E5', '#844AE9']}
