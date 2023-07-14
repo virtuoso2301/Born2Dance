@@ -8,7 +8,8 @@ import {
   Button,
   TouchableOpacity,
   TextInput,
-  ToastAndroid
+  ToastAndroid,
+  Alert
 } from 'react-native';
 import {
   moderateScale,
@@ -112,7 +113,7 @@ setUserName(JSON.parse(user).fullname)
 
   useEffect(()=>{
     GetUserDetail()
-    GetRequests()
+    //GetRequests()
   },[])
 
 
@@ -163,7 +164,48 @@ setUserName(JSON.parse(user).fullname)
       });
       const responseJson = await response.json();
       // setClassDetails(responseJson.dance);
-      console.log("SUBMITed RESPONSE: ",responseJson)
+      console.log("SUBMITed RESPONSE: ",responseJson.data._id)
+      const formId=responseJson.data._id
+
+      Alert.alert("Payment",`Proceed to pay Rs.${State.DanceLevel}?`,[
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: async() => {
+          try{
+            const response2 = await fetch(`${API_URL}/updatecustomvideo`, {
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              method: 'PUT',
+              body: JSON.stringify({
+                id:formId,
+                userId:userId,
+                payment:State.DanceLevel,
+                paymentStatus:"true"
+              }),
+            });
+            const responseJson2 = await response2.json();
+            console.log("FORM PAYMENT DONE: ",responseJson2)
+            Alert.alert("Success","Your Payment was successful")
+            setState({
+              TypeOfEvent: null,
+              DanceLevel: null,
+              Email: '',
+              PhoneNumber: '',
+              SongTitle: "",
+              paymentStatus: "false"
+            })
+          }
+          catch(e){
+            console.log("UPDATE CUSTOM VIDEO ERROR",e)
+          }
+        }},
+      ])
+
     } catch (e) {
       console.log('customVideoRequestAPI -> ', e);
     }
@@ -190,24 +232,24 @@ setUserName(JSON.parse(user).fullname)
         },
         theme: { color: '#F37254' },
       };
-      await RazorpayCheckout.open(options)
-        .then(data => {
-          // handle success
-          alert(`Success: ${data.razorpay_payment_id}`);
-          dispatch(paymentSuccessStatusAdd(data.razorpay_payment_id));
-          navigation.navigate('home');
+      // await RazorpayCheckout.open(options)
+      //   .then(data => {
+      //     // handle success
+      //     alert(`Success: ${data.razorpay_payment_id}`);
+      //     dispatch(paymentSuccessStatusAdd(data.razorpay_payment_id));
+      //     navigation.navigate('home');
           
 
-        })
-        .catch(error => {
-          // handle success
-          console.log('Razorpay -> ', error);
-          ToastAndroid.showWithGravity(
-            error.error?.description,
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM,
-          );
-        });
+      //   })
+      //   .catch(error => {
+      //     // handle success
+      //     console.log('Razorpay -> ', error);
+      //     ToastAndroid.showWithGravity(
+      //       error.error?.description,
+      //       ToastAndroid.SHORT,
+      //       ToastAndroid.BOTTOM,
+      //     );
+      //   });
     }
   };
 
@@ -226,6 +268,7 @@ setUserName(JSON.parse(user).fullname)
             style={style.input}
             placeholder="Eg. Summer high,AP Dhillon"
             onChangeText={e => setState(p => ({ ...p, SongTitle: e }))}
+            value={State.SongTitle}
           />
         </View>
 

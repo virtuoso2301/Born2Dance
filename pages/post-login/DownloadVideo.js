@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -18,66 +19,33 @@ import {
 import VideoPlayer from 'react-native-video-player';
 import { hp, wp } from '../../Constants';
 import FastImage from 'react-native-fast-image';
+import { API_URL } from '../../services/api_url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const DownloadVideo = ({ navigation }) => {
-  const [videolist, setVideolist] = useState([
-    {
-      id: 1,
-      title: 'This is video one',
-      name: 'michelle',
-      category: 'Hip Hop',
-      time: '10:30',
-      videourl: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
-    },
-    {
-      id: 1,
-      title: 'This is video one',
-      name: 'michelle',
-      category: 'Hip Hop',
-      time: '10:30',
-      videourl: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
-    },
-    {
-      id: 1,
-      title: 'This is video one',
-      name: 'michelle',
-      category: 'Hip Hop',
-      time: '10:30',
-      videourl: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
-    },
-    {
-      id: 1,
-      title: 'This is video one',
-      name: 'michelle',
-      category: 'Hip Hop',
-      time: '10:30',
-      videourl: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
-    },
-  ]);
-  return (
-    <ScrollView style={style.view}>
-      <View style={style.view}>
-        {videolist.length == 0 ? (
-          <View>
-            <View>
-              <FastImage
-                source={require('../../assets/images/video.png')}
-                style={style.videoImage}
-              />
-            </View>
-            <View>
-              <Text style={style.videoText}>
-                Download videos and watch them offline
-              </Text>
-            </View>
-          </View>
-        ) : (
-          <View>
-            <View>
-              <Text style={style.downloadText}>Your downoads</Text>
-            </View>
-            {videolist.map((item, index) => (
-              <View style={style.mainCardStyle}>
+
+  const [videolist, setVideolist] = useState(null);
+
+
+  const GetRequests = async () => {
+
+    const user = await AsyncStorage.getItem('user')
+    const userId=JSON.parse(user)._id
+
+    const response = await fetch(`${API_URL}/getAllCustomVideo`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    const responseJson = await response.json();
+    //console.log("ALL REQUESTSSS: ", responseJson?.customvideo?.filter(item => item.userId == userId))
+    setVideolist(responseJson?.customvideo?.filter(item => item?.userId == userId))
+  }
+const renderItem=({item})=>{
+  return(
+    <View style={style.mainCardStyle}>
                 <View>
                   <FastImage
                     source={require('../../assets/images/girl_group.png')}
@@ -90,24 +58,31 @@ export const DownloadVideo = ({ navigation }) => {
                    /> */}
                 </View>
                 <View style={style.cardInnerStyle}>
-                  <Text style={style.cardInnerText}>{item?.title}</Text>
-                  <Text style={style.cardInnernameText}>{item?.name}</Text>
-                  <View style={style.cradInnerTextRow}>
-                    <Text style={style.cardInnerTextOne}>
-                      Intermediate, {item?.category}
-                    </Text>
-                    <Text style={style.cardInnerTextTwo}>
-                      Time :{' '}
-                      <Text style={style.cardTimeText}>{item?.time} mins</Text>
-                    </Text>
-                  </View>
+                  <Text style={style.cardInnerText}>Song: {item?.songname}</Text>
+                  <Text style={style.cardInnernameText}> Event type: {item?.event}</Text>
+
+
+                  <Text style={style.cardInnernameText}> Level: {item?.level=="100"?"Begginer":item?.level=="200"?"Intermediate":"Advance"}</Text>
+
+
                 </View>
               </View>
-            ))}
-          </View>
-        )}
+  )
+}
+  useEffect(() => {
+
+    GetRequests()
+  }, [])
+
+  return (
+      <View style={style.view}>
+        <FlatList
+        data={videolist}
+        renderItem={renderItem}
+        />
+
       </View>
-    </ScrollView>
+
   );
 };
 
@@ -167,7 +142,7 @@ const style = StyleSheet.create({
   cardInnerText: {
     color: '#FFFFFF',
     width: wp(65),
-    fontSize: scale(12),
+    fontSize: scale(14),
     fontWeight: '500',
   },
   cardInnernameText: {

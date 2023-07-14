@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, Platform, Dimensions, StatusBar, ScrollView, ToastAndroid, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Platform, Dimensions, StatusBar, ScrollView,  Text, TouchableOpacity, Alert, Image, } from 'react-native';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
@@ -12,10 +12,11 @@ import Logo from '../../assets/images/logo.png';
 import Share from 'react-native-share';
 import FastImage from 'react-native-fast-image';
 
-import { scale } from 'react-native-size-matters';
+import { scale, verticalScale } from 'react-native-size-matters';
 
 
 const DanceTypeDetails = ({ navigation, route }) => {
+
 
   const paymentStatus = useSelector(
     state => state.appData.paymentSuccessStatus,
@@ -60,13 +61,6 @@ const DanceTypeDetails = ({ navigation, route }) => {
   }, []);
 
 
-  const DownloadBtn = () => {
-    ToastAndroid.showWithGravity(
-      'Comming soon',
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM,
-    );
-  };
 
   const onSharePress = async () => {
     try {
@@ -81,13 +75,6 @@ const DanceTypeDetails = ({ navigation, route }) => {
       console.log('Error Share -> ', e);
     }
   };
-
-
-
-
-
-
-
 
 
   const video = {
@@ -204,17 +191,27 @@ const DanceTypeDetails = ({ navigation, route }) => {
           onReplay={onReplay}
           onSeek={onSeek}
           onSeeking={onSeeking}
-          mainColor={'purple'}
+          mainColor={'#1E293B70'}
           playerState={playerState}
           style={style.backgroundVideo}
           sliderStyle={isFullScreen ? { containerStyle: style.mediaControls, thumbStyle: {}, trackStyle: {} } : { containerStyle: {}, thumbStyle: {}, trackStyle: {} }}
-        />
+        >
+          {!isLoading ? <TouchableOpacity onPress={() => videoPlayer.current.seek(currentTime > 10 ? currentTime - 10 : 0)} style={{ position: "absolute", top: "60%", left: "15%" }}>
+            <Image resizeMode='contain' style={{ height: hp(18), width: wp(18) }} source={require('../../assets/images/backward.png')} />
+          </TouchableOpacity>
+            : null}
+          {!isLoading ? <TouchableOpacity onPress={() => videoPlayer.current.seek(currentTime + 10)} style={{ position: "absolute", top: "60%", right: "15%" }}>
+            <Image resizeMode='contain' style={{ height: hp(18), width: wp(18) }} source={require('../../assets/images/forward.png')} />
+          </TouchableOpacity>
+            : null}
+
+        </MediaControls>
       </View>
 
 
 
       {!isFullScreen ?
-        <View style={{flex:1, paddingHorizontal: wp(4) }}>
+        <View style={{ flex: 1, paddingHorizontal: wp(4) }}>
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <View style={style.mainDanceDetails}>
               <View style={style.daneTeacherDetails}>
@@ -228,9 +225,6 @@ const DanceTypeDetails = ({ navigation, route }) => {
                 </View>
                 <View style={style.mainDancerView}>
                   <Text style={style.dacerText}>{item?.title}</Text>
-                  <Text numberOfLines={2} style={style.dancerName}>
-                    {item?.titleName}
-                  </Text>
                 </View>
               </View>
               {workshop && (
@@ -258,8 +252,8 @@ const DanceTypeDetails = ({ navigation, route }) => {
             {workshop ? (
               <View style={style.maintextRow}>
                 <View>
-                  <Text style={style.danceDuration}>Level</Text>
-                  <Text style={style.danceType}>Intermediate</Text>
+                  <Text style={style.danceDuration}>Instructor</Text>
+                  <Text style={style.danceType}>{item?.titleName}</Text>
                 </View>
                 <View>
                   <Text style={style.danceDuration}>Style</Text>
@@ -277,14 +271,17 @@ const DanceTypeDetails = ({ navigation, route }) => {
             </View>
 
             <View style={style.aboutSection}>
-              <Text style={style.aboutHeader}>About Instructor</Text>
+              <Text style={style.aboutHeader}>Description</Text>
               <Text style={style.aboutText}>{item?.about}</Text>
             </View>
             {workshop && YouTubeList?.length > 0
               ? YouTubeList.map((item, index) => (
                 <TouchableOpacity
-                  onPress={() =>
+                  onPress={() => {
                     paymentStatus !== null && setVideoId(item?.video)
+                    paymentStatus == null && Alert.alert("Alert","Take classes to continue")
+
+                  }
                   }
                   style={style.mainLearnVideo}
                   key={index}>
@@ -294,10 +291,7 @@ const DanceTypeDetails = ({ navigation, route }) => {
                       source={require('../../assets/images/introVideo.png')}
                     />
                     <View style={{ flex: 1 }}>
-                      <Text style={style.videoText2}>{item?.title}</Text>
-                      <Text style={{ paddingLeft: scale(10) }}>
-                        {item?.author}
-                      </Text>
+                      <Text style={style.videoText2}>{item?.title?.endsWith(".mp4") ? item?.title?.slice(0, -4) : item?.title}</Text>
                     </View>
                     {/* <Text style={style.videoQuantty}>20 video</Text> */}
                   </View>
@@ -305,25 +299,23 @@ const DanceTypeDetails = ({ navigation, route }) => {
               ))
               : null}
 
-            {paymentStatus == null && workshop ? (
-              <TouchableOpacity onPress={() => {
-                navigation.navigate('premium-screen', {
-                  item: item,
-                });
-              }} style={{ marginVertical: hp(1.5), height: hp(5.5) }}>
-                <LinearGradient
-                  colors={['#2885E5', '#9968EE']}
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1, y: 0.5 }}
-                  style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5, height: "100%", justifyContent: 'center' }}>
-                  <Text style={{ alignSelf: 'center', color: '#FFFFFF', fontSize: 14, fontWeight: '500' }}>
-                    Take Classes
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            ) : null}
 
           </ScrollView>
+          {paymentStatus == null && workshop ? (
+            <TouchableOpacity onPress={() => {
+              Alert.alert("Payment", "Proceed to pay Rs.500?");
+            }} style={{ marginVertical: hp(1.5), height: hp(5.5) }}>
+              <LinearGradient
+                colors={['#2885E5', '#9968EE']}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.5 }}
+                style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5, height: "100%", justifyContent: 'center' }}>
+                <Text style={{ alignSelf: 'center', color: '#FFFFFF', fontSize: 14, fontWeight: '500' }}>
+                  Take Classes
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : null}
         </View> : null}
 
 
@@ -440,12 +432,13 @@ const style = StyleSheet.create({
   },
   mainDancerView: {
     paddingLeft: scale(10),
+    marginTop: verticalScale(4)
   },
   dacerText: {
     color: '#FFFFFF',
     fontSize: scale(12),
     lineHeight: scale(16),
-    fontWeight: '500',
+    fontWeight: '700',
     fontStyle: 'normal',
     fontFamily: 'Raleway',
     width: scale(180),

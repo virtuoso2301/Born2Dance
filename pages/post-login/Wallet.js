@@ -21,6 +21,7 @@ export function Wallet({ navigation }) {
   const [income, setIncome] = useState(null);
   const [list, setList] = useState([]);
   const userDetail = useSelector(state => state.appData.usersSignIn);
+  const [minutes,setMinutes]=useState("")
 
   // refer wallet function
   const referWalletFun = async () => {
@@ -41,6 +42,9 @@ export function Wallet({ navigation }) {
     const response = await fetch(`${API_URL}/userslist`);
     const resultData = await response.json();
     setList(resultData.users);
+    //console.log("ALL USERS: ",resultData?.users?.filter((item)=>item._id==userDetail._id)[0])
+    const current=resultData?.users?.filter((item)=>item._id==userDetail._id)[0]
+    setMinutes(current?.minutes)
   };
 
   useEffect(() => {
@@ -63,7 +67,7 @@ export function Wallet({ navigation }) {
                 <View>
                   <Text style={style.walletrefralText}>Referal Minutes </Text>
                   <Text style={style.walletTimeText}>
-                    {income != null ? income?.totalAmount : 0.0} sec
+                    {minutes} Minutes
                   </Text>
                 </View>
                 <View style={style.cardInnerStyle}>
