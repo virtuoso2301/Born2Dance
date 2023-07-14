@@ -43,6 +43,8 @@ import RegisterYourself from './post-login/RegisterYourself';
 import Aboutus from './post-login/Aboutus';
 import Dummy from './post-login/Dummy';
 import DanceTypeDetails from './post-login/DanceTypeDetails';
+import AllSongs from './post-login/AllSongs';
+import AllVideos from './post-login/AllVideos';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -68,7 +70,7 @@ const AppStack = (props) => {
         name="dance-type-details"
         component={DanceTypeDetails}
         options={{
-headerShown:false
+          headerShown: false
         }}
       />
       <Stack.Screen
@@ -310,6 +312,24 @@ headerShown:false
         options={{
           headerTitleAlign: 'center',
           title: 'Class List',
+          ...preLoginPageHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="all-songs"
+        component={AllSongs}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'B2D Music',
+          ...preLoginPageHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="all-videos"
+        component={AllVideos}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'B2D Videos',
           ...preLoginPageHeaderOptions,
         }}
       />

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Dimensions,
   FlatList,
-  Image,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
 import MyCarousel from './testing';
 import { scale } from 'react-native-size-matters';
 import { API_URL, API_URL_IMAGE } from '../../services/api_url';
@@ -25,12 +24,10 @@ import {
 } from '../../redux/reducers/appData';
 import { profile } from '../../services/services';
 import { BDLoader, hp, wp } from '../../Constants';
-import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Orientation from 'react-native-orientation-locker';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -208,6 +205,83 @@ export const PostLoginLanding = ({ navigation }) => {
 
   const [muted,setMuted]=useState(bannerMuted)
 
+
+  const songDetails=[
+    {
+      name: "Song 1",
+      artist: "Lewis Capaldi"
+      },
+      
+      {
+      name: "Song 2",
+      artist: "Adele"
+      },
+      
+      {
+      name: "Song 3",
+      artist: "Ed Sheeran"
+      },
+      
+      {
+      name: "Song 4",
+      artist: "Taylor Swift"
+      }
+      ,
+      {
+      name: "Song 5",
+      artist: "Billie Eilish"
+      }
+      ,
+      {
+      name: "Song 6",
+      artist: "Post Malone"
+      }
+      ,
+      {
+      name: "Song 7",
+      artist: "Beyoncé"
+      }
+      ,
+      {
+      name: "Song 8",
+      artist: "Bruno Mars"
+      }
+  ]
+
+  const videoDetails=[
+    {
+      name: "Video 1",
+      artist: "Lewis Capaldi"
+      },
+      {
+      name: "Video 2",
+      artist: "Adele"
+      },
+      {
+      name: "Video 3",
+      artist: "Ed Sheeran"
+      },
+      {
+      name: "Video 4",
+      artist: "Taylor Swift"
+      },
+      {
+      name: "Video 5",
+      artist: "Billie Eilish"
+      },
+      {
+      name: "Video 6",
+      artist: "Post Malone"
+      },
+      {
+      name: "Video 7",
+      artist: "Beyoncé"
+      },
+      {
+      name: "Video 8",
+      artist: "Bruno Mars"
+      }
+  ]
 
 
   return (
@@ -507,8 +581,110 @@ export const PostLoginLanding = ({ navigation }) => {
             style={style.image}
             source={require('../../assets/images/LastBanner.png')}
           />
-
         </View>
+        <View style={style.section}>
+          <View style={style.sectionHeader}>
+            <Text style={style.sectionTitle}>B2D Music</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('all-songs');
+              }}>
+              <Text style={style.seeAll}>See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            data={songDetails.slice(0, 4)}
+            renderItem={({ item }) => (
+              <View style={style.imageContainerDance}>
+
+                <TouchableOpacity
+                  onPress={() =>Alert.alert("Alert","Waiting for API")}
+                  style={{ height: hp(15), justifyContent: "center", width: wp(40), }}
+                >
+                  <FastImage
+                    style={{
+                      alignSelf: 'center',
+                      width: wp(35),
+                      height: hp(10),
+                      borderRadius: 7,
+                      borderWidth:1.5,
+                      borderColor:"#956DFF70"
+
+                    }}
+                    resizeMode={'cover'}
+                    source={require("../../assets/images/music.jpeg")}
+                  />
+                  <Text
+                    style={{
+                      color: '#fff',
+                      textAlign: 'center',
+                      marginTop: '5%',
+                      fontSize: 12,
+                      fontWeight: '400',
+                    }}>
+                    {item?.name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            horizontal
+          />
+        </View>
+
+
+        <View style={style.section}>
+          <View style={style.sectionHeader}>
+            <Text style={style.sectionTitle}>B2D Videos</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('all-videos');
+              }}>
+              <Text style={style.seeAll}>See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            data={videoDetails.slice(0, 4)}
+            renderItem={({ item }) => (
+              <View style={style.imageContainerDance}>
+
+                <TouchableOpacity
+                  onPress={() =>Alert.alert("Alert","Waiting for API")}
+                  style={{ height: hp(30), justifyContent: "center", width: wp(85), }}
+                >
+                  <FastImage
+                    style={{
+                      alignSelf: 'center',
+                      width: wp(80),
+                      height: hp(25),
+                      borderRadius: 7,
+                      borderWidth:1.5,
+                      borderColor:"#956DFF70"
+
+                    }}
+                    resizeMode={'cover'}
+                    source={require("../../assets/images/b2ddance.jpeg")}
+                  />
+                  <Text
+                    style={{
+                      color: '#fff',
+                      textAlign: 'center',
+                      marginTop: '5%',
+                      fontSize: 16,
+                      fontWeight: '400',
+                    }}>
+                    {item?.name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            horizontal
+          />
+        </View>
+
+
+
       </ScrollView>
     </View>
   );
@@ -518,6 +694,7 @@ const style = StyleSheet.create({
   view: {
     backgroundColor: '#0E172A',
     flex: 1,
+    paddingBottom:hp(2)
   },
   imageContainer: {
     //flex: 1,

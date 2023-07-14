@@ -196,12 +196,12 @@ const DanceTypeDetails = ({ navigation, route }) => {
           style={style.backgroundVideo}
           sliderStyle={isFullScreen ? { containerStyle: style.mediaControls, thumbStyle: {}, trackStyle: {} } : { containerStyle: {}, thumbStyle: {}, trackStyle: {} }}
         >
-          {!isLoading ? <TouchableOpacity onPress={() => videoPlayer.current.seek(currentTime > 10 ? currentTime - 10 : 0)} style={{ position: "absolute", top: "60%", left: "15%" }}>
-            <Image resizeMode='contain' style={{ height: hp(18), width: wp(18) }} source={require('../../assets/images/backward.png')} />
+          {!isLoading ? <TouchableOpacity onPress={() => videoPlayer.current.seek(currentTime > 10 ? currentTime - 10 : 0)} style={{ position: "absolute", top: "105%", left: "15%" }}>
+            <Image resizeMode='contain' style={{ height: hp(9), width: wp(9) }} source={require('../../assets/images/backward.png')} />
           </TouchableOpacity>
             : null}
-          {!isLoading ? <TouchableOpacity onPress={() => videoPlayer.current.seek(currentTime + 10)} style={{ position: "absolute", top: "60%", right: "15%" }}>
-            <Image resizeMode='contain' style={{ height: hp(18), width: wp(18) }} source={require('../../assets/images/forward.png')} />
+          {!isLoading ? <TouchableOpacity onPress={() => videoPlayer.current.seek(currentTime + 10)} style={{ position: "absolute", top: "105%", right: "15%" }}>
+            <Image resizeMode='contain' style={{ height: hp(9), width: wp(9) }} source={require('../../assets/images/forward.png')} />
           </TouchableOpacity>
             : null}
 
