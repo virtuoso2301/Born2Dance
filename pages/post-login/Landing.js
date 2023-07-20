@@ -599,7 +599,7 @@ export const PostLoginLanding = ({ navigation }) => {
               <View style={style.imageContainerDance}>
 
                 <TouchableOpacity
-                  onPress={() =>Alert.alert("Alert","Waiting for API")}
+                  onPress={() => navigation.navigate("music-details", {musicItem:item})}
                   style={{ height: hp(15), justifyContent: "center", width: wp(40), }}
                 >
                   <FastImage

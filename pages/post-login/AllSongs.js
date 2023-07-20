@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 import { hp, wp } from '../../Constants'
-import LinearGradient from 'react-native-linear-gradient';
 import FastImage from 'react-native-fast-image';
 
-const AllSongs = () => {
+const AllSongs = ({navigation}) => {
 
     const songDetails=[
         {
@@ -51,7 +50,7 @@ const AllSongs = () => {
         return (
           <View
             style={style.headerContainer}
-            onTouchEnd={() => Alert.alert("Alert","Waiting for API")}
+            onTouchEnd={() => navigation.navigate("music-details",{musicItem:item})}
           >
             <View style={style.headerLogo}>
               <FastImage
@@ -81,19 +80,6 @@ const AllSongs = () => {
         renderItem={renderItem}
         style={{marginVertical:hp(2.5),marginHorizontal:wp(3)}}
       />
-      <TouchableOpacity
-        style={style.buttonTakeClasses}
-        onPress={() => Alert.alert("Alert","Waiting for API")}>
-        <LinearGradient
-          style={style.takeClassesGradient}
-          colors={['#2885E5', '#844AE9']}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}>
-          <Text style={{ alignSelf:'center',color:"#ffffff",fontWeight:"500"}}>
-            Purchase a song
-          </Text>
-        </LinearGradient>
-      </TouchableOpacity>
     </View>
   )
 }
@@ -101,22 +87,6 @@ const AllSongs = () => {
 export default AllSongs
 
 const style = StyleSheet.create({
-    takeClassesGradient: {
-        borderRadius: 5,
-        justifyContent: 'center',
-        width:"100%",
-        height:"100%",
-      },
-      buttonTakeClasses: {
-        textAlign: 'center',
-        borderRadius: 5,
-        position: 'absolute',
-        bottom: "4%",
-        right: "4%",
-        height:hp(5),
-        width:wp(40),
-        justifyContent:"center"
-    },
       view: {
         backgroundColor: '#0E172A',
         flex: 1,

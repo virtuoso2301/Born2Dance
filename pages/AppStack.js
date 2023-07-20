@@ -45,6 +45,8 @@ import Dummy from './post-login/Dummy';
 import DanceTypeDetails from './post-login/DanceTypeDetails';
 import AllSongs from './post-login/AllSongs';
 import AllVideos from './post-login/AllVideos';
+import MusicDetails from './post-login/MusicDetails';
+import SongPurchaseForm from './post-login/SongPurchaseForm';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -288,6 +290,15 @@ const AppStack = (props) => {
         }}
       />
       <Stack.Screen
+        name="song-purchase-form"
+        component={SongPurchaseForm}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Song Purchase Request',
+          ...preLoginPageHeaderOptions,
+        }}
+      />
+      <Stack.Screen
         name="register-yourclass"
         component={RegisterYourClass}
         options={{
@@ -368,6 +379,15 @@ const AppStack = (props) => {
         }}
       />
       <Stack.Screen
+        name="music-details"
+        component={MusicDetails}
+        options={{
+          title: 'Music Details',
+          ...preLoginPageHeaderOptions,
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Stack.Screen
         name="city"
         component={City}
         options={({ route }) => ({
@@ -429,7 +449,11 @@ const BottomTabs = ({ navigation }) => {
       <Tab.Screen
         name="Explore Classes"
         component={AllCity}
-        options={{ headerShown: false }}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Explore Classes',
+          ...preLoginPageHeaderOptions,
+        }}
       />
       <Tab.Screen
         name="Hire Us"
