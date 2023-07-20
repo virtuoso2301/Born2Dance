@@ -39,7 +39,7 @@ export const AllCity = ({ navigation }) => {
         <Text style={style.pageHeader}> Popular states</Text>
         <View style={style.renderContainer}>
           {cityLists?.states?.length > 0 &&
-            cityLists?.states?.map((item, index) => (
+            cityLists?.states?.filter((item)=>item?.countryId?.name=="India").map((item, index) => (
               <TouchableOpacity
                 key={index}
                 style={style.renderCities}
