@@ -15,7 +15,6 @@ import { moderateScale } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
 import { tokenAdd, usersSignInAdd } from '../../redux/reducers/appData';
 import { API_URL } from '../../services/api_url';
-import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -79,29 +78,30 @@ export const Login = ({ navigation }) => {
 
   const googleLogin = async () => {
     // Get the users ID token
-    const userInfo = await GoogleSignin.signIn();
-    if (userInfo.idToken) {
-      console.log(userInfo, 'userInfo');
-      // Start User
-      const user = {
-        _id: userInfo.id,
-        fullname: userInfo.name,
-        email: userInfo.email,
-        ownerReferCode: Math.floor(Math.random() * 34256835),
-        profileImage: userInfo.photo,
-        phone: '',
-      };  
-      dispatch(usersSignInAdd(user));
-      dispatch(tokenAdd(userInfo.idToken));
-      await AsyncStorage.setItem('token', userInfo.idToken);
-      await AsyncStorage.setItem('user', JSON.stringify(userInfo));
-      // navigation.navigate('home');
-    }
-    // End User
-    const googleCredential = await auth.GoogleAuthProvider.credential(
-      userInfo.idToken,
-    );
-    await auth().signInWithCredential(googleCredential);
+    // const userInfo = await GoogleSignin.signIn();
+    // if (userInfo.idToken) {
+    //   console.log(userInfo, 'userInfo');
+    //   // Start User
+    //   const user = {
+    //     _id: userInfo.id,
+    //     fullname: userInfo.name,
+    //     email: userInfo.email,
+    //     ownerReferCode: Math.floor(Math.random() * 34256835),
+    //     profileImage: userInfo.photo,
+    //     phone: '',
+    //   };  
+    //   dispatch(usersSignInAdd(user));
+    //   dispatch(tokenAdd(userInfo.idToken));
+    //   await AsyncStorage.setItem('token', userInfo.idToken);
+    //   await AsyncStorage.setItem('user', JSON.stringify(userInfo));
+    //   // navigation.navigate('home');
+    // }
+    // // End User
+    // const googleCredential = await auth.GoogleAuthProvider.credential(
+    //   userInfo.idToken,
+    // );
+    // await auth().signInWithCredential(googleCredential);
+    console.log("wait")
   };
 
   const facebookLogin = async () => {

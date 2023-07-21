@@ -33,7 +33,7 @@
 		<string>fb</string>
 		<string>facebook-stories</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
+	<!-- <key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
@@ -45,7 +45,17 @@
 				<true/>
 			</dict>
 		</dict>
-	</dict>
+	</dict> -->
+	<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSAllowsArbitraryLoadsInWebContent</key>
+        <true/>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>

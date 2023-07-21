@@ -600,17 +600,14 @@ export const PostLoginLanding = ({ navigation }) => {
 
                 <TouchableOpacity
                   onPress={() => navigation.navigate("music-details", {musicItem:item})}
-                  style={{ height: hp(15), justifyContent: "center", width: wp(40), }}
+                  style={{ height: hp(15), justifyContent: "center", width: wp(34), }}
                 >
                   <FastImage
                     style={{
                       alignSelf: 'center',
-                      width: wp(35),
+                      width: wp(32),
                       height: hp(10),
                       borderRadius: 7,
-                      borderWidth:1.5,
-                      borderColor:"#956DFF70"
-
                     }}
                     resizeMode={'cover'}
                     source={require("../../assets/images/music.jpeg")}
@@ -659,8 +656,6 @@ export const PostLoginLanding = ({ navigation }) => {
                       width: wp(80),
                       height: hp(25),
                       borderRadius: 7,
-                      borderWidth:1.5,
-                      borderColor:"#956DFF70"
 
                     }}
                     resizeMode={'cover'}
