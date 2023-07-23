@@ -190,6 +190,7 @@ export const PreLoginLanding = ({ navigation }) => {
 
       } else if (responseJson.success === false) {
         //setError({ ...error, serverError: responseJson.message });
+        console.log("hereeeeeeeeeeeeee")
         if(responseJson.message=="email already exists"){
 
           const userValue = {
