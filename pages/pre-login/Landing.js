@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
   Image,
-  
+
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { tokenAdd, usersSignInAdd } from '../../redux/reducers/appData';
 import { scale } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GoogleSignin ,statusCodes} from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { API_URL } from '../../services/api_url';
 
 
@@ -23,7 +23,6 @@ const style = StyleSheet.create({
     height: '77%',
   },
   header: {
-    fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: '700',
     fontSize: 24,
@@ -61,174 +60,68 @@ const style = StyleSheet.create({
     alignSelf: 'center',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontFamily: 'Inter',
     fontSize: 16,
     lineHeight: 24,
   },
 });
 
 export const PreLoginLanding = ({ navigation }) => {
-// const [user,setuser]=useState({})
-// useEffect(()=>{ 
-//   GoogleSignin.configure({
-//     webClientId:"255362522738-jp58mv7hsft7viv4p1eal11bc977tf7c.apps.googleusercontent.com",
-//     offlineAccess:true,
-//     forceCodeForRefreshToken:true,
+  // const [user,setuser]=useState({})
+  // useEffect(()=>{ 
+  //   GoogleSignin.configure({
+  //     webClientId:"255362522738-jp58mv7hsft7viv4p1eal11bc977tf7c.apps.googleusercontent.com",
+  //     offlineAccess:true,
+  //     forceCodeForRefreshToken:true,
 
-//   })
-//   isSignedIn()
-// })
-// const signIn=async()=>{
-//   alert('good morning')
-//   try{
-//     await GoogleSignin.hasPlayServices(); 
-//     const userInfo=await GoogleSignin.signIn()
-//     console.log("due___",userInfo)
-//   setuser(userInfo)
-//   }catch(error){
-//  console.log(error)
-//   }
-// }
-
-
-// const isSignedIn=async()=>{
-//   const isSignedIn=await GoogleSignin.isSignedIn()
-//   if(!isSignedIn){
-// getCurrentUserInfO()
-//   }
-//   else{
-//     console.log('please Login')
-//   }
-// }
-// const getCurrentUserInfO=async()=>{
-//   try{
-//     const userInfo=await GoogleSignin.signInSilently();
-//     console.log("edit___")
-//     setuser(userInfo)
+  //   })
+  //   isSignedIn()
+  // })
+  // const signIn=async()=>{
+  //   alert('good morning')
+  //   try{
+  //     await GoogleSignin.hasPlayServices(); 
+  //     const userInfo=await GoogleSignin.signIn()
+  //     console.log("due___",userInfo)
+  //   setuser(userInfo)
+  //   }catch(error){
+  //  console.log(error)
+  //   }
+  // }
 
 
-//   }catch(error){
-// console.log(error)
-//   }
-// }
-
- useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '255362522738-jp58mv7hsft7viv4p1eal11bc977tf7c.apps.googleusercontent.com',
-    });
-  }, []);
-
-  const googleLogin = async () => {
-    // Get the users ID token
-    const userInfo = await GoogleSignin.signIn();
-    if (userInfo.idToken) {
-      console.log("GOOOGGLEE USERR INFOO: ",userInfo);
-      // Start User
-      const user = {
-        fullname: userInfo.user.name,
-        email: userInfo.user.email,
-        profileImage: userInfo.user.photo,
-        loginType:"google",
-        password:"NA",
-        refercode: "",
-        //phone: userInfo.phone,
-      };  
+  // const isSignedIn=async()=>{
+  //   const isSignedIn=await GoogleSignin.isSignedIn()
+  //   if(!isSignedIn){
+  // getCurrentUserInfO()
+  //   }
+  //   else{
+  //     console.log('please Login')
+  //   }
+  // }
+  // const getCurrentUserInfO=async()=>{
+  //   try{
+  //     const userInfo=await GoogleSignin.signInSilently();
+  //     console.log("edit___")
+  //     setuser(userInfo)
 
 
-      console.log("USERRR MADE: ", user)
-      //dispatch(usersSignInAdd(user));
-      //dispatch(tokenAdd(userInfo.idToken));
-      //await AsyncStorage.setItem('user', JSON.stringify(user));
-      //await AsyncStorage.setItem('token', userInfo.idToken);
-
-      const response = await fetch(`${API_URL}/signup`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      });
-      const responseJson = await response.json();
-      
-      if (responseJson.success === true) {
-
-
-        // dispatch(usersSignInAdd(user));
-        // await AsyncStorage.setItem('user', JSON.stringify(user));
-        // dispatch(tokenAdd(userInfo.idToken));
-        // await AsyncStorage.setItem('token', userInfo.idToken);
-
-        const userValue = {
-          email: user.email,
-          password: user.password        
-        };
-        const response = await fetch(`${API_URL}/login`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userValue),
-        });
-        const responseJson = await response.json();
-        console.log("Login GOOGLE DATA: ",responseJson)
-        if (responseJson.success === true) {
-          dispatch(usersSignInAdd(responseJson.user));
-          dispatch(tokenAdd(responseJson.token));
-          await AsyncStorage.setItem('token', responseJson.token);
-          await AsyncStorage.setItem('user', JSON.stringify(responseJson.user));
-          // navigation.navigate('home');
-        } else if (responseJson.success === false) {
-          //setError({ ...error, serverError: responseJson.message });
-          console.log("ERROR L184: ",responseJson.message)
-        }
+  //   }catch(error){
+  // console.log(error)
+  //   }
+  // }
 
 
 
+  //  useEffect(() => {
+  //     GoogleSignin.configure({
+  //       webClientId:
+  //         '255362522738-jp58mv7hsft7viv4p1eal11bc977tf7c.apps.googleusercontent.com',
+  //     });
+  //   }, []);
 
-      } else if (responseJson.success === false) {
-        //setError({ ...error, serverError: responseJson.message });
-        if(responseJson.message=="email already exists"){
-
-          const userValue = {
-            email: user.email,
-            password: user.password,
-          };
-          const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userValue),
-          });
-          const responseJson = await response.json();
-          // console.log(responseJson);
-          if (responseJson.success === true) {
-            dispatch(usersSignInAdd(responseJson.user));
-            dispatch(tokenAdd(responseJson.token));
-            await AsyncStorage.setItem('token', responseJson.token);
-            await AsyncStorage.setItem('user', JSON.stringify(responseJson.user));
-            // navigation.navigate('home');
-          } else if (responseJson.success === false) {
-            //setError({ ...error, serverError: responseJson.message });
-            console.log("EMAIL EXIST ERROR: ",responseJson.message)
-          }
-
-        }
-      }
-
-      // navigation.navigate('home');
-    }
-  //   // End User
-  //   const googleCredential = await auth.GoogleAuthProvider.credential(
-  //     userInfo.idToken,
-  //   );
-  //   await auth().signInWithCredential(googleCredential);
-  // 
-};
+const googleLogin=()=>{
+  console.log("wait")
+}
 
 
   const dispatch = useDispatch();
@@ -303,7 +196,7 @@ export const PreLoginLanding = ({ navigation }) => {
             </Text>
           </TouchableOpacity> */}
 
-         <TouchableOpacity style={Style.socialButton} onPress={googleLogin}>
+          <TouchableOpacity style={Style.socialButton} onPress={googleLogin}>
             <Image
               resizeMode="contain"
               style={style.socialImage}
@@ -343,8 +236,8 @@ export const PreLoginLanding = ({ navigation }) => {
 };
 
 
-const Style=new StyleSheet.create({
- socialButton: {
+const Style = new StyleSheet.create({
+  socialButton: {
     backgroundColor: '#1E293B',
     borderRadius: 6,
     padding: '3%',
@@ -358,9 +251,9 @@ const Style=new StyleSheet.create({
     lineHeight: 24,
     color: '#FFFFFF',
     flex: 0.8,
-    marginLeft:67,
-    color:'white'
+    marginLeft: 67,
+    color: 'white'
     // marginLeft: moderateScale(67),
   },
-  
+
 })

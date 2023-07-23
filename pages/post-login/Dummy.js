@@ -7,7 +7,6 @@ import {
   ToastAndroid,
   TouchableOpacity,
   View,
-  StatusBar
 
 } from 'react-native';
 
@@ -300,7 +299,6 @@ const Dummy = ({ navigation, route }) => {
 
   return (
     <View onLayout={()=>setFullScreenPressed(!fullScreenPressed)}  style={[style.view]}>
-      <StatusBar hidden={true} />
       <CONTENT />
       {/* <Text style={{color:"#ffffff"}}>Hi this is dummy</Text> */}
     </View>
@@ -419,7 +417,6 @@ const style = StyleSheet.create({
     lineHeight: scale(16),
     fontWeight: '500',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
     width: scale(180),
   },
   dancerName: {
@@ -444,7 +441,6 @@ const style = StyleSheet.create({
     fontWeight: '400',
     lineHeight: scale(12),
     fontStyle: 'normal',
-    fontFamily: 'Inter',
     textTransform: 'uppercase',
   },
   danceType: {
@@ -452,7 +448,6 @@ const style = StyleSheet.create({
     fontSize: scale(10),
     fontWeight: '600',
     fontStyle: 'normal',
-    fontFamily: 'Inter',
     textTransform: 'capitalize',
     lineHeight: scale(12),
     paddingTop: scale(5),
@@ -462,7 +457,6 @@ const style = StyleSheet.create({
     fontSize: scale(14),
     fontWeight: '400',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
     lineHeight: scale(18),
   },
   mainLearnVideo: {
@@ -486,7 +480,6 @@ const style = StyleSheet.create({
     fontSize: scale(14),
     fontWeight: '500',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
     lineHeight: scale(16),
     marginTop: scale(12),
   },
@@ -495,7 +488,6 @@ const style = StyleSheet.create({
     fontSize: scale(10),
     fontWeight: '500',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
   },
   backgroundVideo: {
     height: "100%",

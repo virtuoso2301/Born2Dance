@@ -291,11 +291,9 @@ const style = StyleSheet.create({
     fontStyle: 'normal',
     fontSize: scale(16),
     lineHeight: scale(23),
-    fontFamily: 'Raleway',
   },
   seeText: {
     color: '#956DFF',
-    fontFamily: 'Raleway',
     fontSize: scale(11),
   },
 });

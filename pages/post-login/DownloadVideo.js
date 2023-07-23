@@ -115,7 +115,6 @@ const style = StyleSheet.create({
   downloadText: {
     color: '#FFFFFF',
     fontSize: scale(16),
-    fontFamily: 'Raleway',
     lineHeight: scale(19),
     fontWeight: '500',
   },

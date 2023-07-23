@@ -41,7 +41,6 @@ export function Thankyou({ navigation }) {
 const style = {
     TextButton: {
         fontSize: scale(15), 
-        fontWeight: 'Inter', 
         color: '#000000', 
         backgroundColor: '#FFFFFF',
         width: '35%',

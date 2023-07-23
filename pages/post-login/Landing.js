@@ -4,7 +4,6 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -289,7 +288,6 @@ export const PostLoginLanding = ({ navigation }) => {
       <BDLoader visible={State.IsLoading} />
       <LogoTitle navigation={navigation} />
       <ScrollView>
-        <StatusBar animated={true} backgroundColor="#1D283A" />
         {/* <View>
           <Carousel
             style={style.bannerTop}

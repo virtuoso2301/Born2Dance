@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, Platform, Dimensions, StatusBar, ScrollView,  Text, TouchableOpacity, Alert, Image, } from 'react-native';
+import { StyleSheet, View, Platform, Dimensions, ScrollView,  Text, TouchableOpacity, Alert, Image, } from 'react-native';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
@@ -165,7 +165,6 @@ const DanceTypeDetails = ({ navigation, route }) => {
 
   return (
     <View style={style.view}>
-      <StatusBar hidden={true} />
 
 
       <View style={{ height: isFullScreen ? landHt : hp(30), width: isFullScreen ? landWd : potWd }}>
@@ -440,7 +439,6 @@ const style = StyleSheet.create({
     lineHeight: scale(16),
     fontWeight: '700',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
     width: scale(180),
   },
   dancerName: {
@@ -464,8 +462,6 @@ const style = StyleSheet.create({
     fontSize: scale(10),
     fontWeight: '400',
     lineHeight: scale(12),
-    fontStyle: 'normal',
-    fontFamily: 'Inter',
     textTransform: 'uppercase',
   },
   danceType: {
@@ -473,7 +469,6 @@ const style = StyleSheet.create({
     fontSize: scale(10),
     fontWeight: '600',
     fontStyle: 'normal',
-    fontFamily: 'Inter',
     textTransform: 'capitalize',
     lineHeight: scale(12),
     paddingTop: scale(5),
@@ -483,7 +478,6 @@ const style = StyleSheet.create({
     fontSize: scale(14),
     fontWeight: '400',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
     lineHeight: scale(18),
   },
   mainLearnVideo: {
@@ -507,7 +501,6 @@ const style = StyleSheet.create({
     fontSize: scale(14),
     fontWeight: '500',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
     lineHeight: scale(16),
     marginTop: scale(12),
   },
@@ -516,7 +509,6 @@ const style = StyleSheet.create({
     fontSize: scale(10),
     fontWeight: '500',
     fontStyle: 'normal',
-    fontFamily: 'Raleway',
   },
   backgroundVideo: {
     height: "100%",

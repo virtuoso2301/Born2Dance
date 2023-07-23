@@ -28,12 +28,12 @@ export const Login = ({ navigation }) => {
     serverError: '',
   });
 
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '255362522738-jp58mv7hsft7viv4p1eal11bc977tf7c.apps.googleusercontent.com',
-    });
-  }, []);
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId:
+  //       '255362522738-jp58mv7hsft7viv4p1eal11bc977tf7c.apps.googleusercontent.com',
+  //   });
+  // }, []);
 
   const loginAPI = async () => {
     try {

@@ -226,13 +226,11 @@ const style = StyleSheet.create({
     fontWeight: '400',
     lineHeight: scale(12),
     fontStyle: 'normal',
-    fontFamily: 'Inter',
     textTransform: 'uppercase',
     paddingTop: scale(8),
   },
   danceType: {
     color: '#FFFFFF',
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontSize: scale(12),
     fontWeight: '400',
@@ -241,7 +239,6 @@ const style = StyleSheet.create({
   },
   missingText: {
     color: '#FFFFFF',
-    fontFamly: 'Raleway',
     fontSize: scale(16),
     fontStyle: 'normal',
     fontWeight: '500',
@@ -264,17 +261,14 @@ const style = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: scale(19),
-    fontFamly: 'Raleway',
   },
   weeklyText: {
     color: '#BABFC8',
     fontSize: scale(12),
-    fontFamily: 'Raleway',
     marginTop: scale(5),
   },
   priceText: {
     color: '#FFFFFF',
-    fontFamily: 'Raleway',
     marginTop: scale(12),
   },
   crosbtnImage: {
@@ -293,7 +287,6 @@ const style = StyleSheet.create({
   weeklyText2: {
     color: '#FFFFFF',
     fontSize: scale(12),
-    fontFamily: 'Raleway',
     marginTop: scale(5),
   },
 });

@@ -178,7 +178,6 @@ const view="View Profile"
                     <Text
                       style={{
                         fontSize: scale(15),
-                        fontFamily: 'Inter',
                         fontWeight: 'bold',
                         color: '#FFFFFF',
                         marginTop: moderateVerticalScale(6),
