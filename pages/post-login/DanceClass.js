@@ -17,6 +17,7 @@ import {
   scale,
   moderateVerticalScale
 } from 'react-native-size-matters';
+import WebView from 'react-native-webview';
 
 export const DanceClass = ({ navigation, route }) => {
   const [classDetails, setClassDetails] = useState({});
@@ -60,9 +61,10 @@ export const DanceClass = ({ navigation, route }) => {
           videoId={
             VideoId == null
               ? classDetails.youtube?.split('v=')?.[1]?.substring(0, 11) //item?.videoUrl?.video?.split('_')?.[0]
-              : VideoId?.split('v=')?.[1]?.substring(0, 11)
+              : VideoId?.split('v=')?.[1]?.substring(0, 11) 
           }
           play={false}
+          onFullScreenChange={()=>console.log("heree")}
         />
       </View>
       <Text onPress={()=>console.log(classDetails)} style={style.className}>{classDetails?.className}</Text>
