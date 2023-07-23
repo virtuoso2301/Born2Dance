@@ -137,7 +137,7 @@ export const HireUs = ({ navigation }) => {
   return (
     <View style={style.view}>
       <BDLoader visible={State.IsLoading} />
-      <Text
+      {/* <Text
         style={{
           fontSize: 20,
           fontWeight: 'bold',
@@ -145,7 +145,7 @@ export const HireUs = ({ navigation }) => {
           marginVertical: hp(2),
         }}>
         Hire Us
-      </Text>
+      </Text> */}
       <View
         style={{
           backgroundColor: '#1D283A',
@@ -227,6 +227,7 @@ export const HireUs = ({ navigation }) => {
             )
           }}
           horizontal
+          showsHorizontalScrollIndicator={false}
           style={{ marginVertical: hp(1.5) }}
         />
       </View>
@@ -316,6 +317,7 @@ const style = StyleSheet.create({
     backgroundColor: '#0E172A',
     flex: 1,
     paddingHorizontal: '3%',
+    paddingVertical:"3%"
   },
   headerContainer: {
     flex: 1,

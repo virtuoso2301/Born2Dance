@@ -152,14 +152,17 @@ const DanceTypeDetails = ({ navigation, route }) => {
 
   // This function is triggered when the user press on the fullscreen button or to come back from the fullscreen mode.
   const onFullScreen = () => {
+
     if (!isFullScreen) {
       Orientation.lockToLandscape();
+      navigation.setOptions({headerShown: false});
     } else {
       if (Platform.OS === 'ios') {
         Orientation.lockToPortrait();
       }
       Orientation.lockToPortrait();
     }
+    navigation.setOptions({headerShown: true});
     setIsFullScreen(!isFullScreen);
   };
 

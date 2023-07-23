@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Alert,
 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -47,13 +48,17 @@ const style = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'linear-gradient(90deg, #2885E5 0%, #9968EE 100%)',
     padding: '1%',
+    width:"96%",
+    alignSelf:"center"
   },
   buttonSignUp: {
     borderStyle: 'solid',
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#2885E5',
-    margin: '2%',
+    margin: '3%',
+    width:"95%",
+    alignSelf:"center"
   },
   loginButtonText: {
     padding: '2.5%',
@@ -241,8 +246,10 @@ const Style = new StyleSheet.create({
     backgroundColor: '#1E293B',
     borderRadius: 6,
     padding: '3%',
-    marginBottom: '3%',
+    marginVertical: '3%',
     flexDirection: 'row',
+    width:"96%",
+    alignSelf:"center"
   },
   socialText: {
     fontStyle: 'normal',

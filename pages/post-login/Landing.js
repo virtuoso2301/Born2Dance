@@ -69,7 +69,7 @@ const LogoTitle = ({ navigation }) => {
 export const PostLoginLanding = ({ navigation }) => {
   // const { token, bannerMuted} = useSelector(({ appData }) => appData);
 
-  const {bannerMuted, token} = useSelector(state=>state.appData);
+  const { bannerMuted, token } = useSelector(state => state.appData);
   const dispatch = useDispatch();
   const BannerWidth = Dimensions.get('window').width * 1;
 
@@ -83,6 +83,7 @@ export const PostLoginLanding = ({ navigation }) => {
   });
   const [bannerURL, setBannerURL] = useState("")
   const [country, SetCountry] = useState(null)
+  const [songDetails,setSongDetails]=useState(null)
 
 
 
@@ -100,6 +101,12 @@ export const PostLoginLanding = ({ navigation }) => {
     const data = await response.json();
     setState(p => ({ ...p, danceCategory: data }));
     dispatch(danceCategoryAdd(data));
+  };
+
+  const allMusic = async () => {
+    const response = await fetch(`${API_URL}/getAllAudio`);
+    const data = await response.json();
+    setSongDetails(data?.audio)
   };
 
   // const reanderItem = ({ item }) => {
@@ -184,7 +191,8 @@ export const PostLoginLanding = ({ navigation }) => {
     await bannerList();
     await hireusFun();
     await profile(token).then(res => dispatch(usersSignInAdd(res)));
-    
+    await allMusic()
+
   };
 
   useEffect(() => {
@@ -202,84 +210,44 @@ export const PostLoginLanding = ({ navigation }) => {
 
   const [heroBannerEnded, setHeroBannerEnded] = useState(false)
 
-  const [muted,setMuted]=useState(bannerMuted)
+  const [muted, setMuted] = useState(bannerMuted)
 
 
-  const songDetails=[
-    {
-      name: "Song 1",
-      artist: "Lewis Capaldi"
-      },
-      
-      {
-      name: "Song 2",
-      artist: "Adele"
-      },
-      
-      {
-      name: "Song 3",
-      artist: "Ed Sheeran"
-      },
-      
-      {
-      name: "Song 4",
-      artist: "Taylor Swift"
-      }
-      ,
-      {
-      name: "Song 5",
-      artist: "Billie Eilish"
-      }
-      ,
-      {
-      name: "Song 6",
-      artist: "Post Malone"
-      }
-      ,
-      {
-      name: "Song 7",
-      artist: "Beyoncé"
-      }
-      ,
-      {
-      name: "Song 8",
-      artist: "Bruno Mars"
-      }
-  ]
 
-  const videoDetails=[
+
+  const videoDetails = [
     {
       name: "Video 1",
       artist: "Lewis Capaldi"
-      },
-      {
+    },
+    {
       name: "Video 2",
       artist: "Adele"
-      },
-      {
+    },
+    {
       name: "Video 3",
       artist: "Ed Sheeran"
-      },
-      {
+    },
+    {
       name: "Video 4",
       artist: "Taylor Swift"
-      },
-      {
+    },
+    {
       name: "Video 5",
       artist: "Billie Eilish"
-      },
-      {
+    },
+    {
       name: "Video 6",
       artist: "Post Malone"
-      },
-      {
+    },
+    {
       name: "Video 7",
       artist: "Beyoncé"
-      },
-      {
+    },
+    {
       name: "Video 8",
       artist: "Bruno Mars"
-      }
+    }
   ]
 
 
@@ -315,7 +283,8 @@ export const PostLoginLanding = ({ navigation }) => {
         </View> */}
         <View style={{ height: Dimensions.get("window").height * 0.24 }}>
           <Video
-            source={{ uri: `${API_URL_IMAGE}/${bannerURL}` }}
+            // source={{ uri: `${API_URL_IMAGE}/${bannerURL}` }}
+            source={{ uri: "https://www.pexels.com/video/2499611/" }}
             resizeMode="cover"
             style={{
               // width: "100%",
@@ -339,13 +308,13 @@ export const PostLoginLanding = ({ navigation }) => {
             onLoadStart={() => setHeroBannerEnded(false)}
           >
           </Video>
-          {!heroBannerEnded?
-            <TouchableOpacity style={{position: "absolute", top: "4.5%", right: "4.5%",}} onPress={()=>{
+          {!heroBannerEnded ?
+            <TouchableOpacity style={{ position: "absolute", top: "4.5%", right: "4.5%", }} onPress={() => {
               dispatch(setBannerMuted(!muted))
               setMuted(!muted)
 
-              }}>
-              <Text style={{ color: "#ffffff", fontWeight: "bold", fontSize: 10 }}>{muted?`${"UNMUTE"}`:`${"MUTE"}`}</Text>
+            }}>
+              <Text style={{ color: "#ffffff", fontWeight: "bold", fontSize: 10 }}>{muted ? `${"UNMUTE"}` : `${"MUTE"}`}</Text>
             </TouchableOpacity>
             :
             null
@@ -553,7 +522,6 @@ export const PostLoginLanding = ({ navigation }) => {
                       width: wp(70),
                       height: hp(20),
                       borderRadius: 7
-
                     }}
                     resizeMode={'cover'}
                     source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
@@ -574,56 +542,42 @@ export const PostLoginLanding = ({ navigation }) => {
             horizontal
           />
         </View>
-        <View>
-          <FastImage
-            style={style.image}
-            source={require('../../assets/images/LastBanner.png')}
-          />
-        </View>
         <View style={style.section}>
           <View style={style.sectionHeader}>
             <Text style={style.sectionTitle}>B2D Music</Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('all-songs');
+                navigation.navigate('all-songs',{songDetails:songDetails});
               }}>
               <Text style={style.seeAll}>See All</Text>
             </TouchableOpacity>
           </View>
 
           <FlatList
-            data={songDetails.slice(0, 4)}
+            data={songDetails?.slice(0, 2)}
+            style={{ marginVertical: hp(1), marginHorizontal: wp(3) }}
             renderItem={({ item }) => (
-              <View style={style.imageContainerDance}>
-
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("music-details", {musicItem:item})}
-                  style={{ height: hp(14), justifyContent: "center", width: wp(30), }}
-                >
-                  <FastImage
-                    style={{
-                      alignSelf: 'center',
-                      width: wp(28),
-                      height: hp(9),
-                      borderRadius: 7,
-                    }}
-                    resizeMode={'cover'}
-                    source={require("../../assets/images/music.jpeg")}
-                  />
-                  <Text
-                    style={{
-                      color: '#fff',
-                      textAlign: 'center',
-                      marginTop: '5%',
-                      fontSize: 12,
-                      fontWeight: '400',
-                    }}>
-                    {item?.name}
-                  </Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+              style={style.headerContainer}
+              onPress={() => navigation.navigate("all-songs",{songDetails:songDetails,selected:item._id})}
+            >
+              <View style={style.headerLogo}>
+                <FastImage
+                  style={style.instructorlogo}
+                  source={require("../../assets/images/music.jpeg")}
+                />
               </View>
+              <View style={style.headerTitleContainer}>
+                <View
+                  style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={style.headerTitle}>{item.songName}</Text>
+                </View>
+                <Text style={style.headerDescription}>
+                  {item.artist}
+                </Text>
+              </View>
+            </TouchableOpacity>
             )}
-            horizontal
           />
         </View>
 
@@ -645,7 +599,7 @@ export const PostLoginLanding = ({ navigation }) => {
               <View style={style.imageContainerDance}>
 
                 <TouchableOpacity
-                  onPress={() =>Alert.alert("Alert","Waiting for API")}
+                  onPress={() => Alert.alert("Alert", "Waiting for API")}
                   style={{ height: hp(30), justifyContent: "center", width: wp(85), }}
                 >
                   <FastImage
@@ -654,7 +608,6 @@ export const PostLoginLanding = ({ navigation }) => {
                       width: wp(80),
                       height: hp(25),
                       borderRadius: 10,
-
                     }}
                     resizeMode={'cover'}
                     source={require("../../assets/images/b2ddance.jpeg")}
@@ -676,7 +629,12 @@ export const PostLoginLanding = ({ navigation }) => {
           />
         </View>
 
-
+        <View>
+          <FastImage
+            style={style.image}
+            source={require('../../assets/images/LastBanner.png')}
+          />
+        </View>
 
       </ScrollView>
     </View>
@@ -687,7 +645,7 @@ const style = StyleSheet.create({
   view: {
     backgroundColor: '#0E172A',
     flex: 1,
-    paddingBottom:hp(2)
+    paddingBottom: hp(2)
   },
   imageContainer: {
     //flex: 1,
@@ -868,6 +826,39 @@ const style = StyleSheet.create({
   inputSearchStyle: {
     backgroundColor: '#0E172A',
     color: '#BABFC8',
+  },
+  headerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: '2%',
+    borderColor: '#ffffff50',
+    borderWidth: 1.5,
+    borderRadius: 5,
+    marginBottom: '5%',
+  },
+  headerLogo: {
+    overflow: 'hidden',
+    borderRadius: 100,
+  },
+  instructorlogo: {
+    height: 70,
+    width: 70,
+  },
+  headerTitleContainer: { flex: 2, paddingTop: '5%', paddingLeft: '5%' },
+  headerTitle: {
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginRight: wp(1),
+  },
+  headerDescription: {
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 12,
+    lineHeight: 14,
+    color: '#BABFC8',
+    paddingTop: wp(1),
   },
 });
 const styles = StyleSheet.create({

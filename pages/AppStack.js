@@ -6,7 +6,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TryPremium } from './post-login/TryPremium';
 import { CustomVideo } from './post-login/CustomVideo';
 import { PostLoginLanding } from './post-login/Landing';
-import { NearByClasses } from './post-login/NearByClasses';
 import { HireUs } from './post-login/HireUs';
 import { LearnToDance } from './post-login/LearnToDance';
 import { PremiumScreen } from './post-login/PremiumScreen';
@@ -45,7 +44,7 @@ import Dummy from './post-login/Dummy';
 import DanceTypeDetails from './post-login/DanceTypeDetails';
 import AllSongs from './post-login/AllSongs';
 import AllVideos from './post-login/AllVideos';
-import MusicDetails from './post-login/MusicDetails';
+
 import SongPurchaseForm from './post-login/SongPurchaseForm';
 
 const Stack = createNativeStackNavigator();
@@ -72,7 +71,9 @@ const AppStack = (props) => {
         name="dance-type-details"
         component={DanceTypeDetails}
         options={{
-          headerShown: false
+          headerTitleAlign: 'center',
+          title: 'Learn to Dance',
+          ...preLoginPageHeaderOptions,
         }}
       />
       <Stack.Screen
@@ -379,15 +380,6 @@ const AppStack = (props) => {
         }}
       />
       <Stack.Screen
-        name="music-details"
-        component={MusicDetails}
-        options={{
-          title: 'Music Details',
-          ...preLoginPageHeaderOptions,
-          headerTitleAlign: 'center',
-        }}
-      />
-      <Stack.Screen
         name="city"
         component={City}
         options={({ route }) => ({
@@ -458,12 +450,21 @@ const BottomTabs = ({ navigation }) => {
       <Tab.Screen
         name="Hire Us"
         component={HireUs}
-        options={{ headerShown: false }}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Hire Us',
+          ...preLoginPageHeaderOptions,
+        }}
+
       />
       <Tab.Screen
         name="Custom Video"
         component={CustomVideo}
-        options={{ headerShown: false }}
+        options={{
+          title: 'Custom Video',
+          ...preLoginPageHeaderOptions,
+          headerTitleAlign: 'center',
+        }}
       />
       <Tab.Screen
         name="My plan"
@@ -472,7 +473,7 @@ const BottomTabs = ({ navigation }) => {
           title: 'My plan',
           ...preLoginPageHeaderOptions,
           headerTitleAlign: 'center',
-          headerShown: false,
+
         }}
       />
       {/* <Tab.Screen
