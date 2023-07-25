@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ImageBackground
 } from 'react-native';
 import MyCarousel from './testing';
 import { scale } from 'react-native-size-matters';
@@ -83,7 +84,7 @@ export const PostLoginLanding = ({ navigation }) => {
   });
   const [bannerURL, setBannerURL] = useState("")
   const [country, SetCountry] = useState(null)
-  const [songDetails,setSongDetails]=useState(null)
+  const [songDetails, setSongDetails] = useState(null)
 
 
 
@@ -108,6 +109,8 @@ export const PostLoginLanding = ({ navigation }) => {
     const data = await response.json();
     setSongDetails(data?.audio)
   };
+
+  const [selectedSong, setSelectedSong] = useState("")
 
   // const reanderItem = ({ item }) => {
   //   return item.type === 'image' ? (
@@ -542,41 +545,53 @@ export const PostLoginLanding = ({ navigation }) => {
             horizontal
           />
         </View>
-        <View style={style.section}>
+        <View style={[style.section, { height: hp(25) }]}>
           <View style={style.sectionHeader}>
             <Text style={style.sectionTitle}>B2D Music</Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('all-songs',{songDetails:songDetails});
+                navigation.navigate('all-songs', { songDetails: songDetails });
               }}>
               <Text style={style.seeAll}>See All</Text>
             </TouchableOpacity>
           </View>
 
           <FlatList
-            data={songDetails?.slice(0, 2)}
+            data={songDetails?.slice(0, 4)}
+            showsHorizontalScrollIndicator={false}
             style={{ marginVertical: hp(1), marginHorizontal: wp(3) }}
+            horizontal
             renderItem={({ item }) => (
               <TouchableOpacity
-              style={style.headerContainer}
-              onPress={() => navigation.navigate("all-songs",{songDetails:songDetails,selected:item._id})}
-            >
-              <View style={style.headerLogo}>
-                <FastImage
-                  style={style.instructorlogo}
+                style={style.headerContainer}
+                onPress={() => {
+                  setSelectedSong(item._id)
+                }}
+              >
+                <ImageBackground
+                imageStyle={{borderRadius:10}}
+                  style={style.instructorlogo1}
                   source={require("../../assets/images/music.jpeg")}
-                />
-              </View>
-              <View style={style.headerTitleContainer}>
-                <View
-                  style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={style.headerTitle}>{item.songName}</Text>
+                //source={{uri:`${API_URL_IMAGE}/${item.image}`}}
+                >
+                  {item._id == selectedSong ? <FastImage
+                    style={[style.instructorlogo1, { opacity: 0.3 }]}
+                    source={require("../../assets/images/sound1.gif")}
+                  /> : null}
+                </ImageBackground>
+
+                <View style={style.headerTitleContainer}>
+                  <View>
+                    <Text style={style.headerTitle}>{item.songName}</Text>
+                  </View>
+                  <Text style={style.headerDescription}>
+                    {item.artist}
+                  </Text>
+                  <Text style={style.headerDescription1}>
+                    3:47
+                  </Text>
                 </View>
-                <Text style={style.headerDescription}>
-                  {item.artist}
-                </Text>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
             )}
           />
         </View>
@@ -835,31 +850,50 @@ const style = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 5,
     marginBottom: '5%',
+    width: wp(82),
+    height: hp(16.5),
+    marginHorizontal: 10,
   },
   headerLogo: {
     overflow: 'hidden',
-    borderRadius: 100,
+    borderRadius: 10,
   },
   instructorlogo: {
-    height: 70,
+    height: 100,
     width: 70,
   },
-  headerTitleContainer: { flex: 2, paddingTop: '5%', paddingLeft: '5%' },
+  instructorlogo1: {
+    height: hp(13.5),
+    width: 110,
+    marginLeft: 2,
+    alignSelf: "center",
+    borderRadius:10
+  },
+  headerTitleContainer: { marginLeft: 18, marginTop: 10 },
   headerTitle: {
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 16,
+    fontSize: 18,
     color: '#FFFFFF',
-    marginRight: wp(1),
+    marginVertical: 6
   },
   headerDescription: {
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 14,
+    color: '#BABFC8',
+    paddingTop: wp(1),
+  },
+  headerDescription1: {
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 12,
     lineHeight: 14,
     color: '#BABFC8',
-    paddingTop: wp(1),
+    marginTop: 10
   },
+
 });
 const styles = StyleSheet.create({
   container: {

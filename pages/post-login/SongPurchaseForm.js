@@ -77,13 +77,11 @@ const style = StyleSheet.create({
         paddingHorizontal: wp(5),
         color: '#BABFC8',
         fontSize: scale(12),
+        height:hp(6)
     },
 });
 
 const SongPurchaseForm = ({ navigation, route }) => {
-
-    const musicItem = route.params.musicItem
-
 
     const [State, setState] = useState({
         Email: '',
@@ -148,8 +146,7 @@ const SongPurchaseForm = ({ navigation, route }) => {
                     <TextInput
                         placeholderTextColor="#BABFC8"
                         style={style.input}
-                        value={musicItem.name}
-                        editable={false}
+                        placeholder='song name'
                     />
                 </View>
 
