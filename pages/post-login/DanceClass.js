@@ -14,10 +14,8 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import LinearGradient from 'react-native-linear-gradient';
 import { hp, wp } from '../../Constants';
 import {
-  scale,
   moderateVerticalScale
 } from 'react-native-size-matters';
-import WebView from 'react-native-webview';
 
 export const DanceClass = ({ navigation, route }) => {
   const [classDetails, setClassDetails] = useState({});
