@@ -67,7 +67,7 @@ export const DanceClass = ({ navigation, route }) => {
           onFullScreenChange={()=>console.log("heree")}
         />
       </View>
-      <Text onPress={()=>console.log(classDetails)} style={style.className}>{classDetails?.className}</Text>
+      <Text style={style.className}>{classDetails?.className}</Text>
       <Text style={style.classRating}>
         4.5
         <AirbnbRating
