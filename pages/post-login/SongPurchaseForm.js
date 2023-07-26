@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 
     ScrollView,
@@ -90,6 +90,22 @@ const SongPurchaseForm = ({ navigation, route }) => {
         Name: ''
     });
 
+    const vimeoAPI = async () => {
+        try {
+          const response = await fetch(
+            'https://player.vimeo.com/video/748415552/config',
+          );
+          const json = await response.json();
+          console.log(json)
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    useEffect(()=>{
+        vimeoAPI()
+    },[])
+
     const onSubmitPress = async () => {
         Alert.alert("Alert", "You have pressed submit")
         // if (State.Cities == null) {
@@ -132,15 +148,6 @@ const SongPurchaseForm = ({ navigation, route }) => {
         //       ToastAndroid.BOTTOM,
         //     );
         //   });
-    };
-
-    const videoCallbacks = {
-        timeupdate: (data) => console.log('timeupdate: ', data),
-        play: (data) => console.log('play: ', data),
-        pause: (data) => console.log('pause: ', data),
-        fullscreenchange: (data) => console.log('fullscreenchange: ', data),
-        ended: (data) => console.log('ended: ', data),
-        controlschange: (data) => console.log('controlschange: ', data),
     };
 
     return (
@@ -207,11 +214,6 @@ const SongPurchaseForm = ({ navigation, route }) => {
                         </Text>
                     </LinearGradient>
                 </TouchableOpacity>
-                <Vimeo
-            videoId={'712159936'}
-            handlers={videoCallbacks}
-            params={'api=1&controls=0'}
-          />
             </ScrollView>
         </View>
     );
