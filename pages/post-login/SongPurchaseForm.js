@@ -16,6 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { hp, wp } from '../../Constants';
 import RazorpayCheckout from 'react-native-razorpay';
 import Logo from '../../assets/images/logo.png';
+import { Vimeo } from 'react-native-vimeo-iframe';
 
 const style = StyleSheet.create({
     view: {
@@ -77,7 +78,7 @@ const style = StyleSheet.create({
         paddingHorizontal: wp(5),
         color: '#BABFC8',
         fontSize: scale(12),
-        height:hp(6)
+        height: hp(6)
     },
 });
 
@@ -86,7 +87,7 @@ const SongPurchaseForm = ({ navigation, route }) => {
     const [State, setState] = useState({
         Email: '',
         PhoneNumber: '',
-        Name:''
+        Name: ''
     });
 
     const onSubmitPress = async () => {
@@ -131,6 +132,15 @@ const SongPurchaseForm = ({ navigation, route }) => {
         //       ToastAndroid.BOTTOM,
         //     );
         //   });
+    };
+
+    const videoCallbacks = {
+        timeupdate: (data) => console.log('timeupdate: ', data),
+        play: (data) => console.log('play: ', data),
+        pause: (data) => console.log('pause: ', data),
+        fullscreenchange: (data) => console.log('fullscreenchange: ', data),
+        ended: (data) => console.log('ended: ', data),
+        controlschange: (data) => console.log('controlschange: ', data),
     };
 
     return (
@@ -197,6 +207,11 @@ const SongPurchaseForm = ({ navigation, route }) => {
                         </Text>
                     </LinearGradient>
                 </TouchableOpacity>
+                <Vimeo
+            videoId={'712159936'}
+            handlers={videoCallbacks}
+            params={'api=1&controls=0'}
+          />
             </ScrollView>
         </View>
     );

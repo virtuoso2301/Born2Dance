@@ -286,8 +286,7 @@ export const PostLoginLanding = ({ navigation }) => {
         </View> */}
         <View style={{ height: Dimensions.get("window").height * 0.24 }}>
           <Video
-            // source={{ uri: `${API_URL_IMAGE}/${bannerURL}` }}
-            source={{ uri: "https://www.pexels.com/video/2499611/" }}
+            source={{ uri: `${API_URL_IMAGE}/${bannerURL}`.replace(/ /g, '%20') }}
             resizeMode="cover"
             style={{
               // width: "100%",
