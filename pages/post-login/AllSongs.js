@@ -1,14 +1,50 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, ImageBackground } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { hp, wp } from '../../Constants'
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
+import SoundPlayer from 'react-native-sound-player'
+import { API_URL_IMAGE } from '../../services/api_url';
 
 const AllSongs = ({ navigation, route }) => {
 
   const songDetails = route.params.songDetails
 
   const [selectedSong, setSelectedSong] = useState("")
+
+   let _onFinishedPlayingSubscription = null
+    let _onFinishedLoadingSubscription = null
+    let _onFinishedLoadingFileSubscription = null
+    let _onFinishedLoadingURLSubscription = null
+  
+
+  useEffect(()=>{
+    SoundPlayer.setSpeaker(true)
+
+    _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
+      console.log('finished playing', success)
+    })
+    _onFinishedLoadingSubscription = SoundPlayer.addEventListener('FinishedLoading', ({ success }) => {
+      console.log('finished loading', success)
+    })
+    _onFinishedLoadingFileSubscription = SoundPlayer.addEventListener('FinishedLoadingFile', ({ success, name, type }) => {
+      console.log('finished loading file', success, name, type)
+    })
+    _onFinishedLoadingURLSubscription = SoundPlayer.addEventListener('FinishedLoadingURL', ({ success, url }) => {
+      console.log('finished loading url', success, url)
+    })
+
+    return(()=>{
+      _onFinishedPlayingSubscription.remove()
+      _onFinishedLoadingSubscription.remove()
+      _onFinishedLoadingURLSubscription.remove()
+      _onFinishedLoadingFileSubscription.remove()
+      SoundPlayer.stop()
+    }
+    )
+
+
+  },[])
 
   const renderItem = ({ item }) => {
     return (
@@ -17,6 +53,7 @@ const AllSongs = ({ navigation, route }) => {
         onPress={() => {
           setSelectedSong(item._id)
           console.log(item)
+          SoundPlayer.playUrl(`${API_URL_IMAGE +"/"+ item.songlink}`.replace(/ /g, '%20'))
         }}
       >
 
@@ -24,7 +61,6 @@ const AllSongs = ({ navigation, route }) => {
           imageStyle={{ borderRadius: 10 }}
           style={style.instructorlogo1}
           source={require("../../assets/images/music.jpeg")}
-        //source={{uri:`${API_URL_IMAGE}/${item.image}`}}
         >
           {item._id == selectedSong ? <FastImage
             style={[style.instructorlogo1, { opacity: 0.3 }]}

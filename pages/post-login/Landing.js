@@ -29,6 +29,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
 import Orientation from 'react-native-orientation-locker';
+import { Vimeo } from 'react-native-vimeo-iframe';
+import { useRef } from 'react';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -85,6 +87,8 @@ export const PostLoginLanding = ({ navigation }) => {
   const [bannerURL, setBannerURL] = useState("")
   const [country, SetCountry] = useState(null)
   const [songDetails, setSongDetails] = useState(null)
+
+  const vimeoRef=useRef()
 
 
 
@@ -544,7 +548,7 @@ export const PostLoginLanding = ({ navigation }) => {
             horizontal
           />
         </View>
-        <View style={[style.section, { height: hp(25) }]}>
+        <View style={[style.section, { height: hp(26) }]}>
           <View style={style.sectionHeader}>
             <Text style={style.sectionTitle}>B2D Music</Text>
             <TouchableOpacity
@@ -593,6 +597,23 @@ export const PostLoginLanding = ({ navigation }) => {
               </TouchableOpacity>
             )}
           />
+        </View>
+
+
+        <View style={{backgroundColor: '#0E172A',}}>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert("Alert","New API in process")
+              }}>
+              <Text style={[style.seeAll,{marginBottom:8,marginLeft:"85%"}]}>See All</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>vimeoRef.current.play()} style={{width:"95%",alignSelf:"center",borderRadius:10,overflow:"hidden"}}>
+            <Vimeo
+            videoId='146490269'
+            params={'api=1&autoplay=0&share=0'}
+            style={{height:undefined,width:"100%",aspectRatio:16/9,borderRadius:10}}
+            />
+            </TouchableOpacity>
         </View>
 
 

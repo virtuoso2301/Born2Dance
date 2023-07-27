@@ -184,6 +184,8 @@ const DanceTypeDetails = ({ navigation, route }) => {
           style={style.backgroundVideo}
         />
         <MediaControls
+        showOnStart={false}
+        fadeOutDelay={3000}
           isFullScreen={isFullScreen}
           duration={duration}
           isLoading={isLoading}
