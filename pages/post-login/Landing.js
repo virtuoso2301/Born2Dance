@@ -288,22 +288,20 @@ export const PostLoginLanding = ({ navigation }) => {
             loop={true}
           />
         </View> */}
-        <View style={{ height: Dimensions.get("window").height * 0.24 }}>
+        <View style={{ alignSelf:"center", width:"95%" }}>
           <Video
             source={{ uri: `${API_URL_IMAGE}/${bannerURL}`.replace(/ /g, '%20') }}
             resizeMode="cover"
             style={{
-              // width: "100%",
-              // height: "100%",
-              // alignSelf:"center"
               marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
               backgroundColor: 'white',
               backgroundColor: '#000000',
               borderRadius: 10,
-              width: screenWidth - screenWidth / 50,
+              width: "100%",
               marginHorizontal: 1,
               alignSelf: "center",
-              height: "100%",
+              height: undefined,
+              aspectRatio:16/9
 
             }}
             controls={false}
@@ -607,7 +605,7 @@ export const PostLoginLanding = ({ navigation }) => {
               }}>
               <Text style={[style.seeAll,{marginBottom:8,marginLeft:"85%"}]}>See All</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>vimeoRef.current.play()} style={{width:"95%",alignSelf:"center",borderRadius:10,overflow:"hidden"}}>
+            <TouchableOpacity style={{width:"95%",alignSelf:"center",borderRadius:10,overflow:"hidden"}}>
             <Vimeo
             videoId='146490269'
             params={'api=1&autoplay=0&share=0'}

@@ -16,7 +16,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { hp, wp } from '../../Constants';
 import RazorpayCheckout from 'react-native-razorpay';
 import Logo from '../../assets/images/logo.png';
-import { Vimeo } from 'react-native-vimeo-iframe';
 
 const style = StyleSheet.create({
     view: {
@@ -90,21 +89,7 @@ const SongPurchaseForm = ({ navigation, route }) => {
         Name: ''
     });
 
-    const vimeoAPI = async () => {
-        try {
-          const response = await fetch(
-            'https://player.vimeo.com/video/748415552/config',
-          );
-          const json = await response.json();
-          console.log(json)
-        } catch (error) {
-          console.error(error);
-        }
-      };
 
-    useEffect(()=>{
-        vimeoAPI()
-    },[])
 
     const onSubmitPress = async () => {
         Alert.alert("Alert", "You have pressed submit")
