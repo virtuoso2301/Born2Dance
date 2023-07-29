@@ -79,8 +79,8 @@ const DanceTypeDetails = ({ navigation, route }) => {
 
   const video = {
     uri: VideoId
-      ? `${API_URL_IMAGE}/uploads/${VideoId}`
-      : `${API_URL_IMAGE}/uploads/${item?.videoUrl?.video}`,
+      ? `${API_URL_IMAGE}/uploads/${VideoId}`.replace(/ /g,"%20")
+      : `${API_URL_IMAGE}/uploads/${item?.videoUrl?.video}`.replace(/ /g,"%20"),
   }
   const videoPlayer = useRef(null);
 

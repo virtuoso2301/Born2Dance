@@ -30,7 +30,6 @@ import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
 import Orientation from 'react-native-orientation-locker';
 import { Vimeo } from 'react-native-vimeo-iframe';
-import { useRef } from 'react';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -87,8 +86,6 @@ export const PostLoginLanding = ({ navigation }) => {
   const [bannerURL, setBannerURL] = useState("")
   const [country, SetCountry] = useState(null)
   const [songDetails, setSongDetails] = useState(null)
-
-  const vimeoRef=useRef()
 
 
 
@@ -598,17 +595,20 @@ export const PostLoginLanding = ({ navigation }) => {
         </View>
 
 
-        <View style={{backgroundColor: '#0E172A',}}>
+        <View style={style.section}>
+          <View style={style.sectionHeader}>
+            <Text style={style.sectionTitle}>B2D Music Videos</Text>
             <TouchableOpacity
               onPress={() => {
                 Alert.alert("Alert","New API in process")
               }}>
-              <Text style={[style.seeAll,{marginBottom:8,marginLeft:"85%"}]}>See All</Text>
+              <Text style={style.seeAll}>See All</Text>
             </TouchableOpacity>
+          </View>
             <TouchableOpacity style={{width:"95%",alignSelf:"center",borderRadius:10,overflow:"hidden"}}>
             <Vimeo
             videoId='146490269'
-            params={'api=1&autoplay=0&share=0'}
+            params={'api=1&autoplay=0'}
             style={{height:undefined,width:"100%",aspectRatio:16/9,borderRadius:10}}
             />
             </TouchableOpacity>
@@ -617,7 +617,7 @@ export const PostLoginLanding = ({ navigation }) => {
 
         <View style={style.section}>
           <View style={style.sectionHeader}>
-            <Text style={style.sectionTitle}>B2D Videos</Text>
+            <Text style={style.sectionTitle}>B2D Cinemas</Text>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('all-videos');
@@ -863,14 +863,15 @@ const style = StyleSheet.create({
   headerContainer: {
     flex: 1,
     flexDirection: 'row',
-    padding: '2%',
-    borderColor: '#ffffff50',
-    borderWidth: 1.5,
-    borderRadius: 5,
+    padding: '3%',
+    borderColor: '#ffffff70',
+    //borderWidth: 1.5,
+    borderRadius: 10,
     marginBottom: '5%',
-    width: wp(82),
-    height: hp(16.5),
-    marginHorizontal: 10,
+    backgroundColor:"#ffffff09",
+    marginHorizontal:10,
+    marginBottom:"2%",
+    width:wp(82)
   },
   headerLogo: {
     overflow: 'hidden',

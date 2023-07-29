@@ -2,25 +2,22 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import {
-  moderateScale,
-  moderateVerticalScale,
   scale,
 } from 'react-native-size-matters';
 import { API_URL_IMAGE, API_URL } from '../../services/api_url';
 import verified from '../../assets/images/verified.png';
 import { hp, wp } from '../../Constants';
 import Share from 'react-native-share';
-import VideoControl from 'react-native-video-controls';
 import VideoPlayer from 'react-native-video-controls';
 import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -254,7 +251,7 @@ useEffect(()=>{
           {item?.footerImage && (
             <VideoPlayer
               source={{
-                uri: `${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g, '%20'),
+                uri:`${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g,"%20"),
               }}
               navigator={navigation}
               resizeMode="cover"

@@ -113,11 +113,12 @@ const style = StyleSheet.create({
   headerContainer: {
     flex: 1,
     flexDirection: 'row',
-    padding: '2%',
-    borderRadius: 5,
-    width: wp(82),
-    height: hp(16.5),
-    marginHorizontal: 5,
+    padding: '3%',
+    borderColor: '#ffffff70',
+    //borderWidth: 1.5,
+    borderRadius: 10,
+    marginBottom: '5%',
+    backgroundColor:"#ffffff09"
   },
   headerLogo: {
     overflow: 'hidden',

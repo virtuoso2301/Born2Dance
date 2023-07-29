@@ -46,12 +46,12 @@ const AllVideos = () => {
             style={style.headerContainer}
             onTouchEnd={() => Alert.alert("Alert","Waiting for API")}
           >
-            <View style={style.headerLogo}>
+
               <FastImage
                 style={style.instructorlogo}
                 source={require("../../assets/images/b2ddance.jpeg")}
               />
-            </View>
+
             <View style={style.headerTitleContainer}>
               <View
                 style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -118,19 +118,17 @@ const style = StyleSheet.create({
       headerContainer: {
         flex: 1,
         flexDirection: 'row',
-        padding: '2%',
-        borderColor: '#956DFF70',
-        borderWidth: 1.5,
-        borderRadius: 5,
+        padding: '3%',
+        borderColor: '#ffffff70',
+        //borderWidth: 1.5,
+        borderRadius: 10,
         marginBottom: '5%',
-      },
-      headerLogo: {
-        overflow: 'hidden',
-        borderRadius: 100,
+        backgroundColor:"#ffffff09"
       },
       instructorlogo: {
-        height: 70,
-        width: 70,
+        height: 125,
+        width: 125,
+        borderRadius:8
       },
       headerTitleContainer: { flex: 2, paddingTop: '5%', paddingLeft: '5%' },
       headerTitle: {
