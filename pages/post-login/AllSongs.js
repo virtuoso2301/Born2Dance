@@ -9,8 +9,9 @@ import { API_URL_IMAGE } from '../../services/api_url';
 const AllSongs = ({ navigation, route }) => {
 
   const songDetails = route.params.songDetails
+  const songItem = route.params.songItem
 
-  const [selectedSong, setSelectedSong] = useState("")
+  const [selectedSong, setSelectedSong] = useState(songItem?songItem._id:"")
 
    let _onFinishedPlayingSubscription = null
     let _onFinishedLoadingSubscription = null
@@ -33,6 +34,10 @@ const AllSongs = ({ navigation, route }) => {
     _onFinishedLoadingURLSubscription = SoundPlayer.addEventListener('FinishedLoadingURL', ({ success, url }) => {
       console.log('finished loading url', success, url)
     })
+
+    if(songItem){
+      SoundPlayer.playUrl(`${API_URL_IMAGE +"/"+ songItem.songlink}`.replace(/ /g, '%20'))
+    }
 
     return(()=>{
       _onFinishedPlayingSubscription.remove()

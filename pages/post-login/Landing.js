@@ -8,7 +8,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ImageBackground
+  ImageBackground,
+  Platform
 } from 'react-native';
 import MyCarousel from './testing';
 import { scale } from 'react-native-size-matters';
@@ -29,7 +30,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
 import Orientation from 'react-native-orientation-locker';
-import { Vimeo } from 'react-native-vimeo-iframe';
+// import { Vimeo } from 'react-native-vimeo-iframe';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -70,6 +71,14 @@ const LogoTitle = ({ navigation }) => {
 
 export const PostLoginLanding = ({ navigation }) => {
   // const { token, bannerMuted} = useSelector(({ appData }) => appData);
+  // const videoCallbacks = {
+  //   timeupdate: (data) => console.log('timeupdate: ', data),
+  //   play: (data) => console.log('play: ', data),
+  //   pause: (data) => console.log('pause: ', data),
+  //   fullscreenchange: (data) => console.log('fullscreenchange: ', data),
+  //   ended: (data) => console.log('ended: ', data),
+  //   controlschange: (data) => console.log('controlschange: ', data),
+  // };
 
   const { bannerMuted, token } = useSelector(state => state.appData);
   const dispatch = useDispatch();
@@ -111,7 +120,7 @@ export const PostLoginLanding = ({ navigation }) => {
     setSongDetails(data?.audio)
   };
 
-  const [selectedSong, setSelectedSong] = useState("")
+  // const [selectedSong, setSelectedSong] = useState("")
 
   // const reanderItem = ({ item }) => {
   //   return item.type === 'image' ? (
@@ -287,7 +296,7 @@ export const PostLoginLanding = ({ navigation }) => {
         </View> */}
         <View style={{ alignSelf:"center", width:"95%" }}>
           <Video
-            source={{ uri: `${API_URL_IMAGE}/${bannerURL}`.replace(/ /g, '%20') }}
+            source={{ uri: Platform.OS=="ios"?`${API_URL_IMAGE}/${bannerURL}`.replace(/ /g, '%20'):`${API_URL_IMAGE}/${bannerURL}`}}
             resizeMode="cover"
             style={{
               marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
@@ -563,7 +572,8 @@ export const PostLoginLanding = ({ navigation }) => {
               <TouchableOpacity
                 style={style.headerContainer}
                 onPress={() => {
-                  setSelectedSong(item._id)
+                  // setSelectedSong(item._id)
+                  navigation.navigate("all-songs",{songItem:item,songDetails: songDetails})
                 }}
               >
                 <ImageBackground
@@ -572,10 +582,10 @@ export const PostLoginLanding = ({ navigation }) => {
                   source={require("../../assets/images/music.jpeg")}
                 //source={{uri:`${API_URL_IMAGE}/${item.image}`}}
                 >
-                  {item._id == selectedSong ? <FastImage
+                  {/* {item._id == selectedSong ? <FastImage
                     style={[style.instructorlogo1, { opacity: 0.3 }]}
                     source={require("../../assets/images/sound1.gif")}
-                  /> : null}
+                  /> : null} */}
                 </ImageBackground>
 
                 <View style={style.headerTitleContainer}>
@@ -605,13 +615,14 @@ export const PostLoginLanding = ({ navigation }) => {
               <Text style={style.seeAll}>See All</Text>
             </TouchableOpacity>
           </View>
-            <TouchableOpacity style={{width:"95%",alignSelf:"center",borderRadius:10,overflow:"hidden"}}>
+            {/* <TouchableOpacity style={{width:"95%",alignSelf:"center",borderRadius:10,overflow:"hidden"}}>
             <Vimeo
             videoId='146490269'
             params={'api=1&autoplay=0'}
             style={{height:undefined,width:"100%",aspectRatio:16/9,borderRadius:10}}
+            handlers={videoCallbacks}
             />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
 
 

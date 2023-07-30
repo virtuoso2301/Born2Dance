@@ -251,7 +251,7 @@ useEffect(()=>{
           {item?.footerImage && (
             <VideoPlayer
               source={{
-                uri:`${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g,"%20"),
+                uri:Platform.OS=="ios"?`${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g,"%20"):`${API_URL_IMAGE}/${item?.footerImage}`,
               }}
               navigator={navigation}
               resizeMode="cover"
