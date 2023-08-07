@@ -108,48 +108,61 @@ const GlobalDanceForm = ({ navigation, route }) => {
       <BDLoader visible={State.IsLoading} />
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <FlatList
-          style={{ width: wp(30), backgroundColor: "#00000099", paddingVertical:hp(1.5),paddingHorizontal:wp(1.5) }}
+          style={{ width: wp(3), backgroundColor: "#00000099", paddingVertical: hp(1.5), paddingHorizontal: 5 }}
           contentContainerStyle={{ alignItems: "center" }}
           data={State.States}
           renderItem={({ item, index }) => (
-            <View style={{width:"100%",backgroundColor:"#00000000"}}>
-              <TouchableOpacity style={{width:"100%",backgroundColor:"#00000000",marginBottom:hp(1.5) }} onPress={() => onStatePress(item)}>
-                <FastImage
-                  style={{
-                    alignSelf: 'center',
-                    width: wp(20),
-                    height: wp(20),
-                    borderRadius: wp(20),
-                    opacity:State.SelectedState[0]?._id == item?._id? 1:0.6
-                  }}
-                  resizeMode={'cover'}
-                  source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
-                />
-                <Text
-                  style={{
-                    color:
-                      State.SelectedState[0]?._id == item?._id
-                        ? '#FFF'
-                        : '#BABFC8CC',
-                    textAlign: 'center',
-                    marginTop: '5%',
-                    fontSize: 14,
-                    fontWeight: '400',
-                  }}>
-                  {item?.stateName}
-                </Text>
-              </TouchableOpacity>
+            <View style={{ width: "100%", backgroundColor: "#00000000", flexDirection: "row" }}>
+              <View style={{ height: wp(15), width: 7, borderRadius: 10, backgroundColor: State.SelectedState[0]?._id == item?._id ? "#956DFF" : "#00000000", alignSelf: "center", marginBottom: hp(4) }}>
+              </View>
+              <View>
+                <TouchableOpacity style={{ width: wp(30), backgroundColor: "#00000000", marginBottom: hp(1.5) }} onPress={() => onStatePress(item)}>
+                  <FastImage
+                    style={{
+                      alignSelf: 'center',
+                      width: wp(18),
+                      aspectRatio: 1,
+                      borderRadius: wp(18) / 2,
+                    }}
+                    resizeMode={'cover'}
+                    source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
+                  />
+                  {State.SelectedState[0]?._id !== item?._id ?
+                    <Text
+                      style={{
+                        color: "#fff",
+                        textAlign: 'center',
+                        marginTop: '5%',
+                        fontSize: 10.5,
+                        fontWeight: '400',
+                      }}>
+                      {item?.stateName}
+                    </Text>
+                    :
+                    <Text
+                      style={{
+                        color: "#fff",
+                        textAlign: 'center',
+                        marginTop: '5%',
+                        fontSize: 10.5,
+                        fontWeight: '400',
+                      }}>
+                      {item?.stateName}
+                    </Text>
+                  }
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         />
-        <View style={{ width: wp(70),paddingVertical:hp(1.5),paddingHorizontal:wp(1.5) }}>
-        <Text style={{color:"#fff",fontWeight:"600",fontSize:16,alignSelf:"center",marginVertical:hp(1)}}>{State?.SelectedState[0]?.stateName}</Text>
-          {State?.SelectedState?.length>0?
+        <View style={{ width: wp(70), paddingVertical: hp(1.5), paddingHorizontal: wp(1.5), backgroundColor: "#ffffff10" }}>
+          <Text style={{ color: "#fff", fontWeight: "600", fontSize: 16, alignSelf: "center", marginVertical: hp(1) }}>{State?.SelectedState[0]?.stateName}</Text>
+          {State?.SelectedState?.length > 0 ?
             <FlatList
               data={State?.StateDances}
               numColumns={2}
-              style={{paddingLeft:wp(1.5)}}
-              contentContainerStyle={{justifyContent:"flex-start"}}
+              style={{ paddingLeft: wp(1.5) }}
+              contentContainerStyle={{ justifyContent: "flex-start" }}
               renderItem={({ item }) => (
                 <View>
                   <TouchableOpacity
@@ -162,8 +175,8 @@ const GlobalDanceForm = ({ navigation, route }) => {
                         width: wp(30),
                         height: wp(35),
                         borderRadius: wp(2),
-                        marginHorizontal:wp(1.5),
-                        marginVertical:hp(1.5)
+                        marginHorizontal: wp(1.5),
+                        marginVertical: hp(1.5)
                       }}
                       resizeMode={'cover'}
                       source={{ uri: `${API_URL_IMAGE}/${item?.banner}` }}
@@ -183,8 +196,8 @@ const GlobalDanceForm = ({ navigation, route }) => {
               )}
             />
             :
-            <View style={{ flex: 1,width:"100%", alignItems:"center",justifyContent:"center" }}>
-              <Text style={{ color: "#ffffff",fontWeight:"500" }}>Please select a state!</Text>
+            <View style={{ flex: 1, width: "100%", alignItems: "center", justifyContent: "center" }}>
+              <Text style={{ color: "#ffffff", fontWeight: "500" }}>Please select a state!</Text>
             </View>
           }
         </View>
