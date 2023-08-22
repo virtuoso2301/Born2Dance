@@ -75,19 +75,30 @@ const style = StyleSheet.create({
         borderRadius: 5,
         padding: '2%',
         paddingHorizontal: wp(5),
-        color: '#BABFC8',
-        fontSize: scale(12),
-        height: hp(6)
+        color: '#fff',
+        fontSize: scale(13),
+        height: hp(6),
+        fontWeight:"600"
     },
 });
 
 const SongPurchaseForm = ({ navigation, route }) => {
 
+    const songName = route.params.songName
+    console.log("Song Name: ",songName)
+
     const [State, setState] = useState({
         Email: '',
         PhoneNumber: '',
-        Name: ''
+        Name: '',
+        songName: ''
     });
+
+    useEffect(()=>{
+        if(songName){
+            setState(p => ({ ...p, songName: songName }))
+        }
+    },[songName])
 
 
 
@@ -149,6 +160,8 @@ const SongPurchaseForm = ({ navigation, route }) => {
                         placeholderTextColor="#BABFC8"
                         style={style.input}
                         placeholder='song name'
+                        value={State.songName}
+                        onChangeText={e => setState(p => ({ ...p, songName: e }))}
                     />
                 </View>
 
@@ -158,6 +171,7 @@ const SongPurchaseForm = ({ navigation, route }) => {
                         placeholderTextColor="#BABFC8"
                         style={style.input}
                         placeholder="enter your name"
+                        value={State.Name}
                         onChangeText={e => setState(p => ({ ...p, Name: e }))}
                     />
                 </View>

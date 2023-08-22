@@ -92,6 +92,8 @@ export const HireUs = ({ navigation }) => {
     { id: "4", title: "Child Dancers" },
     { id: "5", title: "Senior Dancers" },
     { id: "6", title: "Group Dancers" },
+    { id: "7", title: "Zumba" },
+    { id: "8", title: "Studios" },
   ]
 
   const renderItem = ({ item }) => {

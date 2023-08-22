@@ -31,6 +31,7 @@ import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
 import Orientation from 'react-native-orientation-locker';
 // import { Vimeo } from 'react-native-vimeo-iframe';
+import B2dmusicvideo from './b2dmusicvideo';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -564,7 +565,7 @@ export const PostLoginLanding = ({ navigation }) => {
           </View>
 
           <FlatList
-            data={songDetails?.slice(0, 4)}
+            data={songDetails?.slice(0, 3)}
             showsHorizontalScrollIndicator={false}
             style={{ marginVertical: hp(1), marginHorizontal: wp(3) }}
             horizontal
@@ -615,14 +616,7 @@ export const PostLoginLanding = ({ navigation }) => {
               <Text style={style.seeAll}>See All</Text>
             </TouchableOpacity>
           </View>
-            {/* <TouchableOpacity style={{width:"95%",alignSelf:"center",borderRadius:10,overflow:"hidden"}}>
-            <Vimeo
-            videoId='146490269'
-            params={'api=1&autoplay=0'}
-            style={{height:undefined,width:"100%",aspectRatio:16/9,borderRadius:10}}
-            handlers={videoCallbacks}
-            />
-            </TouchableOpacity> */}
+            <B2dmusicvideo/>
         </View>
 
 

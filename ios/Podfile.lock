@@ -249,6 +249,8 @@ PODS:
     - glog
   - react-native-image-picker (4.10.3):
     - React-Core
+  - react-native-keep-awake (1.2.2):
+    - React-Core
   - react-native-orientation-locker (1.5.0):
     - React-Core
   - react-native-razorpay (2.3.0):
@@ -393,6 +395,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - "react-native-keep-awake (from `../node_modules/@sayem314/react-native-keep-awake`)"
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -480,6 +483,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-keep-awake:
+    :path: "../node_modules/@sayem314/react-native-keep-awake"
   react-native-orientation-locker:
     :path: "../node_modules/react-native-orientation-locker"
   react-native-razorpay:
@@ -568,6 +573,7 @@ SPEC CHECKSUMS:
   React-jsinspector: cab4d37ebde480f84c79ac89568abbf76b916c3e
   React-logger: b75b80500ea80457b2cf169427d66de986cdcb29
   react-native-image-picker: 60f4246eb5bb7187fc15638a8c1f13abd3820695
+  react-native-keep-awake: ad1d67f617756b139536977a0bf06b27cec0714a
   react-native-orientation-locker: 851f6510d8046ea2f14aa169b1e01fcd309a94ba
   react-native-razorpay: 0272dd684bc9148828c54a72e05059e3e2e8b813
   react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de

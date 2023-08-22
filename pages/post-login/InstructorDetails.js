@@ -3,11 +3,13 @@ import {
   Dimensions,
   Image,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
+  Alert,
+  Linking
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,6 +23,7 @@ import Share from 'react-native-share';
 import VideoPlayer from 'react-native-video-controls';
 import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Video,{ Container} from 'clwy-react-native-video-player'
 
 
 export const InstructorDetails = ({ navigation, route }) => {
@@ -34,7 +37,7 @@ export const InstructorDetails = ({ navigation, route }) => {
   const [likeCount, setLikeCount] = useState(item.like)
   const [isLiked, setIsLiked] = useState(false)
   const [instructorDetails,setInstructorDetails]=useState(null)
-  const [likedDancers,setLikedDancers]=useState(null)
+  //const [likedDancers,setLikedDancers]=useState(null)
   const [userId,setUserId]=useState("")
 
 
@@ -86,6 +89,8 @@ useEffect(()=>{
     ),
     [],
   );
+
+  const [isFullScreenSet,setIsFullScreenSet]=useState(false)
 
 
   const increaseLikeAPI = async () => {
@@ -161,7 +166,8 @@ useEffect(()=>{
   }
 
   return (
-    <View style={style.view}>
+    <ScrollView contentContainerStyle={{paddingBottom:50}} style={style.view}>
+      {!isFullScreenSet?<View>
       <View style={style.bannerView}>
         <Carousel
           data={item?.imagelist}
@@ -233,42 +239,50 @@ useEffect(()=>{
         </TouchableOpacity>
       </View>
 
-      <ScrollView>
+      <View>
         <View >
           <Text style={style.aboutHeder}>About Instructor</Text>
           <Text style={style.about}>
             {item.about}
           </Text>
         </View>
+      </View>
 
+      </View>:null}
+<Container style={{marginHorizontal:10,borderRadius:10,overflow:"hidden",marginBottom:20}}>
+      <Video
+            url={Platform.OS=="ios"?`${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g,"%20"):`${API_URL_IMAGE}/${item?.footerImage}`}
+            autoPlay
+            placeholder={require("../../assets/images/logo.png")}
+            hideFullScreenControl={false}
+            //onFullScreen={status => onFullScreen(status)}
+            rotateToFullScreen
+            resizeMode="cover"
+            onFullScreen={(value)=>{
+              if(value){
+                navigation.setOptions({headerShown: false});
+                setIsFullScreenSet(true)
+              }
+              else{
+                navigation.setOptions({headerShown: true});
+                setIsFullScreenSet(false)
+              }
+            }}
+            logo={require("../../assets/images/logo.png")}
+            onMorePress={()=>{
+              Alert.alert("Alert","This Video belongs to B2D",[
+                {
+                  text: 'Visit B2D',
+                  onPress: () => Linking.openURL("https://born2dance.in/"),
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ])
+            }}
+        />
+        </Container>
 
-        <View style={{
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height * 0.27,
-          paddingHorizontal: "2%",
-          marginBottom: "3%"
-        }}>
-          {item?.footerImage && (
-            <VideoPlayer
-              source={{
-                uri:Platform.OS=="ios"?`${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g,"%20"):`${API_URL_IMAGE}/${item?.footerImage}`,
-              }}
-              navigator={navigation}
-              resizeMode="cover"
-              toggleResizeModeOnFullscreen={false}
-              style={{ borderRadius: 10 }}
-
-            />
-          )}
-        </View>
-
-      </ScrollView>
-
-
-
-
-      <TouchableOpacity
-        style={{ height: "5%", width: "90%", alignSelf: "center", justifyContent: 'center' }}
+        {!isFullScreenSet?      <TouchableOpacity
+        style={{ height: 35, width: "90%", alignSelf: "center", justifyContent: 'center' }}
         onPress={() => {
           navigation.navigate('hireus-one', { id: item._id });
         }}>
@@ -281,25 +295,22 @@ useEffect(()=>{
             Hire
           </Text>
         </LinearGradient>
-      </TouchableOpacity>
-      <TouchableOpacity style={{ height: "5%", justifyContent: 'center', alignItems: "center", width: "90%", backgroundColor: "#00000000" }}>
+      </TouchableOpacity>:null}
 
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const style = StyleSheet.create({
   view: {
+    flex:1,
     backgroundColor: '#0E172A',
-    flex: 1,
   },
   bannerView: {
     width: Dimensions.get('window').width * 0.9,
     height: Dimensions.get('window').height * 0.225,
   },
   imageContainer: {
-    flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     backgroundColor: '#000000',
@@ -377,10 +388,6 @@ const style = StyleSheet.create({
   buttonTakeClasses: {
     textAlign: 'center',
     borderRadius: 5,
-    // position: 'absolute',
-    // bottom: hp(2),
-    // left: wp(2.5),
-    // right: 0,
     width: wp(95),
     alignSelf: 'center',
     marginVertical: hp(2),
