@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 import MyCarousel from './testing';
 import { scale } from 'react-native-size-matters';
@@ -53,16 +54,16 @@ const LogoTitle = ({ navigation }) => {
           onPress={() => {
             navigation.navigate('Notifications');
           }}>
-          <Ionicons name="notifications-outline" size={25} color={'#fff'} />
+          <Ionicons name="notifications-outline" size={25} color={'#501c58'} />
         </TouchableOpacity>
         <TouchableOpacity
           style={{ width: 25, height: 25 }}
           onPress={() => {
             navigation.navigate('profile');
           }}>
-          <FastImage
+          <Image
             source={require('../../assets/images/user.png')}
-            style={{ width: '100%', height: '100%' }}
+            style={{ width: '100%', height: '100%', tintColor: "#501c58" }}
           />
         </TouchableOpacity>
       </View>
@@ -267,7 +268,6 @@ export const PostLoginLanding = ({ navigation }) => {
 
   return (
     <View style={style.view}>
-      <BDLoader visible={State.IsLoading} />
       <LogoTitle navigation={navigation} />
       <ScrollView>
         {/* <View>
@@ -539,11 +539,11 @@ export const PostLoginLanding = ({ navigation }) => {
                   />
                   <Text
                     style={{
-                      color: '#BABFC8',
+                      color: '#5A5A5A',
                       textAlign: 'center',
                       marginTop: '5%',
                       fontSize: 17,
-                      fontWeight: '400',
+                      fontWeight: '500',
                     }}>
                     {item?.stateName}
                   </Text>
@@ -675,20 +675,20 @@ export const PostLoginLanding = ({ navigation }) => {
         </View>
 
       </ScrollView>
+      <BDLoader visible={State.IsLoading} />
     </View>
   );
 };
 
 const style = StyleSheet.create({
   view: {
-    backgroundColor: '#0E172A',
+    backgroundColor: '#ffffff',
     flex: 1,
     paddingBottom: hp(2)
   },
   imageContainer: {
     //flex: 1,
-    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
+    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issues
     backgroundColor: '#000000',
     borderRadius: 10,
     width: screenWidth,
@@ -732,7 +732,7 @@ const style = StyleSheet.create({
   },
   section: {
     paddingTop: '5%',
-    backgroundColor: '#0E172A',
+    backgroundColor: '#ffffff',
   },
   sectionHeader: {
     display: 'flex',
@@ -753,7 +753,7 @@ const style = StyleSheet.create({
     fontWeight: '600',
     fontSize: 20,
     lineHeight: 23,
-    color: '#FFFFFF',
+    color: '#501c58',
     paddingLeft: 15,
     paddingBottom: 10,
   },
@@ -762,7 +762,7 @@ const style = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 20,
-    color: '#956DFF',
+    color: '#5A5A5A',
   },
   danceStyleView: {
     paddingVertical: '0%',
@@ -773,7 +773,7 @@ const style = StyleSheet.create({
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
 
-    backgroundColor: '#0E172A',
+    backgroundColor: '#ffffff',
     borderRadius: 8,
     justifyContent: 'flex-start',
     // height: 80,
@@ -804,7 +804,7 @@ const style = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16,
     letterSpacing: -0.1992,
-    color: '#FFFFFF',
+    color: '#5A5A5A',
     textAlign: 'center',
   },
   danceType: {
@@ -814,7 +814,7 @@ const style = StyleSheet.create({
     lineHeight: 12,
     marginTop: 5,
     letterSpacing: -0.1992,
-    color: '#B6B8BB',
+    color: '#5A5A5A',
     width: scale(100),
     textAlign: 'center',
   },
@@ -873,7 +873,7 @@ const style = StyleSheet.create({
     //borderWidth: 1.5,
     borderRadius: 10,
     marginBottom: '5%',
-    backgroundColor:"#ffffff09",
+    backgroundColor:"#00000015",
     marginHorizontal:10,
     marginBottom:"2%",
     width:wp(82)
@@ -896,25 +896,25 @@ const style = StyleSheet.create({
   headerTitleContainer: { marginLeft: 18, marginTop: 10 },
   headerTitle: {
     fontStyle: 'normal',
-    fontWeight: '500',
+    fontWeight: '600',
     fontSize: 18,
-    color: '#FFFFFF',
+    color: '#0E172A',
     marginVertical: 6
   },
   headerDescription: {
     fontStyle: 'normal',
-    fontWeight: '400',
+    fontWeight: '600',
     fontSize: 14,
     lineHeight: 14,
-    color: '#BABFC8',
+    color: '#0E172A99',
     paddingTop: wp(1),
   },
   headerDescription1: {
     fontStyle: 'normal',
-    fontWeight: '400',
+    fontWeight: '600',
     fontSize: 12,
     lineHeight: 14,
-    color: '#BABFC8',
+    color: '#0E172A99',
     marginTop: 10
   },
 

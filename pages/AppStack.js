@@ -398,11 +398,11 @@ const BottomTabs = ({ navigation }) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarStyle: {
-          backgroundColor: '#0F172A',
+          backgroundColor: '#5A5A5A',
           // paddingBottom: 6,
           // paddingTop: 6,
         },
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ color, size, focused }) => {
           if (route.name === 'Home') {
             return <Ionicons name={'home'} size={size} color={color} />;
           } else if (route.name === 'Explore Classes') {
@@ -414,7 +414,7 @@ const BottomTabs = ({ navigation }) => {
               <Image
                 source={require('../assets/images/CustomVideo.png')}
                 resizeMode={'contain'}
-                style={[styles.icon, { tintColor: '#9a9da6' }]}
+                style={[styles.icon, { tintColor: focused?'#98eff9':'#ffffff' }]}
               />
             );
           } else if (route.name === 'My plan') {
@@ -422,7 +422,7 @@ const BottomTabs = ({ navigation }) => {
               <Image
                 source={require('../assets/images/MyPlan.png')}
                 resizeMode={'contain'}
-                style={styles.icon}
+                style={[styles.icon, { tintColor: focused?'#98eff9':'#ffffff' }]}
               />
             );
           }
@@ -430,8 +430,8 @@ const BottomTabs = ({ navigation }) => {
           //   iconName = 'wallet';
           // }
         },
-        tabBarActiveTintColor: '#926AEE',
-        tabBarInactiveTintColor: '#9A9DA6',
+        tabBarActiveTintColor: '#98eff9',
+        tabBarInactiveTintColor: '#ffffff',
       })}>
       <Tab.Screen
         name="Home"
@@ -443,7 +443,7 @@ const BottomTabs = ({ navigation }) => {
         component={AllCity}
         options={{
           headerTitleAlign: 'center',
-          title: 'Explore Classes',
+          title: 'Classes',
           ...preLoginPageHeaderOptions,
         }}
       />
@@ -452,7 +452,7 @@ const BottomTabs = ({ navigation }) => {
         component={HireUs}
         options={{
           headerTitleAlign: 'center',
-          title: 'Hire Us',
+          title: 'Search Courses',
           ...preLoginPageHeaderOptions,
         }}
 
@@ -461,7 +461,7 @@ const BottomTabs = ({ navigation }) => {
         name="Custom Video"
         component={CustomVideo}
         options={{
-          title: 'Custom Video',
+          title: 'Book Class',
           ...preLoginPageHeaderOptions,
           headerTitleAlign: 'center',
         }}
@@ -498,7 +498,7 @@ const BottomTabs = ({ navigation }) => {
 const preLoginPageHeaderOptions = {
   headerBackTitleVisible: false,
   headerStyle: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#5A5A5A',
   },
   headerTitleStyle: {
     fontStyle: 'normal',

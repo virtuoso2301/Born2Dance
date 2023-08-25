@@ -150,10 +150,10 @@ export const HireUs = ({ navigation }) => {
       </Text> */}
       <View
         style={{
-          backgroundColor: '#1D283A',
+          backgroundColor: '#5a5a5a',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          borderRadius: 5,
+          borderRadius: 10,
         }}>
         <TouchableOpacity
           style={{
@@ -174,7 +174,7 @@ export const HireUs = ({ navigation }) => {
         </TouchableOpacity>
 
         <TextInput
-          placeholderTextColor="#BABFC8"
+          placeholderTextColor="#FAF9F6"
           style={{
             paddingHorizontal: wp(2),
             color: '#FFFFFF',
@@ -223,7 +223,7 @@ export const HireUs = ({ navigation }) => {
             return (
               <View style={{ marginHorizontal: wp(1.75) }}>
                 <TouchableOpacity onPress={() => setSelectedTab(item.title)}>
-                  <Text style={{ color: selectedTab == item.title ? "#8671DB" : "#ffffff", fontWeight: "500" }}>{item.title}</Text>
+                  <Text style={{ color: selectedTab == item.title ? "#1F51FF" : "#0E172A", fontWeight: "500" }}>{item.title}</Text>
                 </TouchableOpacity>
               </View>
             )
@@ -286,7 +286,7 @@ export const HireUs = ({ navigation }) => {
         onPress={() => navigation.navigate("register-yourself")}>
         <LinearGradient
           style={style.takeClassesGradient}
-          colors={['#2885E5', '#844AE9']}
+          colors={['#5a5a5a', '#0E172A']}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}>
           <Text style={{ alignSelf:'center',color:"#ffffff",fontWeight:"500"}}>
@@ -316,7 +316,7 @@ const style = StyleSheet.create({
     justifyContent:"center"
 },
   view: {
-    backgroundColor: '#0E172A',
+    backgroundColor: '#ffffff',
     flex: 1,
     paddingHorizontal: '3%',
     paddingVertical:"3%"
@@ -341,17 +341,17 @@ const style = StyleSheet.create({
   headerTitleContainer: { flex: 2, paddingTop: '5%', paddingLeft: '5%' },
   headerTitle: {
     fontStyle: 'normal',
-    fontWeight: '500',
+    fontWeight: '600',
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#0E172A',
     marginRight: wp(1),
   },
   headerDescription: {
     fontStyle: 'normal',
-    fontWeight: '400',
+    fontWeight: '500',
     fontSize: 12,
     lineHeight: 14,
-    color: '#BABFC8',
+    color: '#0E172A',
     paddingTop: wp(1),
   },
   arrow: {

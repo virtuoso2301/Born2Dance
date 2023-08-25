@@ -31,7 +31,7 @@ export const AllCity = ({ navigation }) => {
     <View style={style.view}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <TextInput
-          placeholderTextColor="#BABFC8"
+          placeholderTextColor="#FAF9F6"
           style={style.input}
           placeholder="Search state name"
         />
@@ -67,7 +67,7 @@ export const AllCity = ({ navigation }) => {
 
 const style = StyleSheet.create({
   view: {
-    backgroundColor: '#0E172A',
+    backgroundColor: '#ffffff',
     flex: 1,
     paddingHorizontal: wp(3),
   },
@@ -76,21 +76,23 @@ const style = StyleSheet.create({
     fontWeight: '600',
     fontSize: 20,
     lineHeight: 23,
-    color: '#FFFFFF',
+    color: '#0E172A',
     marginBottom: '5%',
   },
   input: {
-    backgroundColor: '#1D283A',
-    borderRadius: 5,
-    padding: '2%',
-    paddingLeft: moderateScale(36),
-    color: '#FFFFFF',
+    backgroundColor: '#5a5a5a',
+    borderRadius: 10,
+    color: '#ffffff',
     fontSize: scale(12),
+    paddingLeft:16,
     lineHeight: 14,
-    width: '100%',
+    width: '97%',
     textTransform: 'capitalize',
     marginVertical: '5%',
     marginLeft: 5,
+    paddingVertical:18,
+    alignSelf:"center",
+    
   },
   searchIcon: {
     width: scale(18),
@@ -109,10 +111,11 @@ const style = StyleSheet.create({
     marginVertical: hp(1),
   },
   renderCityText: {
-    color: '#fff',
+    color: '#0E172A',
     textAlign: 'center',
     fontSize:15,
     marginTop:hp(1.5),
-    marginBottom:hp(1.25)
+    marginBottom:hp(1.25),
+    fontWeight:"500"
   },
 });
