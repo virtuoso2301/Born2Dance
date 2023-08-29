@@ -150,10 +150,12 @@ export const HireUs = ({ navigation }) => {
       </Text> */}
       <View
         style={{
-          backgroundColor: '#5a5a5a',
+          backgroundColor: '#00000010',
           flexDirection: 'row',
           justifyContent: 'space-between',
           borderRadius: 10,
+          borderWidth:1,
+          borderColor: "#0E172A30"
         }}>
         <TouchableOpacity
           style={{
@@ -164,20 +166,21 @@ export const HireUs = ({ navigation }) => {
             height: scale(40),
           }}
           onPress={() => console.warn('hello')}>
-          <FastImage
+          <Image
             source={searchIcon}
             style={{
               width: '50%',
               height: '50%',
+              tintColor:"#0E172A"
             }}
           />
         </TouchableOpacity>
 
         <TextInput
-          placeholderTextColor="#FAF9F6"
+          placeholderTextColor="#0E172A99"
           style={{
             paddingHorizontal: wp(2),
-            color: '#FFFFFF',
+            color: '#0E172A',
             fontSize: scale(12),
             flex: 1,
           }}

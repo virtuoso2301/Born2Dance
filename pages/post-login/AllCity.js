@@ -31,7 +31,7 @@ export const AllCity = ({ navigation }) => {
     <View style={style.view}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <TextInput
-          placeholderTextColor="#FAF9F6"
+          placeholderTextColor="#0E172A99"
           style={style.input}
           placeholder="Search state name"
         />
@@ -80,9 +80,9 @@ const style = StyleSheet.create({
     marginBottom: '5%',
   },
   input: {
-    backgroundColor: '#5a5a5a',
+    backgroundColor: '#00000010',
     borderRadius: 10,
-    color: '#ffffff',
+    color: '#0E172A',
     fontSize: scale(12),
     paddingLeft:16,
     lineHeight: 14,
