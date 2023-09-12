@@ -23,36 +23,36 @@ import Share from 'react-native-share';
 import VideoPlayer from 'react-native-video-controls';
 import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Video,{ Container} from 'clwy-react-native-video-player'
+import Video, { Container } from 'clwy-react-native-video-player'
 
 
 export const InstructorDetails = ({ navigation, route }) => {
   const { id, item } = route.params;
 
-  
+
 
 
   const BannerWidth = Dimensions.get('window').width * 1;
 
   const [likeCount, setLikeCount] = useState(item.like)
   const [isLiked, setIsLiked] = useState(false)
-  const [instructorDetails,setInstructorDetails]=useState(null)
+  const [instructorDetails, setInstructorDetails] = useState(null)
   //const [likedDancers,setLikedDancers]=useState(null)
-  const [userId,setUserId]=useState("")
+  const [userId, setUserId] = useState("")
 
 
-  const CallApiOne=async()=>{
+  const CallApiOne = async () => {
     const response = await fetch(`${API_URL}/getHireList`);
     const data = await response.json();
-    setInstructorDetails(data?.hirelist?.filter((val)=>val._id==item._id)[0])
-    console.log(data?.hirelist?.filter((val)=>val._id==item._id)[0])
-    setLikeCount(data?.hirelist?.filter((val)=>val._id==item._id)[0].like)
-    const user= await AsyncStorage.getItem('user')
+    setInstructorDetails(data?.hirelist?.filter((val) => val._id == item._id)[0])
+    console.log(data?.hirelist?.filter((val) => val._id == item._id)[0])
+    setLikeCount(data?.hirelist?.filter((val) => val._id == item._id)[0].like)
+    const user = await AsyncStorage.getItem('user')
 
-    const res =await fetch("https://api.born2dance.in/api/userslist")
-    const resData=await res.json()
-    const len= await resData?.users?.filter((val)=>val?._id==JSON.parse(user)._id)[0]?.likedDancer?.includes(item._id)
-  
+    const res = await fetch("https://api.born2dance.in/api/userslist")
+    const resData = await res.json()
+    const len = await resData?.users?.filter((val) => val?._id == JSON.parse(user)._id)[0]?.likedDancer?.includes(item._id)
+
     console.log(len)
     setIsLiked(len)
     setUserId(JSON.parse(user)._id)
@@ -65,13 +65,13 @@ export const InstructorDetails = ({ navigation, route }) => {
     //  else{
     //    setIsLiked(false)
     //  }
-}
+  }
 
 
-useEffect(()=>{
-  CallApiOne()
+  useEffect(() => {
+    CallApiOne()
 
-},[])
+  }, [])
 
 
 
@@ -90,7 +90,7 @@ useEffect(()=>{
     [],
   );
 
-  const [isFullScreenSet,setIsFullScreenSet]=useState(false)
+  const [isFullScreenSet, setIsFullScreenSet] = useState(false)
 
 
   const increaseLikeAPI = async () => {
@@ -166,122 +166,122 @@ useEffect(()=>{
   }
 
   return (
-    <ScrollView contentContainerStyle={{paddingBottom:50}} style={style.view}>
-      {!isFullScreenSet?<View>
-      <View style={style.bannerView}>
-        <Carousel
-          data={item?.imagelist}
-          renderItem={renderItem}
-          sliderWidth={BannerWidth}
-          itemWidth={BannerWidth}
-          autoplay={true}
-          autoplayInterval={3000}
-          loop={true}
-        />
-      </View>
-      <View style={style.line}>
-        <View style={style.lineHR} />
-        <View style={style.lineLabel}>
-          <FastImage
-            source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
-            resizeMode="cover"
-            style={{ width: '100%', height: '100%', borderRadius: 100 }}
-          />
-          <FastImage
-            source={verified}
-            resizeMode={'contain'}
-            style={{
-              width: wp(5),
-              height: wp(5),
-              position: 'absolute',
-              top: hp(1),
-              right: 0,
-              backgroundColor: '#fff',
-              borderRadius: 1000,
-            }}
+    <ScrollView contentContainerStyle={{ paddingBottom: 50 }} style={style.view}>
+      {!isFullScreenSet ? <View>
+        <View style={style.bannerView}>
+          <Carousel
+            data={item?.imagelist}
+            renderItem={renderItem}
+            sliderWidth={BannerWidth}
+            itemWidth={BannerWidth}
+            autoplay={true}
+            autoplayInterval={3000}
+            loop={true}
           />
         </View>
-        <View style={style.lineHR} />
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-
-        <TouchableOpacity
-          style={{ width: "33.333%" }}
-          onPress={onLikePress}>
-          <View style={{ flexDirection: "row", justifyContent: "center", width: "100%" }}>
-            <Text style={{ color: isLiked ? "#2885E5" : "#ffffffaa", fontSize: 13, fontWeight: isLiked ? "800" : "400", marginTop: scale(19), marginRight: scale(1.7) }}>{likeCount}</Text>
-            <Image
-              style={[style.downloadImage, { tintColor: isLiked ? "#2885E5" : '#ffffffaa', marginLeft: scale(1.7) }]}
-              source={require('../../assets/images/like.png')}
+        <View style={style.line}>
+          <View style={style.lineHR} />
+          <View style={style.lineLabel}>
+            <FastImage
+              source={{ uri: `${API_URL_IMAGE}/${item?.profileImage}` }}
+              resizeMode="cover"
+              style={{ width: '100%', height: '100%', borderRadius: 100 }}
+            />
+            <FastImage
+              source={verified}
+              resizeMode={'contain'}
+              style={{
+                width: wp(5),
+                height: wp(5),
+                position: 'absolute',
+                top: hp(1),
+                right: 0,
+                backgroundColor: '#fff',
+                borderRadius: 1000,
+              }}
             />
           </View>
-        </TouchableOpacity>
+          <View style={style.lineHR} />
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
 
-        <View
-          style={{
-            alignItems: 'center',
-            alignSelf: 'center',
-            width: "33.333%",
-            paddingBottom: "2.5%"
-          }}>
-          <Text style={style.instructorTitle}>{item?.name}</Text>
-          <Text style={style.instructorDescription}>{item.designation}</Text>
+          <TouchableOpacity
+            style={{ width: "33.333%" }}
+            onPress={onLikePress}>
+            <View style={{ flexDirection: "row", justifyContent: "center", width: "100%" }}>
+              <Text style={{ color: isLiked ? "#2885E5" : "#ffffffaa", fontSize: 13, fontWeight: isLiked ? "800" : "400", marginTop: scale(19), marginRight: scale(1.7) }}>{likeCount}</Text>
+              <Image
+                style={[style.downloadImage, { tintColor: isLiked ? "#2885E5" : '#ffffffaa', marginLeft: scale(1.7) }]}
+                source={require('../../assets/images/like.png')}
+              />
+            </View>
+          </TouchableOpacity>
+
+          <View
+            style={{
+              alignItems: 'center',
+              alignSelf: 'center',
+              width: "33.333%",
+              paddingBottom: "2.5%"
+            }}>
+            <Text style={style.instructorTitle}>{item?.name}</Text>
+            <Text style={style.instructorDescription}>{item.designation}</Text>
+          </View>
+
+
+          <TouchableOpacity
+            style={{ width: "33.333%", alignItems: "center" }}
+            onPress={onSharePress}>
+            <Image
+              style={[style.downloadImage, { tintColor: '#ffffffaa' }]}
+              source={require('../../assets/images/share.png')}
+            />
+          </TouchableOpacity>
         </View>
 
-
-        <TouchableOpacity
-          style={{ width: "33.333%", alignItems: "center" }}
-          onPress={onSharePress}>
-          <Image
-            style={[style.downloadImage, { tintColor: '#ffffffaa' }]}
-            source={require('../../assets/images/share.png')}
-          />
-        </TouchableOpacity>
-      </View>
-
-      <View>
-        <View >
-          <Text style={style.aboutHeder}>About Instructor</Text>
-          <Text style={style.about}>
-            {item.about}
-          </Text>
+        <View>
+          <View >
+            <Text style={style.aboutHeder}>About Instructor</Text>
+            <Text style={style.about}>
+              {item.about}
+            </Text>
+          </View>
         </View>
-      </View>
 
-      </View>:null}
-<Container style={{marginHorizontal:10,borderRadius:10,overflow:"hidden",marginBottom:20}}>
-      <Video
-            url={Platform.OS=="ios"?`${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g,"%20"):`${API_URL_IMAGE}/${item?.footerImage}`}
-            autoPlay
-            placeholder={require("../../assets/images/logo.png")}
-            hideFullScreenControl={false}
-            //onFullScreen={status => onFullScreen(status)}
-            rotateToFullScreen
-            resizeMode="cover"
-            onFullScreen={(value)=>{
-              if(value){
-                navigation.setOptions({headerShown: false});
-                setIsFullScreenSet(true)
-              }
-              else{
-                navigation.setOptions({headerShown: true});
-                setIsFullScreenSet(false)
-              }
-            }}
-            logo={require("../../assets/images/logo.png")}
-            onMorePress={()=>{
-              Alert.alert("Alert","This Video belongs to B2D",[
-                {
-                  text: 'Visit B2D',
-                  onPress: () => Linking.openURL("https://born2dance.in/"),
-                },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-              ])
-            }}
+      </View> : null}
+      <Container style={{ marginHorizontal: 10, borderRadius: 10, overflow: "hidden", marginBottom: 20 }}>
+        <Video
+          url={Platform.OS == "ios" ? `${API_URL_IMAGE}/${item?.footerImage}`.replace(/ /g, "%20") : `${API_URL_IMAGE}/${item?.footerImage}`}
+          autoPlay
+          placeholder={require("../../assets/images/logo.png")}
+          hideFullScreenControl={false}
+          //onFullScreen={status => onFullScreen(status)}
+          rotateToFullScreen
+          resizeMode="cover"
+          onFullScreen={(value) => {
+            if (value) {
+              navigation.setOptions({ headerShown: false });
+              setIsFullScreenSet(true)
+            }
+            else {
+              navigation.setOptions({ headerShown: true });
+              setIsFullScreenSet(false)
+            }
+          }}
+          logo={require("../../assets/images/logo.png")}
+          onMorePress={() => {
+            Alert.alert("Alert", "This Video belongs to B2D", [
+              {
+                text: 'Visit B2D',
+                onPress: () => Linking.openURL("https://born2dance.in/"),
+              },
+              { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ])
+          }}
         />
-        </Container>
+      </Container>
 
-        {!isFullScreenSet?      <TouchableOpacity
+      {!isFullScreenSet ? <TouchableOpacity
         style={{ height: 35, width: "90%", alignSelf: "center", justifyContent: 'center' }}
         onPress={() => {
           navigation.navigate('hireus-one', { id: item._id });
@@ -295,7 +295,7 @@ useEffect(()=>{
             Hire
           </Text>
         </LinearGradient>
-      </TouchableOpacity>:null}
+      </TouchableOpacity> : null}
 
     </ScrollView>
   );
@@ -303,7 +303,7 @@ useEffect(()=>{
 
 const style = StyleSheet.create({
   view: {
-    flex:1,
+    flex: 1,
     backgroundColor: '#0E172A',
   },
   bannerView: {

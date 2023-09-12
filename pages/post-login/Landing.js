@@ -30,7 +30,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
 import Orientation from 'react-native-orientation-locker';
-// import { Vimeo } from 'react-native-vimeo-iframe';
 import B2dmusicvideo from './b2dmusicvideo';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -96,6 +95,9 @@ export const PostLoginLanding = ({ navigation }) => {
   const [bannerURL, setBannerURL] = useState("")
   const [country, SetCountry] = useState(null)
   const [songDetails, setSongDetails] = useState(null)
+  const [musicVideoDetails, setMusicVideoDetails] = useState(null)
+  const [firstVideoDetails, setFirstVideoDetials] = useState(null)
+  const [cinemasDetails, setCinemasDetails] = useState(null)
 
 
 
@@ -119,6 +121,21 @@ export const PostLoginLanding = ({ navigation }) => {
     const response = await fetch(`${API_URL}/getAllAudio`);
     const data = await response.json();
     setSongDetails(data?.audio)
+  };
+
+  const allMusicVideos = async () => {
+    const response = await fetch(`${API_URL}/getAllAudioVideos`);
+    const data = await response.json();
+    //console.log("ALL MUSIC VIDEOS: ",data?.video)
+    setMusicVideoDetails(data?.video)
+    setFirstVideoDetials(data?.video[0])
+  };
+
+  const allCinemas = async () => {
+    const response = await fetch(`${API_URL}/getAllCinemaVideos`);
+    const data = await response.json();
+    //console.log("ALL Cinemas VIDEOS: ",data?.video)
+    setCinemasDetails(data?.video)
   };
 
   // const [selectedSong, setSelectedSong] = useState("")
@@ -205,8 +222,9 @@ export const PostLoginLanding = ({ navigation }) => {
     await bannerList();
     await hireusFun();
     await profile(token).then(res => dispatch(usersSignInAdd(res)));
-    await allMusic()
-
+    await allMusic();
+    await allMusicVideos();
+    await allCinemas();
   };
 
   useEffect(() => {
@@ -225,44 +243,6 @@ export const PostLoginLanding = ({ navigation }) => {
   const [heroBannerEnded, setHeroBannerEnded] = useState(false)
 
   const [muted, setMuted] = useState(bannerMuted)
-
-
-
-
-  const videoDetails = [
-    {
-      name: "Video 1",
-      artist: "Lewis Capaldi"
-    },
-    {
-      name: "Video 2",
-      artist: "Adele"
-    },
-    {
-      name: "Video 3",
-      artist: "Ed Sheeran"
-    },
-    {
-      name: "Video 4",
-      artist: "Taylor Swift"
-    },
-    {
-      name: "Video 5",
-      artist: "Billie Eilish"
-    },
-    {
-      name: "Video 6",
-      artist: "Post Malone"
-    },
-    {
-      name: "Video 7",
-      artist: "Beyoncé"
-    },
-    {
-      name: "Video 8",
-      artist: "Bruno Mars"
-    }
-  ]
 
 
   return (
@@ -295,9 +275,9 @@ export const PostLoginLanding = ({ navigation }) => {
             loop={true}
           />
         </View> */}
-        <View style={{ alignSelf:"center", width:"95%" }}>
+        <View style={{ alignSelf: "center", width: "95%" }}>
           <Video
-            source={{ uri: Platform.OS=="ios"?`${API_URL_IMAGE}/${bannerURL}`.replace(/ /g, '%20'):`${API_URL_IMAGE}/${bannerURL}`}}
+            source={{ uri: Platform.OS == "ios" ? `${API_URL_IMAGE}/${bannerURL}`.replace(/ /g, '%20') : `${API_URL_IMAGE}/${bannerURL}` }}
             resizeMode="cover"
             style={{
               marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
@@ -308,7 +288,7 @@ export const PostLoginLanding = ({ navigation }) => {
               marginHorizontal: 1,
               alignSelf: "center",
               height: undefined,
-              aspectRatio:16/9
+              aspectRatio: 16 / 9
 
             }}
             controls={false}
@@ -574,14 +554,14 @@ export const PostLoginLanding = ({ navigation }) => {
                 style={style.headerContainer}
                 onPress={() => {
                   // setSelectedSong(item._id)
-                  navigation.navigate("all-songs",{songItem:item,songDetails: songDetails})
+                  navigation.navigate("all-songs", { songItem: item, songDetails: songDetails })
                 }}
               >
                 <ImageBackground
-                imageStyle={{borderRadius:10}}
+                  imageStyle={{ borderRadius: 10 }}
                   style={style.instructorlogo1}
-                  source={require("../../assets/images/music.jpeg")}
-                //source={{uri:`${API_URL_IMAGE}/${item.image}`}}
+                  //source={require("../../assets/images/music.jpeg")}
+                  source={{ uri: `${API_URL_IMAGE}/${item.image}` }}
                 >
                   {/* {item._id == selectedSong ? <FastImage
                     style={[style.instructorlogo1, { opacity: 0.3 }]}
@@ -594,7 +574,7 @@ export const PostLoginLanding = ({ navigation }) => {
                     <Text style={style.headerTitle}>{item.songName}</Text>
                   </View>
                   <Text style={style.headerDescription}>
-                    {item.artist}
+                    {item.description}
                   </Text>
                   <Text style={style.headerDescription1}>
                     3:47
@@ -611,12 +591,15 @@ export const PostLoginLanding = ({ navigation }) => {
             <Text style={style.sectionTitle}>B2D Music Videos</Text>
             <TouchableOpacity
               onPress={() => {
-                Alert.alert("Alert","New API in process")
+               navigation.navigate("all-music-videos", { musicVideoDetails: musicVideoDetails })
               }}>
               <Text style={style.seeAll}>See All</Text>
             </TouchableOpacity>
           </View>
-            <B2dmusicvideo/>
+          <B2dmusicvideo
+            videolink={firstVideoDetails?.videolink}
+            videotitle={firstVideoDetails?.songName}
+          />
         </View>
 
 
@@ -625,14 +608,14 @@ export const PostLoginLanding = ({ navigation }) => {
             <Text style={style.sectionTitle}>B2D Cinemas</Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('all-videos');
+                navigation.navigate('all-cinemas',{cinemasDetails: cinemasDetails});
               }}>
               <Text style={style.seeAll}>See All</Text>
             </TouchableOpacity>
           </View>
 
           <FlatList
-            data={videoDetails.slice(0, 4)}
+            data={cinemasDetails?.slice(0, 4)}
             renderItem={({ item }) => (
               <View style={style.imageContainerDance}>
 
@@ -648,7 +631,7 @@ export const PostLoginLanding = ({ navigation }) => {
                       borderRadius: 10,
                     }}
                     resizeMode={'cover'}
-                    source={require("../../assets/images/b2ddance.jpeg")}
+                    source={{uri: `${API_URL_IMAGE}/${item.image}`}}
                   />
                   <Text
                     style={{
@@ -658,7 +641,7 @@ export const PostLoginLanding = ({ navigation }) => {
                       fontSize: 16,
                       fontWeight: '400',
                     }}>
-                    {item?.name}
+                    {item?.songName}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -873,10 +856,10 @@ const style = StyleSheet.create({
     //borderWidth: 1.5,
     borderRadius: 10,
     marginBottom: '5%',
-    backgroundColor:"#ffffff09",
-    marginHorizontal:10,
-    marginBottom:"2%",
-    width:wp(82)
+    backgroundColor: "#ffffff09",
+    marginHorizontal: 10,
+    marginBottom: "2%",
+    width: wp(82)
   },
   headerLogo: {
     overflow: 'hidden',
@@ -891,7 +874,7 @@ const style = StyleSheet.create({
     width: 110,
     marginLeft: 2,
     alignSelf: "center",
-    borderRadius:10
+    borderRadius: 10
   },
   headerTitleContainer: { marginLeft: 18, marginTop: 10 },
   headerTitle: {

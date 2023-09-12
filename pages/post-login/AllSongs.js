@@ -12,7 +12,7 @@ const AllSongs = ({ navigation, route }) => {
   const songItem = route.params.songItem
 
   const [selectedSong, setSelectedSong] = useState(songItem ? songItem._id : "")
-  const [showMore,setShowMore]= useState(false)
+  const [showMore, setShowMore] = useState(false)
 
   let _onFinishedPlayingSubscription = null
   let _onFinishedLoadingSubscription = null
@@ -50,35 +50,9 @@ const AllSongs = ({ navigation, route }) => {
     )
 
 
+
   }, [])
 
-  const designationDetails = [
-    {
-      designation: "Singer",
-      name: "Arijit Singh",
-      image: "https://c.saavncdn.com/artists/Arijit_Singh_002_20230323062147_500x500.jpg"
-    },
-    {
-      designation: "Lyricist",
-      name: "Javed Akhtar",
-      image: "https://www.jharkhandlitmeet.in/2022/wp-content/uploads/2022/11/Javed-Akhtar.jpg"
-    },
-    {
-      designation: "Composer",
-      name: "AR Rahman",
-      image: "https://img.etimg.com/photo/62391223/62391223.jpg"
-    },
-    {
-      designation: "Singer",
-      name: "Shreya Ghoshal",
-      image: "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202306/shreya-three_four.jpg"
-    },
-    {
-      designation: "Music Producer",
-      name: "Mithoon",
-      image: "https://www.hindustantimes.com/ht-img/img/2023/06/09/550x309/Mithoon-is-known-for-composing-the-hit-song-Tum-Hi_1686316230721.jpg"
-    },
-  ]
 
   const renderDesignations = ({ item }) => {
 
@@ -86,7 +60,7 @@ const AllSongs = ({ navigation, route }) => {
       <View>
         <View style={style.designationItem}>
           <FastImage
-            source={{ uri: item.image }}
+            source={{ uri: `${API_URL_IMAGE}/${item.image}` }}
             style={style.designationImage}
           />
           <View style={style.designationDetailsContainer}>
@@ -117,7 +91,8 @@ const AllSongs = ({ navigation, route }) => {
           <ImageBackground
             imageStyle={{ borderRadius: 10 }}
             style={style.instructorlogo1}
-            source={require("../../assets/images/music.jpeg")}
+            // source={require("../../assets/images/music.jpeg")}
+            source={{ uri: `${API_URL_IMAGE}/${item.image}` }}
           >
             {item._id == selectedSong ? <FastImage
               style={[style.instructorlogo1, { opacity: 0.3 }]}
@@ -131,7 +106,7 @@ const AllSongs = ({ navigation, route }) => {
               <Text style={style.headerTitle}>{item.songName}</Text>
             </View>
             <Text style={style.headerDescription}>
-              {item.artist}
+              {item.description}
             </Text>
             <Text style={style.headerDescription1}>
               3:47
@@ -141,13 +116,16 @@ const AllSongs = ({ navigation, route }) => {
         {item._id == selectedSong ?
           <View style={{ marginBottom: 10 }}>
             <FlatList
-              data={showMore?designationDetails:designationDetails.slice(0,3)}
+              data={showMore ? item.designationDetails : item.designationDetails.slice(0, 3)}
               renderItem={renderDesignations}
               style={style.designationsContainer}
             />
-            <TouchableOpacity onPress={()=>setShowMore(!showMore)}>
-            <Text style={{color:'#2885E5', fontWeight:"600", fontSize:14,marginVertical:8, marginLeft:15,marginBottom:10}}>{showMore?"Show Less":"Show More"}</Text>
-            </TouchableOpacity>
+            {item?.designationDetails?.length > 3 ?
+              <TouchableOpacity onPress={() => setShowMore(!showMore)}>
+                <Text style={{ color: '#2885E5', fontWeight: "600", fontSize: 14, marginVertical: 8, marginLeft: 15, marginBottom: 10 }}>{showMore ? "Show Less" : "Show More"}</Text>
+              </TouchableOpacity>
+              : null
+            }
             <TouchableOpacity
               style={style.buttonPurchaseMusic}
               onPress={() => navigation.navigate("song-purchase-form", { songName: item.songName })}>

@@ -108,7 +108,6 @@ setUserName(JSON.parse(user).fullname)
       },
     });
     const responseJson = await response.json();
-    console.log("ALL REQUESTSSS: ",responseJson)
   }
 
   useEffect(()=>{

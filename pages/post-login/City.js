@@ -27,7 +27,7 @@ export const City = ({ navigation, route }) => {
     const data = await response.json();
 
     setCity(data?.citys?.filter(item => item?.stateId?._id == id));
-    console.log("CITIESSS: ",data)
+
   };
 
   useEffect(() => {
