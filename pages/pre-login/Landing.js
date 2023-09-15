@@ -97,7 +97,7 @@ export const PreLoginLanding = ({ navigation }) => {
 
   const isSignedIn=async()=>{
     const isSignedIn=await GoogleSignin.isSignedIn()
-    if(!isSignedIn){
+    if(isSignedIn){
   getCurrentUserInfO()
     }
     else{
@@ -112,7 +112,7 @@ export const PreLoginLanding = ({ navigation }) => {
 
 
     }catch(error){
-  console.log(error)
+  console.log("HERE:",error)
     }
   }
 
@@ -122,6 +122,7 @@ export const PreLoginLanding = ({ navigation }) => {
       GoogleSignin.configure({
         webClientId:
           '255362522738-jp58mv7hsft7viv4p1eal11bc977tf7c.apps.googleusercontent.com',
+          iosClientId:"954839633934-hun2otfj69e4mnevmdrrodv79ufnc3vn.apps.googleusercontent.com",
       });
     }, []);
 

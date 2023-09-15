@@ -64,6 +64,7 @@ export const Login = ({ navigation }) => {
           // navigation.navigate('home');
         } else if (responseJson.success === false) {
           setError({ ...error, serverError: responseJson.message });
+          console.log("error in login")
         }
       }
     } catch (error) {
