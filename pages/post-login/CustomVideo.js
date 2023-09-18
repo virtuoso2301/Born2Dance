@@ -82,6 +82,7 @@ const style = StyleSheet.create({
     borderRadius: 5,
     padding: '2%',
     paddingHorizontal: wp(5),
+    paddingVertical:14,
     color: '#BABFC8',
     fontSize: scale(12),
   },
@@ -117,26 +118,51 @@ setUserName(JSON.parse(user).fullname)
 
 
 
-  const TypeOfEvent = [
-    { label: 'Online', value: 'Online' },
-    { label: 'Offline', value: 'Offline' },
-    { label: 'Home', value: 'Home' },
-    { label: 'Office', value: 'Office' },
+  const TypeOfDelivery = [
+    { label: 'One Week  (Rs.20000)', value: 'One Week', amount: "20000" },
+    { label: 'Two Weeks  (Rs.15000)', value: 'Two Weeks', amount: "15000" },
+    { label: 'Three Weeks  (Rs.10000)', value: 'Three Weeks', amount: "10000" },
   ];
 
   const DanceLevel = [
-    { label: 'Begginer', value: '100' },
-    { label: 'Intermediate', value: '200' },
-    { label: 'Advance', value: '500' },
+    { label: 'Begginer', value: 'Begginer' },
+    { label: 'Intermediate', value: 'Intermediate' },
+    { label: 'Advance', value: 'Advance' },
   ];
 
+  const TrainerGender = [
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
+    { label: 'Others', value: 'Others' },
+  ]
+
+  const ContactMode = [
+    { label: 'Calling', value: 'Calling' },
+    { label: 'WhatsApp', value: 'WhatsApp' },
+    { label: 'Email', value: 'Email' },
+  ]
+
+  const ContactTiming = [
+    { label: 'Morning', value: 'Morning' },
+    { label: 'Afternoon', value: 'Afternoon' },
+    { label: 'Evening', value: 'Evening' },
+  ]
+
   const [State, setState] = useState({
-    TypeOfEvent: null,
-    DanceLevel: null,
+    FullName:'',
     Email: '',
     PhoneNumber: '',
+    Address: '',
+    Country: '',
     SongTitle: "",
-    paymentStatus: "false"
+    DanceStyle: '',
+    DanceLevel: null,
+    TrainerGender: null,
+    TypeOfDelivery: null,
+    ContactMode: null,
+    ContactTiming: null,
+    paymentStatus: "false",
+    amount:""
   });
 
   useEffect(()=>{
@@ -152,7 +178,7 @@ setUserName(JSON.parse(user).fullname)
         },
         method: 'POST',
         body: JSON.stringify({
-          event:State.TypeOfEvent,
+          event:State.TypeOfDelivery,
           songname:State.SongTitle,
           paymentStatus:"false",
           phonenumber:State.PhoneNumber,
@@ -166,7 +192,7 @@ setUserName(JSON.parse(user).fullname)
       console.log("SUBMITed RESPONSE: ",responseJson.data._id)
       const formId=responseJson.data._id
 
-      Alert.alert("Payment",`Proceed to pay Rs.${State.DanceLevel}?`,[
+      Alert.alert("Payment",`Proceed to pay Rs.${State.amount}?`,[
         {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
@@ -191,12 +217,20 @@ setUserName(JSON.parse(user).fullname)
             console.log("FORM PAYMENT DONE: ",responseJson2)
             Alert.alert("Success","Your Payment was successful")
             setState({
-              TypeOfEvent: null,
-              DanceLevel: null,
+              FullName:'',
               Email: '',
               PhoneNumber: '',
+              Address: '',
+              Country: '',
               SongTitle: "",
-              paymentStatus: "false"
+              DanceStyle: '',
+              DanceLevel: null,
+              TrainerGender: null,
+              TypeOfDelivery: null,
+              ContactMode: null,
+              ContactTiming: null,
+              paymentStatus: "false",
+              amount:""
             })
           }
           catch(e){
@@ -211,7 +245,7 @@ setUserName(JSON.parse(user).fullname)
   };
 
   const onSubmitPress = async () => {
-    if (State.DanceLevel == null || State.TypeOfEvent==null || State.Email==''|| State.PhoneNumber.length<10 ||State.SongTitle=='') {
+    if (State.DanceLevel == null || State.TypeOfDelivery==null || State.Email==''|| State.PhoneNumber.length<10 ||State.SongTitle=='' || State.FullName == '' || State.Address=='' || State.Country=='' || State.DanceStyle=='' || State.TrainerGender==null || State.ContactMode==null || State.ContactTiming==null) {
       return alert('Please fill all fields correctly');
     }
     else {
@@ -255,10 +289,84 @@ setUserName(JSON.parse(user).fullname)
   return (
     <View style={style.view}>
       <ScrollView>
+        <View style={{flexDirection:"row"}}>
         <Text style={style.requestFormText}>Request Form</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("download")} style={{ justifyContent: "center", alignItems: "center", height: 40, width: "50%", marginLeft:"18%",marginTop:16 }}>
+          <LinearGradient
+            colors={['#2885E5', '#9968EE']}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+            style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5, justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+            <Text style={{ color: '#FFFFFF', fontSize: 12 }}>
+              See Your Requested Videos
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        </View>
         <Text style={style.pleaseText}>
           Please answer the following question so the we can reach to you.
         </Text>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Full Name</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Eg. Summer high,AP Dhillon"
+            onChangeText={e => setState(p => ({ ...p, FullName: e }))}
+            value={State.FullName}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Enter your Email Id</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Eg; demo@gmail.com"
+            keyboardType={'email-address'}
+            value={State.Email}
+            onChangeText={v => setState(p => ({ ...p, Email: v }))}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>
+            Enter Your Mobile Number
+          </Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Eg 9986754380"
+            maxLength={10}
+            keyboardType={'numeric'}
+            value={State.PhoneNumber}
+            onChangeText={v => setState(p => ({ ...p, PhoneNumber: v }))}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Address</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your address"
+            onChangeText={e => setState(p => ({ ...p, Address: e }))}
+            value={State.Address}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Country</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your country"
+            onChangeText={e => setState(p => ({ ...p, Country: e }))}
+            value={State.Country}
+          />
+        </View>
+        
 
         <View style={style.inputContainer}>
           <Text style={style.whyYouText}>Song title</Text>
@@ -272,28 +380,13 @@ setUserName(JSON.parse(user).fullname)
         </View>
 
         <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>Type of event</Text>
-          <Dropdown
-            style={style.inputStyle}
-            selectedTextStyle={{ color: '#babfc8' }}
-            placeholderStyle={{ color: '#babfc8' }}
-            containerStyle={{ borderWidth: 0 }}
-            data={TypeOfEvent}
-            labelField="label"
-            valueField="value"
-            placeholder={'Please select the type'}
-            value={State.TypeOfEvent}
-            onChange={e => setState(p => ({ ...p, TypeOfEvent: e.value }))}
-            renderItem={(item, selected) => (
-              <View
-                style={{
-                  backgroundColor: selected ? '#263040' : '#334155',
-                  paddingHorizontal: wp(2),
-                  paddingVertical: hp(1.5),
-                }}>
-                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
-              </View>
-            )}
+          <Text style={style.whyYouText}>Dance Style</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Choice of dance style"
+            onChangeText={e => setState(p => ({ ...p, DanceStyle: e }))}
+            value={State.DanceStyle}
           />
         </View>
 
@@ -324,31 +417,115 @@ setUserName(JSON.parse(user).fullname)
         </View>
 
         <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>Enter your Email Id</Text>
-          <TextInput
-            placeholderTextColor="#BABFC8"
-            style={style.input}
-            placeholder="Eg; demo@gmail.com"
-            keyboardType={'email-address'}
-            value={State.Email}
-            onChangeText={v => setState(p => ({ ...p, Email: v }))}
+          <Text style={style.whyYouText}>Trainer Gender</Text>
+          <Dropdown
+            style={style.inputStyle}
+            selectedTextStyle={{ color: '#babfc8' }}
+            placeholderStyle={{ color: '#babfc8' }}
+            containerStyle={{ borderWidth: 0 }}
+            renderItem={(item, selected) => (
+              <View
+                style={{
+                  backgroundColor: selected ? '#263040' : '#334155',
+                  paddingHorizontal: wp(2),
+                  paddingVertical: hp(1.5),
+                }}>
+                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
+              </View>
+            )}
+            data={TrainerGender}
+            labelField="label"
+            valueField="value"
+            placeholder={'Select Trainer Gender'}
+            value={State.TrainerGender}
+            onChange={e => setState(p => ({ ...p, TrainerGender: e.value }))}
           />
         </View>
+
         <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>
-            Enter Your Mobile Number (required){' '}
-          </Text>
-          <TextInput
-            placeholderTextColor="#BABFC8"
-            style={style.input}
-            placeholder="Eg 9986754380"
-            maxLength={10}
-            keyboardType={'numeric'}
-            value={State.PhoneNumber}
-            onChangeText={v => setState(p => ({ ...p, PhoneNumber: v }))}
+          <Text style={style.whyYouText}>Delivery Time</Text>
+          <Dropdown
+            style={style.inputStyle}
+            selectedTextStyle={{ color: '#babfc8' }}
+            placeholderStyle={{ color: '#babfc8' }}
+            containerStyle={{ borderWidth: 0 }}
+            data={TypeOfDelivery}
+            labelField="label"
+            valueField="value"
+            placeholder='Select Delivery time'
+            value={State.TypeOfDelivery}
+            onChange={e => setState(p => ({ ...p, TypeOfDelivery: e.value, amount:e.amount }))}
+            renderItem={(item, selected) => (
+              <View
+                style={{
+                  backgroundColor: selected ? '#263040' : '#334155',
+                  paddingHorizontal: wp(2),
+                  paddingVertical: hp(1.5),
+                }}>
+                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
+              </View>
+            )}
           />
         </View>
-        <TouchableOpacity onPress={onSubmitPress} style={style.mainNextstyle}>
+
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Contact Mode</Text>
+          <Dropdown
+            style={style.inputStyle}
+            selectedTextStyle={{ color: '#babfc8' }}
+            placeholderStyle={{ color: '#babfc8' }}
+            containerStyle={{ borderWidth: 0 }}
+            data={ContactMode}
+            labelField="label"
+            valueField="value"
+            placeholder='Select an option'
+            value={State.ContactMode}
+            onChange={e => setState(p => ({ ...p, ContactMode: e.value }))}
+            renderItem={(item, selected) => (
+              <View
+                style={{
+                  backgroundColor: selected ? '#263040' : '#334155',
+                  paddingHorizontal: wp(2),
+                  paddingVertical: hp(1.5),
+                }}>
+                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
+              </View>
+            )}
+          />
+        </View>
+
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Contact Timing</Text>
+          <Dropdown
+            style={style.inputStyle}
+            selectedTextStyle={{ color: '#babfc8' }}
+            placeholderStyle={{ color: '#babfc8' }}
+            containerStyle={{ borderWidth: 0 }}
+            data={ContactTiming}
+            labelField="label"
+            valueField="value"
+            placeholder='Select an option'
+            value={State.ContactTiming}
+            onChange={e => setState(p => ({ ...p, ContactTiming: e.value }))}
+            renderItem={(item, selected) => (
+              <View
+                style={{
+                  backgroundColor: selected ? '#263040' : '#334155',
+                  paddingHorizontal: wp(2),
+                  paddingVertical: hp(1.5),
+                }}>
+                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
+              </View>
+            )}
+          />
+        </View>
+
+
+      </ScrollView>
+
+      <TouchableOpacity onPress={onSubmitPress} style={[style.mainNextstyle,{marginVertical:14}]}>
           <LinearGradient
             colors={['#2885E5', '#9968EE']}
             start={{ x: 0, y: 0.5 }}
@@ -359,18 +536,7 @@ setUserName(JSON.parse(user).fullname)
             </Text>
           </LinearGradient>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("download")} style={{ position: "absolute", top: "3%", right: "3%", justifyContent: "center", alignItems: "center", height: "5%", width: "50%" }}>
-          <LinearGradient
-            colors={['#2885E5', '#9968EE']}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5, justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
-            <Text style={{ color: '#FFFFFF', fontSize: 12 }}>
-              See Your Requested Videos
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </ScrollView>
+
     </View>
   );
 };
