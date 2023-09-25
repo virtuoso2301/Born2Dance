@@ -20,6 +20,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { hp, wp } from '../../Constants';
 import RazorpayCheckout from 'react-native-razorpay';
 import Logo from '../../assets/images/logo.png';
+import { API_URL } from '../../services/api_url';
 
 const style = StyleSheet.create({
   view: {
@@ -133,15 +134,70 @@ const RegisterYourself = ({ navigation }) => {
     }
   },[State.Categories])
 
+  const registerYourselfAPI= async()=>{
+    try{
+      const response = await fetch(`${API_URL}/addRegisterYourself`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          FullName:State.FullName,
+          Email: State.Email,
+          PhoneNumber: State.PhoneNumber,
+          Dob:State.Dob,
+          Address: State.Address,
+          City:State.City,
+          State:State.State,
+          Country: State.Country,
+          Gender: State.Gender,
+          Categories:State.Categories,
+          NoOfDanceStyles:State.NoOfDanceStyles,
+          ProfileImages:State.ProfileImages,
+          ProfileVideos:State.ProfileVideos,
+          AboutYourself:State.AboutYourself
+        }),
+      });
+      const responseJson = await response.json();
+      // setClassDetails(responseJson.dance);
+      console.log("SUBMITed RESPONSE: ", responseJson)
+      alert("FORM submitted successfully")
+
+      setState({
+        FullName:'',
+        Email: '',
+        PhoneNumber: '',
+        Dob:'',
+        Address: '',
+        City:'',
+        State:'',
+        Country: '',
+        Gender: null,
+        Categories:[],
+        NoOfDanceStyles:"",
+        ProfileImages:"",
+        ProfileVideos:'',
+        AboutYourself:""
+      });
+    }
+    catch(e){
+      console.log("REGister yourself api error: ",e)
+    }
+  }
+
+  useEffect(()=>{
+    console.log(State)
+  },[State])
+
   const [isZumbaOrStudio,setIsZumbaOrStudio]=useState(false)
 
   const onSubmitPress = async () => {
-    Alert.alert("Alert","You have pressed submit")
-    if(State.FullName==''|| State.Email==''||State.PhoneNumber==''||State.Dob==''||State.Address==''||State.City==''||State.State==''||State.Country==''||State.Gender==null||State.Categories==null||State.NoOfDanceStyles==''||State.ProfileImages==''||State.ProfileVideos==''||State.AboutYourself==''){
+    if(State.FullName==''|| State.Email==''||State.PhoneNumber==''||State.Dob==''||State.Address==''||State.City==''||State.State==''||State.Country==''||State.Gender==null||State.Categories==null||(isZumbaOrStudio==false && State.NoOfDanceStyles=='')||State.ProfileImages==''||State.ProfileVideos==''||State.AboutYourself==''){
       alert("Please fill all fields correctly")
     }
     else{
-
+      registerYourselfAPI()
     const options = {
       description: 'Description goes here',
       image: Logo,
@@ -332,7 +388,7 @@ const RegisterYourself = ({ navigation }) => {
           />
         </View>
 
-{isZumbaOrStudio?
+{!isZumbaOrStudio?
         <View style={style.inputContainer}>
           <Text style={style.whyYouText}>Number of Dance Styles you know</Text>
           <TextInput

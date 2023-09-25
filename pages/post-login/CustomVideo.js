@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Button,
   TouchableOpacity,
   TextInput,
-  ToastAndroid,
   Alert
 } from 'react-native';
 import {
-  moderateScale,
-  moderateVerticalScale,
   scale,
 } from 'react-native-size-matters';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -82,7 +77,7 @@ const style = StyleSheet.create({
     borderRadius: 5,
     padding: '2%',
     paddingHorizontal: wp(5),
-    paddingVertical:14,
+    paddingVertical: 14,
     color: '#BABFC8',
     fontSize: scale(12),
   },
@@ -90,17 +85,17 @@ const style = StyleSheet.create({
 
 export const CustomVideo = ({ navigation }) => {
 
-  const [userId,setUserId]=useState("")
-  const [userName,setUserName]=useState("")
+  const [userId, setUserId] = useState("")
+  const [userName, setUserName] = useState("")
 
 
-  const GetUserDetail=async()=>{
-    const user= await AsyncStorage.getItem('user')
-setUserId(JSON.parse(user)._id)
-setUserName(JSON.parse(user).fullname)
+  const GetUserDetail = async () => {
+    const user = await AsyncStorage.getItem('user')
+    setUserId(JSON.parse(user)._id)
+    setUserName(JSON.parse(user).fullname)
   }
 
-  const GetRequests=async()=>{
+  const GetRequests = async () => {
     const response = await fetch(`${API_URL}/getAllCustomVideo`, {
       method: 'GET',
       headers: {
@@ -111,10 +106,10 @@ setUserName(JSON.parse(user).fullname)
     const responseJson = await response.json();
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     GetUserDetail()
     //GetRequests()
-  },[])
+  }, [])
 
 
 
@@ -149,7 +144,7 @@ setUserName(JSON.parse(user).fullname)
   ]
 
   const [State, setState] = useState({
-    FullName:'',
+    FullName: '',
     Email: '',
     PhoneNumber: '',
     Address: '',
@@ -162,81 +157,90 @@ setUserName(JSON.parse(user).fullname)
     ContactMode: null,
     ContactTiming: null,
     paymentStatus: "false",
-    amount:""
+    amount: ""
   });
 
-  useEffect(()=>{
-    console.log("STATE: ",State)
-  },[State])
+  useEffect(() => {
+    console.log("STATE: ", State)
+  }, [State])
 
   const customVideoRequestAPI = async () => {
     try {
-      const response = await fetch(`${API_URL}/customeVedioForm`, {
+      const response = await fetch(`${API_URL}/addCustomVideo`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         method: 'POST',
         body: JSON.stringify({
-          event:State.TypeOfDelivery,
-          songname:State.SongTitle,
-          paymentStatus:"false",
-          phonenumber:State.PhoneNumber,
-          email:State.Email,
-          level:State.DanceLevel,
+          FullName:State.FullName,
+          Email: State.Email,
+          PhoneNumber: State.PhoneNumber,
+          Address: State.Address,
+          Country: State.Address,
+          SongTitle: State.SongTitle,
+          DanceStyle: State.DanceStyle,
+          DanceLevel: State.DanceLevel,
+          TrainerGender: State.TrainerGender,
+          TypeOfDelivery: State.TypeOfDelivery,
+          ContactMode: State.ContactMode,
+          ContactTiming: State.ContactTiming,
+          paymentStatus: false,
           userId:userId
         }),
       });
       const responseJson = await response.json();
       // setClassDetails(responseJson.dance);
-      console.log("SUBMITed RESPONSE: ",responseJson.data._id)
-      const formId=responseJson.data._id
+      console.log("SUBMITed RESPONSE: ", responseJson)
+      const formId = responseJson?.user?._id
 
-      Alert.alert("Payment",`Proceed to pay Rs.${State.amount}?`,[
+      Alert.alert("Payment", `Proceed to pay Rs.${State.amount}?`, [
         {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: async() => {
-          try{
-            const response2 = await fetch(`${API_URL}/updatecustomvideo`, {
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-              method: 'PUT',
-              body: JSON.stringify({
-                id:formId,
-                userId:userId,
-                payment:State.DanceLevel,
-                paymentStatus:"true"
-              }),
-            });
-            const responseJson2 = await response2.json();
-            console.log("FORM PAYMENT DONE: ",responseJson2)
-            Alert.alert("Success","Your Payment was successful")
-            setState({
-              FullName:'',
-              Email: '',
-              PhoneNumber: '',
-              Address: '',
-              Country: '',
-              SongTitle: "",
-              DanceStyle: '',
-              DanceLevel: null,
-              TrainerGender: null,
-              TypeOfDelivery: null,
-              ContactMode: null,
-              ContactTiming: null,
-              paymentStatus: "false",
-              amount:""
-            })
+        {
+          text: 'OK', onPress: async () => {
+            try {
+              const response2 = await fetch(`${API_URL}/updateCustomVideoNew`, {
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                method: 'PUT',
+                body: JSON.stringify({
+                  id: formId,
+                  userId: userId,
+                  amount: Number(State.amount),
+                  paymentStatus: true
+                }),
+              });
+              const responseJson2 = await response2.json();
+              console.log("FORM PAYMENT DONE: ", responseJson2)
+              Alert.alert("Success", "Your Payment was successful")
+              setState({
+                FullName: '',
+                Email: '',
+                PhoneNumber: '',
+                Address: '',
+                Country: '',
+                SongTitle: "",
+                DanceStyle: '',
+                DanceLevel: null,
+                TrainerGender: null,
+                TypeOfDelivery: null,
+                ContactMode: null,
+                ContactTiming: null,
+                paymentStatus: "false",
+                amount: ""
+              })
+            }
+            catch (e) {
+              console.log("UPDATE CUSTOM VIDEO ERROR", e)
+            }
           }
-          catch(e){
-            console.log("UPDATE CUSTOM VIDEO ERROR",e)
-          }
-        }},
+        },
       ])
 
     } catch (e) {
@@ -245,7 +249,7 @@ setUserName(JSON.parse(user).fullname)
   };
 
   const onSubmitPress = async () => {
-    if (State.DanceLevel == null || State.TypeOfDelivery==null || State.Email==''|| State.PhoneNumber.length<10 ||State.SongTitle=='' || State.FullName == '' || State.Address=='' || State.Country=='' || State.DanceStyle=='' || State.TrainerGender==null || State.ContactMode==null || State.ContactTiming==null) {
+    if (State.DanceLevel == null || State.TypeOfDelivery == null || State.Email == '' || State.PhoneNumber.length < 10 || State.SongTitle == '' || State.FullName == '' || State.Address == '' || State.Country == '' || State.DanceStyle == '' || State.TrainerGender == null || State.ContactMode == null || State.ContactTiming == null) {
       return alert('Please fill all fields correctly');
     }
     else {
@@ -271,7 +275,7 @@ setUserName(JSON.parse(user).fullname)
       //     alert(`Success: ${data.razorpay_payment_id}`);
       //     dispatch(paymentSuccessStatusAdd(data.razorpay_payment_id));
       //     navigation.navigate('home');
-          
+
 
       //   })
       //   .catch(error => {
@@ -289,19 +293,19 @@ setUserName(JSON.parse(user).fullname)
   return (
     <View style={style.view}>
       <ScrollView>
-        <View style={{flexDirection:"row"}}>
-        <Text style={style.requestFormText}>Request Form</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("download")} style={{ justifyContent: "center", alignItems: "center", height: 40, width: "50%", marginLeft:"18%",marginTop:16 }}>
-          <LinearGradient
-            colors={['#2885E5', '#9968EE']}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5, justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
-            <Text style={{ color: '#FFFFFF', fontSize: 12 }}>
-              See Your Requested Videos
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={style.requestFormText}>Request Form</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("download")} style={{ justifyContent: "center", alignItems: "center", height: 40, width: "50%", marginLeft: "18%", marginTop: 16 }}>
+            <LinearGradient
+              colors={['#2885E5', '#9968EE']}
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1, y: 0.5 }}
+              style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5, justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+              <Text style={{ color: '#FFFFFF', fontSize: 12 }}>
+                See Your Requested Videos
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
         <Text style={style.pleaseText}>
           Please answer the following question so the we can reach to you.
@@ -366,7 +370,7 @@ setUserName(JSON.parse(user).fullname)
             value={State.Country}
           />
         </View>
-        
+
 
         <View style={style.inputContainer}>
           <Text style={style.whyYouText}>Song title</Text>
@@ -454,7 +458,7 @@ setUserName(JSON.parse(user).fullname)
             valueField="value"
             placeholder='Select Delivery time'
             value={State.TypeOfDelivery}
-            onChange={e => setState(p => ({ ...p, TypeOfDelivery: e.value, amount:e.amount }))}
+            onChange={e => setState(p => ({ ...p, TypeOfDelivery: e.value, amount: e.amount }))}
             renderItem={(item, selected) => (
               <View
                 style={{
@@ -525,17 +529,17 @@ setUserName(JSON.parse(user).fullname)
 
       </ScrollView>
 
-      <TouchableOpacity onPress={onSubmitPress} style={[style.mainNextstyle,{marginVertical:14}]}>
-          <LinearGradient
-            colors={['#2885E5', '#9968EE']}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5 }}>
-            <Text style={{ ...style.loginButtonText, color: '#FFFFFF' }}>
-              Submit
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={onSubmitPress} style={[style.mainNextstyle, { marginVertical: 14 }]}>
+        <LinearGradient
+          colors={['#2885E5', '#9968EE']}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={{ borderWidth: 1, borderStyle: 'solid', borderRadius: 5 }}>
+          <Text style={{ ...style.loginButtonText, color: '#FFFFFF' }}>
+            Submit
+          </Text>
+        </LinearGradient>
+      </TouchableOpacity>
 
     </View>
   );

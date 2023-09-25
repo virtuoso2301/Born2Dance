@@ -20,6 +20,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { hp, wp } from '../../Constants';
 import RazorpayCheckout from 'react-native-razorpay';
 import Logo from '../../assets/images/logo.png';
+import { API_URL } from '../../services/api_url';
 
 const style = StyleSheet.create({
   view: {
@@ -104,6 +105,57 @@ const RegisterYourClass = ({ navigation }) => {
     AboutStudio:""
   });
 
+  const registerClassAPI= async()=>{
+    try{
+      const response = await fetch(`${API_URL}/addRegisterClass`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          FullName:State.FullName,
+          Email: State.Email,
+          PhoneNumber: State.PhoneNumber,
+          Dob:State.Dob,
+          Address: State.Address,
+          City:State.City,
+          State:State.State,
+          Country: State.Country,
+          Gender: State.Gender,
+          DanceStudioName:State.DanceStudioName,
+          Suburb:State.Suburb,
+          NoOfDanceStyles:State.NoOfDanceStyles,
+          StudioImages:State.StudioImages,
+          AboutStudio:State.AboutStudio
+        }),
+      });
+      const responseJson = await response.json();
+      // setClassDetails(responseJson.dance);
+      console.log("SUBMITed RESPONSE: ", responseJson)
+      alert("FORM submitted successfully")
+      setState({
+        FullName:'',
+        Email: '',
+        PhoneNumber: '',
+        Dob:'',
+        Address: '',
+        City:'',
+        State:'',
+        Country: '',
+        Gender: null,
+        DanceStudioName:'',
+        Suburb:'',
+        NoOfDanceStyles:"",
+        StudioImages:"",
+        AboutStudio:""
+      });
+    }
+    catch(e){
+      console.log("Register class form api error: ",e)
+    }
+  }
+
   const Gender = [
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
@@ -111,7 +163,7 @@ const RegisterYourClass = ({ navigation }) => {
   ]
 
   const onSubmitPress =  () => {
-    Alert.alert("Alert","You have pressed submit")
+    registerClassAPI()
     // if (State.Cities == null) {
     //   return alert('Please select dance level');
     // }

@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Logo from '../../assets/images/logo.png';
 import { hp, wp } from '../../Constants';
 import RazorpayCheckout from 'react-native-razorpay';
+import { API_URL } from '../../services/api_url';
 
 const style = StyleSheet.create({
   view: {
@@ -119,7 +120,6 @@ export const LearnDanceForm = ({ navigation }) => {
     { label: 'Evening', value: 'Evening' },
   ]
 
-
   const [State, setState] = useState({
     FullName:'',
     Email: '',
@@ -134,13 +134,47 @@ export const LearnDanceForm = ({ navigation }) => {
     ContactTiming: null,
   });
 
+  const learnDanceFormAPI=async()=>{
+    try{
+      const response = await fetch(`${API_URL}/addLearnToDanceFormNew`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          FullName:State.FullName,
+          Email: State.Email,
+          PhoneNumber: State.PhoneNumber,
+          Address: State.Address,
+          Country:State.Country,
+          Gender: State.Gender,
+          Requirement:State.Requirement,
+          LearnWhere:State.LearnWhere,
+          Organization:State.Organization,
+          ContactMode: State.ContactMode,
+          ContactTiming: State.ContactTiming,
+        }),
+      });
+      const responseJson = await response.json();
+      // setClassDetails(responseJson.dance);
+      console.log("SUBMITed RESPONSE: ", responseJson)
+      alert("FORM submitted successfully")
+
+    }
+    catch(e){
+      console.log("LEarn this dance form api error: ",e)
+    }
+  }
+
+
   const onSubmitPress = async () => {
 
     if(State.FullName=='' || State.Email=='' || State.PhoneNumber.length<10 || State.Address=='' || State.Country==''|| State.Organization==''|| State.Gender==null || State.Requirement==null || State.LearnWhere==null || State.ContactMode==null || State.ContactTiming==null){
       alert("Please Fill all fields correctly")
     }
     else{
-      alert("Submited")
+      learnDanceFormAPI()
       setState({
         FullName:'',
         Email: '',
