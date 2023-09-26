@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -13,7 +13,7 @@ import { moderateScale, scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { API_URL, API_URL_IMAGE } from '../../services/api_url';
 import { hp, wp } from '../../Constants';
-import { useState } from 'react';
+
 import { useEffect } from 'react';
 import FastImage from 'react-native-fast-image';
 
@@ -21,13 +21,14 @@ export const City = ({ navigation, route }) => {
     const { id, stateName } = route.params;
 
     const [city, setCity] = useState([])
+    const [searchText, setSearchText] = useState('');
 
     const cityList = async () => {
     const response = await fetch(`${API_URL}/allcity`);
     const data = await response.json();
 
     setCity(data?.citys?.filter(item => item?.stateId?._id == id));
-    console.log("CITIESSS: ",data)
+
   };
 
   useEffect(() => {
@@ -37,16 +38,45 @@ export const City = ({ navigation, route }) => {
   return (
     <View style={style.view}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TextInput
+      <View>
+      <TextInput
           placeholderTextColor="#BABFC8"
-          style={style.input}
-          placeholder="Search city name"
+          style={{
+            backgroundColor: '#1D283A',
+            borderRadius: 5,
+            padding: '2%',
+            paddingLeft: moderateScale(36),
+            margin: '2%',
+            color: '#FFFFFF',
+            fontWeight: 'bold',
+            fontSize: scale(12),
+            lineHeight: 14,
+            width: '95%',
+            marginHorizontal: '2.5%',
+            textTransform: 'capitalize',
+            marginVertical: '5%',
+            height:45
+          }}
+          placeholder="Search for cities"
+          onChangeText={text => setSearchText(text)}
+          value={searchText}
         />
+                  <FastImage
+            source={searchIcon}
+            style={{
+              width: 20,
+              height: 20,
+              position: 'absolute',
+              bottom: 34,
+              left: 20,
+            }}
+          />
+          </View>
         {/* <Image source={searchIcon} style={style.searchIcon} /> */}
         <Text style={style.pageHeader}>Cities</Text>
         <View style={style.renderContainer}>
           {city?.length > 0 &&
-            city?.map((item, index) => (
+            city?.filter((item)=>item?.cityName?.includes(searchText)).map((item, index) => (
               <TouchableOpacity
                 key={index}
                 style={style.renderCities}

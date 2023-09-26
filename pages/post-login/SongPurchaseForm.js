@@ -84,7 +84,7 @@ const style = StyleSheet.create({
 
 const SongPurchaseForm = ({ navigation, route }) => {
 
-    const songName = route.params.songName
+    const songName = route?.params?.songName
     console.log("Song Name: ",songName)
 
     const [State, setState] = useState({
@@ -151,15 +151,15 @@ const SongPurchaseForm = ({ navigation, route }) => {
             <ScrollView>
                 <Text style={style.requestFormText}>Request Form</Text>
                 <Text style={style.pleaseText}>
-                    Please answer the following question so the we can reach to you.
+                    Please answer the following question so the we can reach out to you.
                 </Text>
 
                 <View style={style.inputContainer}>
-                    <Text style={style.whyYouText}>Requested Song</Text>
+                    <Text style={style.whyYouText}>Requested Song/ Cinema</Text>
                     <TextInput
                         placeholderTextColor="#BABFC8"
                         style={style.input}
-                        placeholder='song name'
+                        placeholder='song name / cinema name'
                         value={State.songName}
                         onChangeText={e => setState(p => ({ ...p, songName: e }))}
                     />

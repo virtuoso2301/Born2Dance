@@ -46,6 +46,8 @@ import AllSongs from './post-login/AllSongs';
 import AllVideos from './post-login/AllVideos';
 
 import SongPurchaseForm from './post-login/SongPurchaseForm';
+import AllVideoSongs from './post-login/AllVideoSongs';
+import AllCinemas from './post-login/AllCinemas';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -295,7 +297,7 @@ const AppStack = (props) => {
         component={SongPurchaseForm}
         options={{
           headerTitleAlign: 'center',
-          title: 'Song Purchase Request',
+          title: 'Purchase Request',
           ...preLoginPageHeaderOptions,
         }}
       />
@@ -328,6 +330,15 @@ const AppStack = (props) => {
         }}
       />
       <Stack.Screen
+        name="all-music-videos"
+        component={AllVideoSongs}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'B2D Music Videos',
+          ...preLoginPageHeaderOptions,
+        }}
+      />
+      <Stack.Screen
         name="all-songs"
         component={AllSongs}
         options={{
@@ -337,11 +348,11 @@ const AppStack = (props) => {
         }}
       />
       <Stack.Screen
-        name="all-videos"
-        component={AllVideos}
+        name="all-cinemas"
+        component={AllCinemas}
         options={{
           headerTitleAlign: 'center',
-          title: 'B2D Videos',
+          title: 'B2D Cinemas',
           ...preLoginPageHeaderOptions,
         }}
       />

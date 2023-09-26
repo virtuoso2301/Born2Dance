@@ -15,6 +15,7 @@
 #import <React/RCTSurfacePresenter.h>
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
+#import <GoogleSignIn/GIDSignIn.h>
 
 #import <react/config/ReactNativeConfig.h>
 

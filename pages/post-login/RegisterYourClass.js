@@ -20,6 +20,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { hp, wp } from '../../Constants';
 import RazorpayCheckout from 'react-native-razorpay';
 import Logo from '../../assets/images/logo.png';
+import { API_URL } from '../../services/api_url';
 
 const style = StyleSheet.create({
   view: {
@@ -59,7 +60,9 @@ const style = StyleSheet.create({
     padding: '3%',
     textAlign: 'center',
   },
-
+  mainNextstyle: {
+    marginTop: hp(3),
+  },
   selectedTextStyle: {
     color: '#BABFC8',
   },
@@ -68,7 +71,7 @@ const style = StyleSheet.create({
     color: '#BABFC8',
   },
   inputContainer: {
-    marginVertical: hp(0.75),
+    paddingTop: hp(2),
   },
   input: {
     backgroundColor: '#0E172A',
@@ -77,43 +80,90 @@ const style = StyleSheet.create({
     borderRadius: 5,
     padding: '2%',
     paddingHorizontal: wp(5),
+    paddingVertical:14,
     color: '#BABFC8',
     fontSize: scale(12),
   },
 });
 
 const RegisterYourClass = ({ navigation }) => {
-  const States = [
-    { label: 'State1', value: 'State1' },
-    { label: 'State2', value: 'State2' },
-    { label: 'State3', value: 'State3' },
-    { label: 'State4', value: 'State4' },
-  ];
-
-  const Cities = [
-    { label: 'City1', value: 'City1' },
-    { label: 'City2', value: 'City2' },
-    { label: 'City3', value: 'City3' },
-  ];
-
-  const Suburbs = [
-    { label: 'Suburb1', value: 'Suburb1' },
-    { label: 'Suburb2', value: 'Suburb2' },
-    { label: 'Suburb3', value: 'Suburb3' },
-  ];
 
   const [State, setState] = useState({
-    States: null,
-    Cities: null,
-    Suburbs:null,
+    FullName:'',
     Email: '',
     PhoneNumber: '',
-    ClassName:"",
-    Address:""
+    Dob:'',
+    Address: '',
+    City:'',
+    State:'',
+    Country: '',
+    Gender: null,
+    DanceStudioName:'',
+    Suburb:'',
+    NoOfDanceStyles:"",
+    StudioImages:"",
+    AboutStudio:""
   });
 
+  const registerClassAPI= async()=>{
+    try{
+      const response = await fetch(`${API_URL}/addRegisterClass`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          FullName:State.FullName,
+          Email: State.Email,
+          PhoneNumber: State.PhoneNumber,
+          Dob:State.Dob,
+          Address: State.Address,
+          City:State.City,
+          State:State.State,
+          Country: State.Country,
+          Gender: State.Gender,
+          DanceStudioName:State.DanceStudioName,
+          Suburb:State.Suburb,
+          NoOfDanceStyles:State.NoOfDanceStyles,
+          StudioImages:State.StudioImages,
+          AboutStudio:State.AboutStudio
+        }),
+      });
+      const responseJson = await response.json();
+      // setClassDetails(responseJson.dance);
+      console.log("SUBMITed RESPONSE: ", responseJson)
+      alert("FORM submitted successfully")
+      setState({
+        FullName:'',
+        Email: '',
+        PhoneNumber: '',
+        Dob:'',
+        Address: '',
+        City:'',
+        State:'',
+        Country: '',
+        Gender: null,
+        DanceStudioName:'',
+        Suburb:'',
+        NoOfDanceStyles:"",
+        StudioImages:"",
+        AboutStudio:""
+      });
+    }
+    catch(e){
+      console.log("Register class form api error: ",e)
+    }
+  }
+
+  const Gender = [
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
+    { label: 'Others', value: 'Others' },
+  ]
+
   const onSubmitPress =  () => {
-    Alert.alert("Alert","You have pressed submit")
+    registerClassAPI()
     // if (State.Cities == null) {
     //   return alert('Please select dance level');
     // }
@@ -165,100 +215,13 @@ const RegisterYourClass = ({ navigation }) => {
         </Text>
 
         <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>Dance Class Name</Text>
+          <Text style={style.whyYouText}>Full Name</Text>
           <TextInput
             placeholderTextColor="#BABFC8"
             style={style.input}
-            placeholder="your dance class name"
-            onChangeText={e => setState(p => ({ ...p, ClassName: e }))}
-          />
-        </View>
-
-        <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>State</Text>
-          <Dropdown
-            style={style.inputStyle}
-            selectedTextStyle={{ color: '#babfc8' }}
-            placeholderStyle={{ color: '#babfc8' }}
-            containerStyle={{ borderWidth: 0 }}
-            data={States}
-            labelField="label"
-            valueField="value"
-            placeholder={'Please select the type'}
-            value={State.States?.value}
-            onChange={e => setState(p => ({ ...p, States: e }))}
-            renderItem={(item, selected) => (
-              <View
-                style={{
-                  backgroundColor: selected ? '#263040' : '#334155',
-                  paddingHorizontal: wp(2),
-                  paddingVertical: hp(1.5),
-                }}>
-                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
-              </View>
-            )}
-          />
-        </View>
-
-        <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>City</Text>
-          <Dropdown
-            style={style.inputStyle}
-            selectedTextStyle={{ color: '#babfc8' }}
-            placeholderStyle={{ color: '#babfc8' }}
-            containerStyle={{ borderWidth: 0 }}
-            renderItem={(item, selected) => (
-              <View
-                style={{
-                  backgroundColor: selected ? '#263040' : '#334155',
-                  paddingHorizontal: wp(2),
-                  paddingVertical: hp(1.5),
-                }}>
-                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
-              </View>
-            )}
-            data={Cities}
-            labelField="label"
-            valueField="value"
-            placeholder={'Please select the type'}
-            value={State.Cities?.value}
-            onChange={e => setState(p => ({ ...p, Cities: e }))}
-          />
-        </View>
-
-        <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>Suburb</Text>
-          <Dropdown
-            style={style.inputStyle}
-            selectedTextStyle={{ color: '#babfc8' }}
-            placeholderStyle={{ color: '#babfc8' }}
-            containerStyle={{ borderWidth: 0 }}
-            renderItem={(item, selected) => (
-              <View
-                style={{
-                  backgroundColor: selected ? '#263040' : '#334155',
-                  paddingHorizontal: wp(2),
-                  paddingVertical: hp(1.5),
-                }}>
-                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
-              </View>
-            )}
-            data={Suburbs}
-            labelField="label"
-            valueField="value"
-            placeholder={'Please select the type'}
-            value={State.Cities?.value}
-            onChange={e => setState(p => ({ ...p, Suburbs: e }))}
-          />
-        </View>
-
-        <View style={style.inputContainer}>
-          <Text style={style.whyYouText}>Address</Text>
-          <TextInput
-            placeholderTextColor="#BABFC8"
-            style={style.input}
-            placeholder="your dance class address"
-            onChangeText={e => setState(p => ({ ...p, Address: e }))}
+            placeholder="Eg. Summer high,AP Dhillon"
+            onChangeText={e => setState(p => ({ ...p, FullName: e }))}
+            value={State.FullName}
           />
         </View>
 
@@ -273,9 +236,10 @@ const RegisterYourClass = ({ navigation }) => {
             onChangeText={v => setState(p => ({ ...p, Email: v }))}
           />
         </View>
+
         <View style={style.inputContainer}>
           <Text style={style.whyYouText}>
-            Enter Your Mobile Number (required){' '}
+            Enter Your Mobile Number
           </Text>
           <TextInput
             placeholderTextColor="#BABFC8"
@@ -287,7 +251,148 @@ const RegisterYourClass = ({ navigation }) => {
             onChangeText={v => setState(p => ({ ...p, PhoneNumber: v }))}
           />
         </View>
-        <TouchableOpacity onPress={onSubmitPress} style={{marginVertical:hp(1.5)}}>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Enter Your DOB</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Enter D.O.B"
+            value={State.Dob}
+            onChangeText={v => setState(p => ({ ...p, Dob: v }))}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Address</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your address"
+            onChangeText={e => setState(p => ({ ...p, Address: e }))}
+            value={State.Address}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>City</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your address"
+            onChangeText={e => setState(p => ({ ...p, City: e }))}
+            value={State.City}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>State</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your address"
+            onChangeText={e => setState(p => ({ ...p, State: e }))}
+            value={State.State}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Country</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your country"
+            onChangeText={e => setState(p => ({ ...p, Country: e }))}
+            value={State.Country}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Gender</Text>
+          <Dropdown
+            style={style.inputStyle}
+            selectedTextStyle={{ color: '#babfc8' }}
+            placeholderStyle={{ color: '#babfc8' }}
+            containerStyle={{ borderWidth: 0 }}
+            renderItem={(item, selected) => (
+              <View
+                style={{
+                  backgroundColor: selected ? '#263040' : '#334155',
+                  paddingHorizontal: wp(2),
+                  paddingVertical: hp(1.5),
+                }}>
+                <Text style={{ color: '#babfc8' }}>{item.label}</Text>
+              </View>
+            )}
+            data={Gender}
+            labelField="label"
+            valueField="value"
+            placeholder={'Select Gender'}
+            value={State.Gender}
+            onChange={e => setState(p => ({ ...p, Gender: e.value }))}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Dance Studio Name</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your Dance Studio Name"
+            onChangeText={e => setState(p => ({ ...p, DanceStudioName: e }))}
+            value={State.DanceStudioName}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Suburb</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your Dance Studio Name"
+            onChangeText={e => setState(p => ({ ...p, Suburb: e }))}
+            value={State.Suburb}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Number of Dance Styles you know</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Your country"
+            keyboardType='numeric'
+            onChangeText={e => setState(p => ({ ...p, NoOfDanceStyles: e }))}
+            value={State.NoOfDanceStyles}
+          />
+        </View>
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>Studio Images</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={style.input}
+            placeholder="Google drive link"
+            onChangeText={e => setState(p => ({ ...p, StudioImages: e }))}
+            value={State.StudioImages}
+          />
+        </View>
+
+
+        <View style={style.inputContainer}>
+          <Text style={style.whyYouText}>About Your Dance Class</Text>
+          <TextInput
+            placeholderTextColor="#BABFC8"
+            style={[style.input,{height:120,paddingTop:12}]}
+            placeholder="Write about your dance class"
+            multiline
+            onChangeText={e => setState(p => ({ ...p, AboutYourself: e }))}
+            value={State.AboutYourself}
+          />
+        </View>
+
+
+        <TouchableOpacity onPress={onSubmitPress} style={{marginVertical:18}}>
           <LinearGradient
             colors={['#2885E5', '#9968EE']}
             start={{ x: 0, y: 0.5 }}

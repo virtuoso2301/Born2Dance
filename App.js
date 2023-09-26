@@ -10,6 +10,7 @@ import { StatusBar } from 'react-native';
 const persistor = persistStore(store);
 
 const App = () => {
+  console.disableYellowBox=true
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={null}>

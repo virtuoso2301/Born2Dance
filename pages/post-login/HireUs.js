@@ -30,6 +30,7 @@ export const HireUs = ({ navigation }) => {
     name: "register",
     position: 1
   }]
+  const [searchInput,setSearchInput]=useState("")
 
   useEffect(() => {
     GetHireUsList();
@@ -79,11 +80,7 @@ export const HireUs = ({ navigation }) => {
     }
   }, [selectedTab])
 
-  useEffect(() => {
 
-    console.log(displayList)
-
-  }, [])
 
   const designations = [
     { id: "1", title: "All" },
@@ -97,6 +94,7 @@ export const HireUs = ({ navigation }) => {
   ]
 
   const renderItem = ({ item }) => {
+    if(searchInput===""){
     return (
       <View
         style={style.headerContainer}
@@ -134,6 +132,46 @@ export const HireUs = ({ navigation }) => {
         </View>
       </View>
     )
+          }
+          if(item.name.toLowerCase().includes(searchInput.toLowerCase())){
+            return (
+              <View
+                style={style.headerContainer}
+                onTouchEnd={() => {
+                  navigation.navigate('instructor-details', {
+                    id: item._id,
+                    item: item,
+                  });
+                }}
+              >
+                <View style={style.headerLogo}>
+                  <FastImage
+                    style={style.instructorlogo}
+                    source={{
+                      uri: `${API_URL_IMAGE}/${item?.profileImage}`,
+                    }}
+                  />
+                </View>
+                <View style={style.headerTitleContainer}>
+                  <View
+                    style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={style.headerTitle}>{item.name}</Text>
+                    <FastImage
+                      source={verified}
+                      resizeMode={'contain'}
+                      style={{ width: wp(4), height: wp(4) }}
+                    />
+                  </View>
+                  <Text style={style.headerDescription}>
+                    {item.designation}
+                  </Text>
+                </View>
+                <View style={style.arrow}>
+                  <FastImage source={require('../../assets/images/arrow.png')} />
+                </View>
+              </View>
+            )
+          }
   }
 
   return (
@@ -185,6 +223,7 @@ export const HireUs = ({ navigation }) => {
             flex: 1,
           }}
           placeholder="Search users"
+          onChangeText={setSearchInput}
         />
       </View>
 
