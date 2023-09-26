@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -14,6 +14,7 @@ import { API_URL_IMAGE } from '../../services/api_url';
 import { hp, wp } from '../../Constants';
 import FastImage from 'react-native-fast-image'
 
+
 export const AllCity = ({ navigation }) => {
   const cityLists = useSelector(state => state.appData.cityList);
 
@@ -26,20 +27,50 @@ export const AllCity = ({ navigation }) => {
       ...rest,
     }),
   );
+  const [searchText, setSearchText] = useState('');
 
   return (
     <View style={style.view}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TextInput
+        <View>
+      <TextInput
           placeholderTextColor="#BABFC8"
-          style={style.input}
-          placeholder="Search state name"
+          style={{
+            backgroundColor: '#1D283A',
+            borderRadius: 5,
+            padding: '2%',
+            paddingLeft: moderateScale(36),
+            margin: '2%',
+            color: '#FFFFFF',
+            fontWeight: 'bold',
+            fontSize: scale(12),
+            lineHeight: 14,
+            width: '95%',
+            marginHorizontal: '2.5%',
+            textTransform: 'capitalize',
+            marginVertical: '5%',
+            height:45
+          }}
+          placeholder="Search for states"
+          onChangeText={text => setSearchText(text)}
+          value={searchText}
         />
+                  <FastImage
+            source={searchIcon}
+            style={{
+              width: 20,
+              height: 20,
+              position: 'absolute',
+              bottom: 34,
+              left: 20,
+            }}
+          />
+          </View>
         {/* <Image source={searchIcon} style={style.searchIcon} /> */}
         <Text style={style.pageHeader}> Popular states</Text>
         <View style={style.renderContainer}>
           {cityLists?.states?.length > 0 &&
-            cityLists?.states?.filter((item)=>item?.countryId?.name=="India").map((item, index) => (
+            cityLists?.states?.filter((item)=>item?.countryId?.name=="India" && item?.stateName.includes(searchText)).map((item, index) => (
               <TouchableOpacity
                 key={index}
                 style={style.renderCities}

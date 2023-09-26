@@ -29,9 +29,6 @@ export const LearnToDance = ({ navigation, route }) => {
     JSON.stringify(getDanceCategory, null, 2),
   );
 
-  const SerachData = () => {
-    // console.log(searchText);
-  };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#0E172A' }}>
@@ -55,12 +52,12 @@ export const LearnToDance = ({ navigation, route }) => {
             marginHorizontal: '2.5%',
             textTransform: 'capitalize',
             marginVertical: '5%',
+            height:45
           }}
-          placeholder="Search for categories"
+          placeholder="Search for songs"
           onChangeText={text => setSearchText(text)}
           value={searchText}
         />
-        <TouchableOpacity onPress={SerachData}>
           <FastImage
             source={searchIcon}
             style={{
@@ -71,7 +68,6 @@ export const LearnToDance = ({ navigation, route }) => {
               left: 20,
             }}
           />
-        </TouchableOpacity>
       </View>
       <FlatList
         style={style.view}
@@ -79,15 +75,17 @@ export const LearnToDance = ({ navigation, route }) => {
           item.categoryName.toLowerCase().includes(searchText.toLowerCase()),
         )}
         renderItem={({ item }) => (
-          <View
-            style={style.imageContainerDance}
-            onTouchEnd={() => {
-              navigation.navigate('dance-type-details', {
-                id: item?._id,
-                item: item,
-                workshop: workshop,
-              });
-            }}>
+          <TouchableOpacity
+          style={style.imageContainerDance}
+          onPress={() => {
+            navigation.navigate('dance-type-details', {
+              id: item?._id,
+              item: item,
+              workshop: workshop, 
+            });
+          }}
+          >
+
             <FastImage
               style={style.imageDance}
               source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
@@ -100,8 +98,9 @@ export const LearnToDance = ({ navigation, route }) => {
               }}>
               <Text style={style.imageTitleDance}>{item?.categoryName}</Text>
             </View>
-          </View>
-        )}
+          </TouchableOpacity>
+        )
+        }
         numColumns={2}
       />
       <View
@@ -151,9 +150,9 @@ const style = StyleSheet.create({
   imageDance: {
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'cover',
-    borderRadius: 1,
+    borderRadius: 10,
     backgroundColor: '#000000',
-    width: scale(155),
+    width: scale(150),
   },
   imageTitleDance: {
     flex: 1,
