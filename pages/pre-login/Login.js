@@ -116,10 +116,9 @@ export const Login = ({ navigation }) => {
   return (
     <ScrollView style={style.view}>
       <View style={style.view}>
-        <Text style={style.title}>Enter your email</Text>
+        <Text style={style.title}>Enter your email and Password</Text>
         <Text style={style.discription}>
-          Please enter your email we’ll sent you the verification code on your
-          given email
+          Please enter your email and password to login to B2D
         </Text>
         <View>
           <Text style={style.inputLabel}>Email</Text>
@@ -166,7 +165,7 @@ export const Login = ({ navigation }) => {
             </Text>
           </LinearGradient>
         </TouchableOpacity>
-        <View style={style.line}>
+        {/* <View style={style.line}>
           <View style={style.lineHR} />
           <View style={style.lineLabel}>
             <Text style={style.lineLabel}>OR</Text>
@@ -194,7 +193,7 @@ export const Login = ({ navigation }) => {
               <Text style={style.facebookText}>Continue with Facebook</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={style.haventSignText}>
           <View>
             <Text style={style.signUpQuestion}>Haven’t Signed Up yet? </Text>
@@ -222,6 +221,7 @@ const style = StyleSheet.create({
     flexGrow: 1,
     padding: '3%',
     marginBottom: '0%',
+    paddingTop:36
   },
   title: {
     fontStyle: 'normal',

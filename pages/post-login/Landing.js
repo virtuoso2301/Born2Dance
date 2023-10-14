@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 import MyCarousel from './testing';
 import { scale } from 'react-native-size-matters';
@@ -31,6 +32,7 @@ import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image'
 import Orientation from 'react-native-orientation-locker';
 import B2dmusicvideo from './b2dmusicvideo';
+import Carousel from 'react-native-snap-carousel';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -140,56 +142,68 @@ export const PostLoginLanding = ({ navigation }) => {
 
   // const [selectedSong, setSelectedSong] = useState("")
 
-  // const reanderItem = ({ item }) => {
-  //   return item.type === 'image' ? (
-  //     <View>
-  //       <FastImage
-  //         source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
-  //         resizeMode="cover"
-  //         style={{
-  //           // width: "100%",
-  //           // height: "100%",
-  //           // alignSelf:"center"
-  //           marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-  //           backgroundColor: 'white',
-  //           backgroundColor: '#000000',
-  //           borderRadius: 10,
-  //           width: screenWidth - screenWidth / 50,
-  //           marginHorizontal: 1,
-  //           marginVertical: 5,
-  //           height: Dimensions.get("window").height * 0.24,
-  //           alignSelf: "center"
+  const reanderItem = ({ item }) => {
+    return item.type === 'image' ? (
+      <View style={{ alignSelf: "center", width: "95%" }}>
+        <FastImage
+          source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
+          resizeMode="cover"
+          style={{
+            // width: "100%",
+            // height: "100%",
+            // alignSelf:"center"
+            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+            backgroundColor: 'white',
+            backgroundColor: '#000000',
+            borderRadius: 10,
+            width:"100%",
+            marginHorizontal: 1,
+            marginVertical: 5,
+            height: Dimensions.get("window").height * 0.24,
+            alignSelf: "center"
 
-  //         }}
-  //       />
-  //     </View>
-  //   ) : (
-  //     <View>
-  //       <Video
-  //         source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
-  //         resizeMode="cover"
-  //         style={{
-  //           // width: "100%",
-  //           // height: "100%",
-  //           // alignSelf:"center"
-  //           marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-  //           backgroundColor: 'white',
-  //           backgroundColor: '#000000',
-  //           borderRadius: 10,
-  //           width: screenWidth - screenWidth / 50,
-  //           marginHorizontal: 1,
-  //           marginVertical: 5,
-  //           height: Dimensions.get("window").height * 0.24,
-  //           alignSelf: "center"
-  //         }}
-  //         controls={false}
-  //         paused={false}
-  //         repeat={false}
-  //       >
-  //       </Video>
-  //     </View>
-  //   );
-  // };
+          }}
+        />
+      </View>
+    ) : (
+      <View style={{ alignSelf: "center", width: "95%" }}>
+        <Video
+          source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
+          resizeMode="cover"
+          style={{
+            marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+            backgroundColor: 'white',
+            backgroundColor: '#000000',
+            borderRadius: 10,
+            width: "100%",
+            marginHorizontal: 1,
+            alignSelf: "center",
+            height: undefined,
+            aspectRatio: 16 / 9
+  
+          }}
+          controls={false}
+          paused={false}
+          repeat={false}
+          onEnd={() => setHeroBannerEnded(true)}
+          muted={muted}
+          onLoadStart={() => setHeroBannerEnded(false)}
+        >
+        </Video>
+        {!heroBannerEnded && item?.type=='video' ?
+        <TouchableOpacity style={{ position: "absolute", top: "4.5%", right: "4.5%", }} onPress={() => {
+          dispatch(setBannerMuted(!muted))
+          setMuted(!muted)
+
+        }}>
+          <Text style={{ color: "#ffffff", fontWeight: "bold", fontSize: 10 }}>{muted ? `${"UNMUTE"}` : `${"MUTE"}`}</Text>
+        </TouchableOpacity>
+        :
+        null
+      }
+      </View>
+    );
+  };
 
   // city list
   const cityList = async () => {
@@ -240,9 +254,14 @@ export const PostLoginLanding = ({ navigation }) => {
 
   }, []);
 
+  useEffect(()=>{
+    console.log("BANNER LIST:  ", State.bannerList)
+  },[State.bannerList])
+
   const [heroBannerEnded, setHeroBannerEnded] = useState(false)
 
   const [muted, setMuted] = useState(bannerMuted)
+
 
 
   return (
@@ -250,68 +269,18 @@ export const PostLoginLanding = ({ navigation }) => {
       <BDLoader visible={State.IsLoading} />
       <LogoTitle navigation={navigation} />
       <ScrollView>
-        {/* <View>
+        <View>
           <Carousel
             style={style.bannerTop}
             data={State.bannerList?.banners}
             renderItem={reanderItem}
-            //   return (
-            //     <View style={style.imageContainer}>
-            //       <Image
-            //         source={{ uri: `${API_URL_IMAGE}/${item?.image}` }}
-            //         resizeMode="cover"
-            //         style={{
-            //           width: '100%',
-            //           height: 140,
-            //         }}
-            //       />
-            //     </View>
-            //   );
-            // }}
             sliderWidth={BannerWidth}
             itemWidth={BannerWidth}
             autoplay={true}
             autoplayInterval={20000}
             loop={true}
           />
-        </View> */}
-        <View style={{ alignSelf: "center", width: "95%" }}>
-          <Video
-            source={{ uri: Platform.OS == "ios" ? `${API_URL_IMAGE}/${bannerURL}`.replace(/ /g, '%20') : `${API_URL_IMAGE}/${bannerURL}` }}
-            resizeMode="cover"
-            style={{
-              marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-              backgroundColor: 'white',
-              backgroundColor: '#000000',
-              borderRadius: 10,
-              width: "100%",
-              marginHorizontal: 1,
-              alignSelf: "center",
-              height: undefined,
-              aspectRatio: 16 / 9
-
-            }}
-            controls={false}
-            paused={false}
-            repeat={false}
-            onEnd={() => setHeroBannerEnded(true)}
-            muted={muted}
-            onLoadStart={() => setHeroBannerEnded(false)}
-          >
-          </Video>
-          {!heroBannerEnded ?
-            <TouchableOpacity style={{ position: "absolute", top: "4.5%", right: "4.5%", }} onPress={() => {
-              dispatch(setBannerMuted(!muted))
-              setMuted(!muted)
-
-            }}>
-              <Text style={{ color: "#ffffff", fontWeight: "bold", fontSize: 10 }}>{muted ? `${"UNMUTE"}` : `${"MUTE"}`}</Text>
-            </TouchableOpacity>
-            :
-            null
-          }
         </View>
-
         <View style={style.section}>
           <View style={style.sectionHeader}>
             <Text style={style.sectionTitle}>Learn to Dance</Text>
